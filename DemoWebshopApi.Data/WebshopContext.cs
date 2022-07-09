@@ -23,5 +23,20 @@ namespace DemoWebshopApi.Data
             var connectionString = configuration.GetConnectionString("AppDb");
             optionsBuilder.UseSqlServer(connectionString);
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            SetupProductsConfiguration(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
+        private static void SetupProductsConfiguration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Product>().HasKey(t => t.Id);
+            modelBuilder.Entity<Product>().Property(t => t.Name).IsRequired();
+            modelBuilder.Entity<Product>().Property(t => t.Model).IsRequired();
+            modelBuilder.Entity<Product>().Property(t => t.AvailableQuantity).IsRequired();
+            modelBuilder.Entity<Product>().Property(t => t.Price).IsRequired();
+        }
     }
 }
