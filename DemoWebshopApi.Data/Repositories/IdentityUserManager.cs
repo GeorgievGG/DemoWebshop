@@ -1,4 +1,5 @@
-﻿using DemoWebshopApi.Data.Interfaces;
+﻿using DemoWebshopApi.Data.Entities;
+using DemoWebshopApi.Data.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;

@@ -1,4 +1,5 @@
 using DemoWebshopApi.Data;
+using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.Data.Interfaces;
 using DemoWebshopApi.Data.Repositories;
 using Microsoft.EntityFrameworkCore;

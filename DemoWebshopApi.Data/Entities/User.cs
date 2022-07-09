@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace DemoWebshopApi.Data
+namespace DemoWebshopApi.Data.Entities
 {
     public class User : IdentityUser<Guid>
     {
