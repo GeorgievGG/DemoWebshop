@@ -26,6 +26,7 @@ namespace DemoWebshopApi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             SetupProductsConfiguration(modelBuilder);
+            SetupOrdersConfiguration(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -33,10 +34,18 @@ namespace DemoWebshopApi.Data
         private static void SetupProductsConfiguration(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasKey(t => t.Id);
-            modelBuilder.Entity<Product>().Property(t => t.Name).IsRequired();
-            modelBuilder.Entity<Product>().Property(t => t.Model).IsRequired();
+            modelBuilder.Entity<Product>().Property(t => t.Name).HasMaxLength(120).IsRequired();
+            modelBuilder.Entity<Product>().Property(t => t.Model).HasMaxLength(120).IsRequired();
             modelBuilder.Entity<Product>().Property(t => t.AvailableQuantity).IsRequired();
             modelBuilder.Entity<Product>().Property(t => t.Price).IsRequired();
+        }
+
+        private static void SetupOrdersConfiguration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Order>().HasKey(t => t.Id);
+            modelBuilder.Entity<Order>().Property(t => t.OrderDate).IsRequired();
+            modelBuilder.Entity<Order>().Property(t => t.Paid).IsRequired();
+            modelBuilder.Entity<Order>().HasOne(t => t.Client).WithMany(u => u.Orders).HasForeignKey(t => t.ClientId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
