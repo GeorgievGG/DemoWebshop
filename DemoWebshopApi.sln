@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebshopApi", "DemoWebshopApi\DemoWebshopApi.csproj", "{D05A2D2A-6727-4174-9427-B6379357A3AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoWebshopApi", "DemoWebshopApi\DemoWebshopApi.csproj", "{D05A2D2A-6727-4174-9427-B6379357A3AC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebshopApi.Data", "DemoWebshopApi.Data\DemoWebshopApi.Data.csproj", "{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{D05A2D2A-6727-4174-9427-B6379357A3AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D05A2D2A-6727-4174-9427-B6379357A3AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D05A2D2A-6727-4174-9427-B6379357A3AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
