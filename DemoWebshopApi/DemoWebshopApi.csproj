@@ -26,10 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DemoWebshopApi.Data\DemoWebshopApi.Data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\DemoWebshopApi.Services\DemoWebshopApi.Services.csproj" />
   </ItemGroup>
 
 </Project>
