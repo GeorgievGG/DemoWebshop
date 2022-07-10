@@ -47,7 +47,7 @@ namespace DemoWebshopApi.Data
             modelBuilder.Entity<Order>().HasKey(t => t.Id);
             modelBuilder.Entity<Order>().Property(t => t.OrderDate).IsRequired();
             modelBuilder.Entity<Order>().Property(t => t.Paid).IsRequired();
-            modelBuilder.Entity<Order>().HasOne(t => t.Client).WithMany(u => u.Orders).HasForeignKey(t => t.ClientId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Order>().HasOne(t => t.Client).WithMany(u => u.Orders).HasForeignKey(t => t.ClientId).IsRequired().OnDelete(DeleteBehavior.Restrict);
         }
 
         private void SetupOrderLinesConfiguration(ModelBuilder modelBuilder)
@@ -55,15 +55,15 @@ namespace DemoWebshopApi.Data
             modelBuilder.Entity<OrderLine>().HasKey(t => t.Id);
             modelBuilder.Entity<OrderLine>().Property(t => t.Quantity).IsRequired();
             modelBuilder.Entity<OrderLine>().Property(t => t.Price).IsRequired();
-            modelBuilder.Entity<OrderLine>().HasOne(t => t.Order).WithMany(u => u.OrderLines).HasForeignKey(t => t.OrderId).OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<OrderLine>().HasOne(t => t.Product).WithMany().HasForeignKey(t => t.ProductId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<OrderLine>().HasOne(t => t.Order).WithMany(u => u.OrderLines).HasForeignKey(t => t.OrderId).IsRequired().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<OrderLine>().HasOne(t => t.Product).WithMany().HasForeignKey(t => t.ProductId).IsRequired().OnDelete(DeleteBehavior.Restrict);
         }
 
         private void SetupShoppingBasketsConfiguration(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ShoppingBasket>().HasKey(t => t.Id);
             modelBuilder.Entity<ShoppingBasket>().Property(t => t.LastVisited).IsRequired();
-            modelBuilder.Entity<ShoppingBasket>().HasOne(t => t.Client).WithOne(t => t.Basket).HasForeignKey<ShoppingBasket>(t => t.ClientId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ShoppingBasket>().HasOne(t => t.Client).WithOne(t => t.Basket).HasForeignKey<ShoppingBasket>(t => t.ClientId).IsRequired().OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
