@@ -7,6 +7,8 @@ namespace DemoWebshopApi.Data.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
+        public virtual ShoppingBasket Basket { get; set; }
+
         public virtual ICollection<Order> Orders { get; set; }
     }
 }
