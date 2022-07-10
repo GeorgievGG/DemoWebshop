@@ -27,6 +27,7 @@ namespace DemoWebshopApi.Data
         {
             SetupProductsConfiguration(modelBuilder);
             SetupOrdersConfiguration(modelBuilder);
+            SetupOrderLinesConfiguration(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -46,6 +47,15 @@ namespace DemoWebshopApi.Data
             modelBuilder.Entity<Order>().Property(t => t.OrderDate).IsRequired();
             modelBuilder.Entity<Order>().Property(t => t.Paid).IsRequired();
             modelBuilder.Entity<Order>().HasOne(t => t.Client).WithMany(u => u.Orders).HasForeignKey(t => t.ClientId).OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void SetupOrderLinesConfiguration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<OrderLine>().HasKey(t => t.Id);
+            modelBuilder.Entity<OrderLine>().Property(t => t.Quantity).IsRequired();
+            modelBuilder.Entity<OrderLine>().Property(t => t.Price).IsRequired();
+            modelBuilder.Entity<OrderLine>().HasOne(t => t.Order).WithMany(u => u.OrderLines).HasForeignKey(t => t.OrderId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<OrderLine>().HasOne(t => t.Product).WithMany().HasForeignKey(t => t.ProductId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
