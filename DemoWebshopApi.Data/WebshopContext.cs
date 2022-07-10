@@ -29,6 +29,7 @@ namespace DemoWebshopApi.Data
             SetupOrdersConfiguration(modelBuilder);
             SetupOrderLinesConfiguration(modelBuilder);
             SetupShoppingBasketsConfiguration(modelBuilder);
+            SetupShoppingBasketLinesConfiguration(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
         }
@@ -64,6 +65,14 @@ namespace DemoWebshopApi.Data
             modelBuilder.Entity<ShoppingBasket>().HasKey(t => t.Id);
             modelBuilder.Entity<ShoppingBasket>().Property(t => t.LastVisited).IsRequired();
             modelBuilder.Entity<ShoppingBasket>().HasOne(t => t.Client).WithOne(t => t.Basket).HasForeignKey<ShoppingBasket>(t => t.ClientId).IsRequired().OnDelete(DeleteBehavior.Restrict);
+        }
+
+        private void SetupShoppingBasketLinesConfiguration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ShoppingBasketLine>().HasKey(t => t.Id);
+            modelBuilder.Entity<ShoppingBasketLine>().Property(t => t.Quantity).IsRequired();
+            modelBuilder.Entity<ShoppingBasketLine>().HasOne(t => t.Basket).WithMany(u => u.BasketLines).HasForeignKey(t => t.BasketId).IsRequired().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ShoppingBasketLine>().HasOne(t => t.Product).WithMany().HasForeignKey(t => t.ProductId).IsRequired().OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
