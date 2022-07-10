@@ -5,12 +5,14 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoWebshopApi", "DemoWebshopApi\DemoWebshopApi.csproj", "{D05A2D2A-6727-4174-9427-B6379357A3AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebshopApi.Data", "DemoWebshopApi.Data\DemoWebshopApi.Data.csproj", "{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoWebshopApi.Data", "DemoWebshopApi.Data\DemoWebshopApi.Data.csproj", "{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BCC72457-FE68-4ED0-B2C6-A8388091B60E}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoWebshopApi.Services", "DemoWebshopApi.Services\DemoWebshopApi.Services.csproj", "{F60A18E5-23F7-4ACE-9C2D-8C30BCF4C71B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6DE0A93-C8E5-40EB-9E9D-7A3F11BE9E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F60A18E5-23F7-4ACE-9C2D-8C30BCF4C71B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F60A18E5-23F7-4ACE-9C2D-8C30BCF4C71B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F60A18E5-23F7-4ACE-9C2D-8C30BCF4C71B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F60A18E5-23F7-4ACE-9C2D-8C30BCF4C71B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

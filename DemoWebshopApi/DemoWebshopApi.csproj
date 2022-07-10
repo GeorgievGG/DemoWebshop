@@ -28,4 +28,8 @@
     <ProjectReference Include="..\DemoWebshopApi.Data\DemoWebshopApi.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>
