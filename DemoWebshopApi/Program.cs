@@ -2,6 +2,8 @@ using DemoWebshopApi.Data;
 using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.Data.Interfaces;
 using DemoWebshopApi.Data.Repositories;
+using DemoWebshopApi.Services.Interfaces;
+using DemoWebshopApi.Services.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +16,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("AppDb");
-builder.Services.AddDbContext<WebshopContext>(x => x.UseSqlServer(connectionString));
+builder.Services.AddDbContext<WebshopContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddTransient<IIDentityUserManager, IdentityUserManager>();
+builder.Services.AddTransient<IProductService, ProductService>();
 
 builder.Services.AddIdentityCore<User>(options =>
 {
