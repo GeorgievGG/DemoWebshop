@@ -20,6 +20,7 @@ builder.Services.AddDbContext<WebshopContext>(options => options.UseSqlServer(co
 
 builder.Services.AddTransient<IIDentityUserManager, IdentityUserManager>();
 builder.Services.AddTransient<IProductService, ProductService>();
+builder.Services.AddTransient<IOrderService, OrderService>();
 
 builder.Services.AddIdentityCore<User>(options =>
 {
