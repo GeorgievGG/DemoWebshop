@@ -17,6 +17,7 @@ namespace DemoWebshopApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            SetupUserConfiguration(modelBuilder);
             SetupProductsConfiguration(modelBuilder);
             SetupOrdersConfiguration(modelBuilder);
             SetupOrderLinesConfiguration(modelBuilder);
@@ -24,6 +25,13 @@ namespace DemoWebshopApi.Data
             SetupShoppingBasketLinesConfiguration(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        private static void SetupUserConfiguration(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>().Property(t => t.FirstName).HasMaxLength(64);
+            modelBuilder.Entity<User>().Property(t => t.LastName).HasMaxLength(64);
+            modelBuilder.Entity<User>().Property(t => t.LastLogin).IsRequired();
         }
 
         private static void SetupProductsConfiguration(ModelBuilder modelBuilder)
@@ -55,7 +63,6 @@ namespace DemoWebshopApi.Data
         private void SetupShoppingBasketsConfiguration(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ShoppingBasket>().HasKey(t => t.Id);
-            modelBuilder.Entity<ShoppingBasket>().Property(t => t.LastVisited).IsRequired();
             modelBuilder.Entity<ShoppingBasket>().HasOne(t => t.Client).WithOne(t => t.Basket).HasForeignKey<ShoppingBasket>(t => t.ClientId).IsRequired().OnDelete(DeleteBehavior.Restrict);
         }
 
