@@ -9,10 +9,13 @@ namespace DemoWebshopApi.Controllers
     public class ShoppingBasketController : ControllerBase
     {
         private readonly IShoppingBasketService _shoppingBasketService;
+        private readonly IShoppingBasketLineService _shoppingBasketLineService;
 
-        public ShoppingBasketController(IShoppingBasketService shoppingBasketService)
+        public ShoppingBasketController(IShoppingBasketService shoppingBasketService,
+            IShoppingBasketLineService shoppingBasketLineService)
         {
             _shoppingBasketService = shoppingBasketService;
+            _shoppingBasketLineService = shoppingBasketLineService;
         }
 
         [HttpGet("{userId}")]
@@ -21,7 +24,7 @@ namespace DemoWebshopApi.Controllers
             return await _shoppingBasketService.GetShoppingBasket(userId);
         }
 
-        [HttpPost]
+        [HttpPost("AddShoppingBasketLine")]
         public async Task<ActionResult<ShoppingBasket>> CreateShoppingBasketLine(Guid userId, ShoppingBasketLine shoppingBasketLine)
         {
             var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);
@@ -31,7 +34,7 @@ namespace DemoWebshopApi.Controllers
                 shoppingBasket = await _shoppingBasketService.CreateShoppingBasket(newBasket);
             }
 
-            var isLineAddedSuccessfully = await _shoppingBasketService.CreateShoppingBasketLine(shoppingBasket.Id, shoppingBasketLine);
+            var isLineAddedSuccessfully = await _shoppingBasketLineService.CreateShoppingBasketLine(shoppingBasket.Id, shoppingBasketLine);
             if (!isLineAddedSuccessfully)
             {
                 return BadRequest();
@@ -40,16 +43,26 @@ namespace DemoWebshopApi.Controllers
             return CreatedAtAction("GetShoppingBasket", new { id = shoppingBasket.Id }, shoppingBasket);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteShoppingBasket(Guid id)
+        [HttpDelete("DeleteShoppingBasketLine/{userId}")]
+        public async Task<IActionResult> DeleteShoppingBasketLine(Guid userId, ShoppingBasketLine shoppingBasketLine)
         {
-            var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(id);
+            var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);
             if (shoppingBasket == null)
             {
                 return NotFound();
             }
 
-            await _shoppingBasketService.DeleteShoppingBasket(shoppingBasket);
+            var lineToDelete = await _shoppingBasketLineService.GetShoppingBasketLine(shoppingBasketLine.Id);
+            if (lineToDelete == null)
+            {
+                return NotFound();
+            }
+
+            var isLineAddedSuccessfully = await _shoppingBasketLineService.DeleteShoppingBasketLine(shoppingBasket.Id, shoppingBasketLine.Id);
+            if (!isLineAddedSuccessfully)
+            {
+                return BadRequest();
+            }
 
             return NoContent();
         }

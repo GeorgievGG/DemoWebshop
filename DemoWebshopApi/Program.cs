@@ -22,6 +22,7 @@ builder.Services.AddTransient<IIDentityUserManager, IdentityUserManager>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IShoppingBasketService, ShoppingBasketService>();
+builder.Services.AddTransient<IShoppingBasketLineService, ShoppingBasketLineService>();
 
 builder.Services.AddIdentityCore<User>(options =>
 {

@@ -26,26 +26,5 @@ namespace DemoWebshopApi.Services.Services
 
             return shoppingBasket;
         }
-
-        public async Task<bool> CreateShoppingBasketLine(Guid basketId, ShoppingBasketLine shoppingBasketLine)
-        {
-            var basket = await _context.ShoppingBaskets.FindAsync(basketId);
-            if (basket == null)
-            {
-                return false;
-            }
-
-            basket.BasketLines.Add(shoppingBasketLine);
-
-            await _context.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task DeleteShoppingBasket(ShoppingBasket shoppingBasket)
-        {
-            _context.ShoppingBaskets.Remove(shoppingBasket);
-            await _context.SaveChangesAsync();
-        }
     }
 }
