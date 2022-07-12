@@ -70,13 +70,11 @@ namespace DemoWebshopApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
-            var product = await _productService.GetProduct(id);
-            if (product == null)
+            var isSuccessful = await _productService.DeleteProduct(id);
+            if (!isSuccessful)
             {
                 return NotFound();
             }
-
-            await _productService.DeleteProduct(product);
 
             return NoContent();
         }
