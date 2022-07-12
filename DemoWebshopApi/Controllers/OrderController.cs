@@ -1,4 +1,7 @@
-﻿using DemoWebshopApi.Data.Entities;
+﻿using AutoMapper;
+using DemoWebshopApi.Data.Entities;
+using DemoWebshopApi.DTOs.RequestModels;
+using DemoWebshopApi.DTOs.ResponseModels;
 using DemoWebshopApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,15 +11,17 @@ namespace DemoWebshopApi.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IMapper mapper, IOrderService orderService)
         {
+            _mapper = mapper;
             _orderService = orderService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<OrderResponseDto>>> GetOrders()
         {
             var orders = await _orderService.GetOrders();
             if (orders == null)
@@ -24,11 +29,11 @@ namespace DemoWebshopApi.Controllers
                 return NotFound();
             }
 
-            return Ok(orders);
+            return Ok(_mapper.Map<ICollection<OrderResponseDto>>(orders));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> GetOrder(Guid id)
+        public async Task<ActionResult<OrderResponseDto>> GetOrder(Guid id)
         {
             var order = await _orderService.GetOrder(id);
             if (order == null)
@@ -36,7 +41,19 @@ namespace DemoWebshopApi.Controllers
                 return NotFound();
             }
 
-            return order;
+            return _mapper.Map<OrderResponseDto>(order);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<OrderResponseDto>> CreateOrder(OrderRequestDto order)
+        {
+            var toBeCreated = _mapper.Map<Order>(order);
+            toBeCreated.OrderDate = DateTime.UtcNow;
+            // TODO: Fix ClientId
+            // TODO: Fix OrderId if needed
+            var newOrder = await _orderService.CreateOrder(toBeCreated);
+
+            return CreatedAtAction("GetOrder", new { id = newOrder.Id }, _mapper.Map<OrderResponseDto>(newOrder));
         }
 
         [HttpPut("{id}/SetDeliveryDate")]
@@ -61,14 +78,6 @@ namespace DemoWebshopApi.Controllers
             }
 
             return NoContent();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Order>> CreateOrder(Order order)
-        {
-            await _orderService.CreateOrder(order);
-
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
         }
 
         [HttpDelete("{id}")]

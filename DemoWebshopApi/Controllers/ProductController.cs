@@ -29,7 +29,7 @@ namespace DemoWebshopApi.Controllers
                 return NotFound();
             }
 
-            return Ok(products);
+            return Ok(_mapper.Map<ICollection<ProductResponseDto>>(products));
         }
 
         [HttpGet("{id}")]

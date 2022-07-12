@@ -24,6 +24,14 @@ namespace DemoWebshopApi.Services.Services
             return await _context.Orders.FindAsync(id);
         }
 
+        public async Task<Order> CreateOrder(Order order)
+        {
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            return order;
+        }
+
         public async Task<bool> SetDeliveryDate(Guid id, DateTime date)
         {
             var order = await _context.Orders.FindAsync(id);
@@ -54,14 +62,6 @@ namespace DemoWebshopApi.Services.Services
             await _context.SaveChangesAsync();
 
             return true;
-        }
-
-        public async Task<Order> CreateOrder(Order order)
-        {
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            return order;
         }
 
         public async Task DeleteOrder(Order order)
