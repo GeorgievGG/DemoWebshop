@@ -39,15 +39,22 @@ namespace DemoWebshopApi.Controllers
             return order;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateOrder(Guid id, Order order)
+        [HttpPut("{id}/SetDeliveryDate")]
+        public async Task<IActionResult> SetDeliveryDate(Guid id, DateTime deliveryDate)
         {
-            if (id != order.Id)
+            var isSuccessful = await _orderService.SetDeliveryDate(id, deliveryDate);
+            if (!isSuccessful)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            var isSuccessful = await _orderService.UpdateOrder(id, order);
+            return NoContent();
+        }
+
+        [HttpPut("{id}/ConfirmOrder")]
+        public async Task<IActionResult> ConfirmOrder(Guid id)
+        {
+            var isSuccessful = await _orderService.ConfirmOrder(id);
             if (!isSuccessful)
             {
                 return NotFound();

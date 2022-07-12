@@ -24,27 +24,36 @@ namespace DemoWebshopApi.Services.Services
             return await _context.Orders.FindAsync(id);
         }
 
-        public async Task<bool> UpdateOrder(Guid id, Order order)
+        public async Task<bool> SetDeliveryDate(Guid id, DateTime date)
         {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
+            {
+                return false;
+            }
+
+            order.DeliveryDate = date;
+
             _context.Entry(order).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
 
-            try
-            {
-                await _context.SaveChangesAsync();
+            return true;
+        }
 
-                return true;
-            }
-            catch (DbUpdateConcurrencyException)
+        public async Task<bool> ConfirmOrder(Guid id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null)
             {
-                if (!OrderExists(id))
-                {
-                    return false;
-                }
-                else
-                {
-                    throw;
-                }
+                return false;
             }
+
+            order.Confirmed = true;
+
+            _context.Entry(order).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<Order> CreateOrder(Order order)

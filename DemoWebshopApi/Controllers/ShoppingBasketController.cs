@@ -24,7 +24,7 @@ namespace DemoWebshopApi.Controllers
             return await _shoppingBasketService.GetShoppingBasket(userId);
         }
 
-        [HttpPost("AddShoppingBasketLine")]
+        [HttpPost("{userId}/AddShoppingBasketLine")]
         public async Task<ActionResult<ShoppingBasket>> CreateShoppingBasketLine(Guid userId, ShoppingBasketLine shoppingBasketLine)
         {
             var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);
@@ -43,7 +43,7 @@ namespace DemoWebshopApi.Controllers
             return CreatedAtAction("GetShoppingBasket", new { id = shoppingBasket.Id }, shoppingBasket);
         }
 
-        [HttpDelete("DeleteShoppingBasketLine/{userId}")]
+        [HttpDelete("{userId}/DeleteShoppingBasketLine")]
         public async Task<IActionResult> DeleteShoppingBasketLine(Guid userId, ShoppingBasketLine shoppingBasketLine)
         {
             var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);

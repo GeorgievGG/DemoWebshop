@@ -4,10 +4,11 @@ namespace DemoWebshopApi.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<Order> CreateOrder(Order order);
-        Task DeleteOrder(Order order);
-        Task<Order> GetOrder(Guid id);
         Task<IEnumerable<Order>> GetOrders();
-        Task<bool> UpdateOrder(Guid id, Order order);
+        Task<Order> GetOrder(Guid id);
+        Task<Order> CreateOrder(Order order);
+        Task<bool> ConfirmOrder(Guid id);
+        Task<bool> SetDeliveryDate(Guid id, DateTime date);
+        Task DeleteOrder(Order order);
     }
 }

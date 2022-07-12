@@ -47,7 +47,8 @@ namespace DemoWebshopApi.Data
         {
             modelBuilder.Entity<Order>().HasKey(t => t.Id);
             modelBuilder.Entity<Order>().Property(t => t.OrderDate).IsRequired();
-            modelBuilder.Entity<Order>().Property(t => t.Paid).IsRequired();
+            modelBuilder.Entity<Order>().Property(t => t.Confirmed).IsRequired();
+            modelBuilder.Entity<Order>().Property(t => t.DeliveryDate);
             modelBuilder.Entity<Order>().HasOne(t => t.Client).WithMany(u => u.Orders).HasForeignKey(t => t.ClientId).IsRequired().OnDelete(DeleteBehavior.Restrict);
         }
 
