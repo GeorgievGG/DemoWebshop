@@ -1,4 +1,4 @@
-﻿namespace DemoWebshopApi.DTO.ResponseModels
+﻿namespace DemoWebshopApi.DTOs.ResponseModels
 {
     public class ProductResponseDto
     {

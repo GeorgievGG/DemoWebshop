@@ -1,4 +1,4 @@
-﻿namespace DemoWebshopApi.DTO.RequestModels
+﻿namespace DemoWebshopApi.DTOs.RequestModels
 {
     public class ProductRequestDto
     {

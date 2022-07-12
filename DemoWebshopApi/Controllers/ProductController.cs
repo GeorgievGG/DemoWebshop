@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using DemoWebshopApi.Data.Entities;
-using DemoWebshopApi.DTO.RequestModels;
-using DemoWebshopApi.DTO.ResponseModels;
+using DemoWebshopApi.DTOs.RequestModels;
+using DemoWebshopApi.DTOs.ResponseModels;
 using DemoWebshopApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
