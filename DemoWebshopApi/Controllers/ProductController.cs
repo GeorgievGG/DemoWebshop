@@ -1,4 +1,7 @@
-﻿using DemoWebshopApi.Data.Entities;
+﻿using AutoMapper;
+using DemoWebshopApi.Data.Entities;
+using DemoWebshopApi.DTO.RequestModels;
+using DemoWebshopApi.DTO.ResponseModels;
 using DemoWebshopApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,15 +11,17 @@ namespace DemoWebshopApi.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IProductService _productService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IMapper mapper, IProductService productService)
         {
+            _mapper = mapper;
             _productService = productService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<ProductResponseDto>>> GetProducts()
         {
             var products = await _productService.GetProducts();
             if (products == null)
@@ -28,7 +33,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(Guid id)
+        public async Task<ActionResult<ProductResponseDto>> GetProduct(Guid id)
         {
             var product = await _productService.GetProduct(id);
             if (product == null)
@@ -36,18 +41,16 @@ namespace DemoWebshopApi.Controllers
                 return NotFound();
             }
 
-            return product;
+            return _mapper.Map<ProductResponseDto>(product);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(Guid id, Product product)
+        public async Task<IActionResult> UpdateProduct(Guid id, ProductRequestDto product)
         {
-            if (id != product.Id)
-            {
-                return BadRequest();
-            }
+            var updatedProduct = _mapper.Map<Product>(product);
+            updatedProduct.Id = id;
 
-            var isSuccessful = await _productService.UpdateProduct(id, product);
+            var isSuccessful = await _productService.UpdateProduct(id, _mapper.Map<Product>(updatedProduct));
             if (!isSuccessful)
             {
                 return NotFound();
@@ -57,11 +60,11 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct(Product product)
+        public async Task<ActionResult<ProductResponseDto>> CreateProduct(ProductRequestDto product)
         {
-            await _productService.CreateProduct(product);
+            var newProduct = await _productService.CreateProduct(_mapper.Map<Product>(product));
 
-            return CreatedAtAction("GetProduct", new { id = product.Id }, product);
+            return CreatedAtAction("GetProduct", new { id = newProduct.Id }, _mapper.Map<ProductResponseDto>(newProduct));
         }
 
         [HttpDelete("{id}")]

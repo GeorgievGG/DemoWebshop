@@ -17,6 +17,7 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("AppDb");
 builder.Services.AddDbContext<WebshopContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<IIDentityUserManager, IdentityUserManager>();
 builder.Services.AddTransient<IProductService, ProductService>();
