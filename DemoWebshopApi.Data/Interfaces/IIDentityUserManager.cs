@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace DemoWebshopApi.Data.Interfaces
 {
-    public interface IIDentityUserManager
+    public interface IIdentityUserManager
     {
         Task<IdentityResult> AddUserToRoleAsync(User user, string password);
         Task<bool> VerifyEmail(string email);

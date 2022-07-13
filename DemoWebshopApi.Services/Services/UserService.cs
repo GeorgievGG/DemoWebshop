@@ -6,9 +6,9 @@ namespace DemoWebshopApi.Services.Services
 {
     public class UserService : IUserService
     {
-        private readonly IIDentityUserManager _userManager;
+        private readonly IIdentityUserManager _userManager;
 
-        public UserService(IIDentityUserManager userManager)
+        public UserService(IIdentityUserManager userManager)
         {
             _userManager = userManager;
         }
