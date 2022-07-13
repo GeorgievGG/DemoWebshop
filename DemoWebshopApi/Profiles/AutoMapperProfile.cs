@@ -9,8 +9,16 @@ namespace DemoWebshopApi.Profiles
     {
         public AutoMapperProfile()
         {
+            SetupUserMaps();
             SetupProductMaps();
             SetupOrderMaps();
+        }
+
+        private void SetupUserMaps()
+        {
+            CreateMap<CreateUserRequestDto, User>();
+            CreateMap<UpdateUserRequestDto, User>();
+            CreateMap<User, UserResponseDto>();
         }
 
         private void SetupProductMaps()
