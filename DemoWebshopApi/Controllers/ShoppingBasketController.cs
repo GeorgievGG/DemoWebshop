@@ -6,7 +6,7 @@ namespace DemoWebshopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ShoppingBasketController : ControllerBase
+    public class ShoppingBasketController : BaseController
     {
         private readonly IShoppingBasketService _shoppingBasketService;
         private readonly IShoppingBasketLineService _shoppingBasketLineService;

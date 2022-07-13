@@ -3,13 +3,14 @@ using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.DTOs.RequestModels;
 using DemoWebshopApi.DTOs.ResponseModels;
 using DemoWebshopApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoWebshopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : BaseController
     {
         private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
@@ -45,12 +46,17 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<OrderResponseDto>> CreateOrder(OrderRequestDto order)
         {
+            if (UserId == null)
+            {
+                return BadRequest();
+            }
+
             var toBeCreated = _mapper.Map<Order>(order);
             toBeCreated.OrderDate = DateTime.UtcNow;
-            // TODO: Fix ClientId
-            // TODO: Fix OrderId if needed
+            toBeCreated.ClientId = Guid.Parse(UserId);
             var newOrder = await _orderService.CreateOrder(toBeCreated);
 
             return CreatedAtAction("GetOrder", new { id = newOrder.Id }, _mapper.Map<OrderResponseDto>(newOrder));

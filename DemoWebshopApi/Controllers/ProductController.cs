@@ -9,7 +9,7 @@ namespace DemoWebshopApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController : ControllerBase
+    public class ProductController : BaseController
     {
         private readonly IMapper _mapper;
         private readonly IProductService _productService;
