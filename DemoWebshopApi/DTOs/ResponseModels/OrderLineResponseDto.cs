@@ -10,7 +10,7 @@ namespace DemoWebshopApi.DTOs.ResponseModels
 
         public double Price { get; set; }
 
-        public ProductResponseDto Product { get; set; }
+        public Guid ProductId { get; set; }
 
         public Guid OrderId { get; set; }
 
