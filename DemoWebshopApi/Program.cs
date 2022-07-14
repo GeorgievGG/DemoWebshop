@@ -112,6 +112,7 @@ builder.Services
 
 var app = builder.Build();
 
+DatabaseSeeder.Seed(app.Services);
 app.UseIdentityServer();
 
 // Configure the HTTP request pipeline.
