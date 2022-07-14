@@ -1,5 +1,6 @@
 ﻿using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoWebshopApi.Controllers
@@ -19,12 +20,14 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpGet("{userId}")]
+        [Authorize]
         public async Task<ActionResult<ShoppingBasket>> GetShoppingBasket(Guid userId)
         {
             return await _shoppingBasketService.GetShoppingBasket(userId);
         }
 
         [HttpPost("{userId}/AddShoppingBasketLine")]
+        [Authorize]
         public async Task<ActionResult<ShoppingBasket>> CreateShoppingBasketLine(Guid userId, ShoppingBasketLine shoppingBasketLine)
         {
             var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);
@@ -44,6 +47,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpDelete("{userId}/DeleteShoppingBasketLine")]
+        [Authorize]
         public async Task<IActionResult> DeleteShoppingBasketLine(Guid userId, ShoppingBasketLine shoppingBasketLine)
         {
             var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);

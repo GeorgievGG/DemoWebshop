@@ -3,6 +3,7 @@ using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.DTOs.RequestModels;
 using DemoWebshopApi.DTOs.ResponseModels;
 using DemoWebshopApi.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoWebshopApi.Controllers
@@ -21,6 +22,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<UserResponseDto>> GetUser(Guid id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -33,6 +35,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateUser(Guid id, UpdateUserRequestDto user)
         {
             var updatedUser = _mapper.Map<User>(user);
@@ -48,6 +51,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpPut("{id}/UpdatePassword")]
+        [Authorize]
         public async Task<IActionResult> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
         {
             var isSuccessful = await _userService.UpdateUserPasswrodAsync(id, updatePasswordDto);
@@ -68,6 +72,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
             var isSuccessful = await _userService.DeleteUserAsync(id);

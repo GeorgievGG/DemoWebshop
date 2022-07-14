@@ -22,6 +22,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<OrderResponseDto>>> GetOrders()
         {
             var orders = await _orderService.GetOrders();
@@ -34,6 +35,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<OrderResponseDto>> GetOrder(Guid id)
         {
             var order = await _orderService.GetOrder(id);
@@ -63,6 +65,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpPut("{id}/SetDeliveryDate")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SetDeliveryDate(Guid id, DateTime deliveryDate)
         {
             var isSuccessful = await _orderService.SetDeliveryDate(id, deliveryDate);
@@ -75,6 +78,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpPut("{id}/ConfirmOrder")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ConfirmOrder(Guid id)
         {
             var isSuccessful = await _orderService.ConfirmOrder(id);
@@ -87,6 +91,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
             var order = await _orderService.GetOrder(id);

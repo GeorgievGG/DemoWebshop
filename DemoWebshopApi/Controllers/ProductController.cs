@@ -3,6 +3,7 @@ using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.DTOs.RequestModels;
 using DemoWebshopApi.DTOs.ResponseModels;
 using DemoWebshopApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DemoWebshopApi.Controllers
@@ -21,6 +22,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<ProductResponseDto>>> GetProducts()
         {
             var products = await _productService.GetProducts();
@@ -33,6 +35,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<ProductResponseDto>> GetProduct(Guid id)
         {
             var product = await _productService.GetProduct(id);
@@ -45,6 +48,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct(Guid id, ProductRequestDto product)
         {
             var updatedProduct = _mapper.Map<Product>(product);
@@ -60,6 +64,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<ProductResponseDto>> CreateProduct(ProductRequestDto product)
         {
             var newProduct = await _productService.CreateProduct(_mapper.Map<Product>(product));
@@ -68,6 +73,7 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var isSuccessful = await _productService.DeleteProduct(id);
