@@ -69,10 +69,5 @@ namespace DemoWebshopApi.Services.Services
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
         }
-
-        private bool OrderExists(Guid id)
-        {
-            return (_context.Orders?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
     }
 }
