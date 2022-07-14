@@ -5,12 +5,13 @@ namespace DemoWebshopApi.Services.Services
 {
     public interface IUserService
     {
-        Task<List<User>> GetAllUsersAsync();
-        Task<User> GetUserByIdAsync(Guid id);
+        Task<List<User>> GetAllUsers();
+        Task<User> GetUserById(Guid id);
         Task<User> GetCurrentUser(ClaimsPrincipal principal);
-        Task<User> CreateUserAsync(User user, string password);
-        Task<bool> UpdateUserAsync(User user);
-        Task<bool> DeleteUserAsync(Guid id);
-        Task<bool> UpdateUserPasswrodAsync(Guid id, UpdatePasswordDto updatePasswordDto);
+        Task<User> CreateUser(User user, string password);
+        Task<bool> UpdateUser(User user);
+        Task<bool> SetUserInRole(Guid userId, string roleName);
+        Task<bool> DeleteUser(Guid id);
+        Task<bool> UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto);
     }
 }

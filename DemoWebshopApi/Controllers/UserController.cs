@@ -25,7 +25,7 @@ namespace DemoWebshopApi.Controllers
         [Authorize]
         public async Task<ActionResult<UserResponseDto>> GetUser(Guid id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetUserById(id);
             if (user == null)
             {
                 return NotFound();
@@ -41,7 +41,7 @@ namespace DemoWebshopApi.Controllers
             var updatedUser = _mapper.Map<User>(user);
             updatedUser.Id = id;
 
-            var isSuccessful = await _userService.UpdateUserAsync(_mapper.Map<User>(updatedUser));
+            var isSuccessful = await _userService.UpdateUser(_mapper.Map<User>(updatedUser));
             if (!isSuccessful)
             {
                 return NotFound();
@@ -54,7 +54,20 @@ namespace DemoWebshopApi.Controllers
         [Authorize]
         public async Task<IActionResult> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
         {
-            var isSuccessful = await _userService.UpdateUserPasswrodAsync(id, updatePasswordDto);
+            var isSuccessful = await _userService.UpdateUserPasswrod(id, updatePasswordDto);
+            if (!isSuccessful)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}/SetUserAdmin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SetUserRole(Guid id)
+        {
+            var isSuccessful = await _userService.SetUserInRole(id, "Admin");
             if (!isSuccessful)
             {
                 return NotFound();
@@ -66,7 +79,7 @@ namespace DemoWebshopApi.Controllers
         [HttpPost]
         public async Task<ActionResult<UserResponseDto>> CreateUser(CreateUserRequestDto user)
         {
-            var newUser = await _userService.CreateUserAsync(_mapper.Map<User>(user), user.Password);
+            var newUser = await _userService.CreateUser(_mapper.Map<User>(user), user.Password);
 
             return CreatedAtAction("GetUser", new { id = newUser.Id }, _mapper.Map<UserResponseDto>(newUser));
         }
@@ -75,7 +88,7 @@ namespace DemoWebshopApi.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var isSuccessful = await _userService.DeleteUserAsync(id);
+            var isSuccessful = await _userService.DeleteUser(id);
             if (!isSuccessful)
             {
                 return NotFound();

@@ -13,26 +13,26 @@ namespace DemoWebshopApi.Services.Services
             _userManager = userManager;
         }
 
-        public async Task<List<User>> GetAllUsersAsync()
+        public async Task<List<User>> GetAllUsers()
         {
             return await _userManager.GetAllAsync();
         }
 
-        public async Task<User> GetUserByIdAsync(Guid id)
+        public async Task<User> GetUserById(Guid id)
         {
             var checkUser = await _userManager.FindByIdAsync(id.ToString());
 
             return checkUser;
         }
 
-        public async Task<User> CreateUserAsync(User user, string password)
+        public async Task<User> CreateUser(User user, string password)
         {
             await _userManager.CreateUserAsync(user, password);
 
             return await _userManager.FindByNameAsync(user.UserName);
         }
 
-        public async Task<bool> UpdateUserAsync(User user)
+        public async Task<bool> UpdateUser(User user)
         {
             var existingUser = await _userManager.FindByIdAsync(user.Id.ToString());
             if (existingUser == null)
@@ -49,7 +49,7 @@ namespace DemoWebshopApi.Services.Services
             return true;
         }
 
-        public async Task<bool> UpdateUserPasswrodAsync(Guid id, UpdatePasswordDto updatePasswordDto)
+        public async Task<bool> UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto)
         {
             var existingUser = await _userManager.FindByIdAsync(id.ToString());
             if (existingUser == null || updatePasswordDto.NewPassword != updatePasswordDto.RepeatNewPassword)
@@ -62,7 +62,7 @@ namespace DemoWebshopApi.Services.Services
             return true;
         }
 
-        public async Task<bool> DeleteUserAsync(Guid id)
+        public async Task<bool> DeleteUser(Guid id)
         {
             var checkUser = await _userManager.FindByIdAsync(id.ToString());
 
@@ -73,6 +73,19 @@ namespace DemoWebshopApi.Services.Services
         public async Task<User> GetCurrentUser(ClaimsPrincipal principal)
         {
             return await _userManager.GetUserAsync(principal);
+        }
+
+        public async Task<bool> SetUserInRole(Guid userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+            {
+                return false;
+            }
+
+            await _userManager.AddUserToRoleAsync(user, roleName);
+
+            return true;
         }
     }
 }
