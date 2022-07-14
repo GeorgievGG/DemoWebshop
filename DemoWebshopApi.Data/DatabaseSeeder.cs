@@ -18,7 +18,7 @@ namespace DemoWebshopApi.Data
                     User admin = new User()
                     {
                         Id = Guid.NewGuid(),
-                        UserName = "admin@identity.com",
+                        UserName = "admin",
                         FirstName = "Admin",
                         LastName = "Admin",
                         Email = "admin@identity.com",
