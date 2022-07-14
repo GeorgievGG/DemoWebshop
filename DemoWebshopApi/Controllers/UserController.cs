@@ -34,12 +34,17 @@ namespace DemoWebshopApi.Controllers
             return _mapper.Map<UserResponseDto>(user);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdateUser(Guid id, UpdateUserRequestDto user)
+        public async Task<IActionResult> UpdateUser(UpdateUserRequestDto user)
         {
+            if (UserId == null)
+            {
+                return BadRequest();
+            }
+
             var updatedUser = _mapper.Map<User>(user);
-            updatedUser.Id = id;
+            updatedUser.Id = Guid.Parse(UserId);
 
             var isSuccessful = await _userService.UpdateUser(_mapper.Map<User>(updatedUser));
             if (!isSuccessful)
@@ -50,11 +55,16 @@ namespace DemoWebshopApi.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/UpdatePassword")]
+        [HttpPut("UpdatePassword")]
         [Authorize]
-        public async Task<IActionResult> UpdatePassword(Guid id, UpdatePasswordDto updatePasswordDto)
+        public async Task<IActionResult> UpdatePassword(UpdatePasswordDto updatePasswordDto)
         {
-            var isSuccessful = await _userService.UpdateUserPasswrod(id, updatePasswordDto);
+            if (UserId == null)
+            {
+                return BadRequest();
+            }
+
+            var isSuccessful = await _userService.UpdateUserPasswrod(Guid.Parse(UserId), updatePasswordDto);
             if (!isSuccessful)
             {
                 return NotFound();

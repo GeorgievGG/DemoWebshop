@@ -19,17 +19,28 @@ namespace DemoWebshopApi.Controllers
             _shoppingBasketLineService = shoppingBasketLineService;
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet]
         [Authorize]
-        public async Task<ActionResult<ShoppingBasket>> GetShoppingBasket(Guid userId)
+        public async Task<ActionResult<ShoppingBasket>> GetShoppingBasket()
         {
-            return await _shoppingBasketService.GetShoppingBasket(userId);
+            if (UserId == null)
+            {
+                return BadRequest();
+            }
+
+            return await _shoppingBasketService.GetShoppingBasket(Guid.Parse(UserId));
         }
 
-        [HttpPost("{userId}/AddShoppingBasketLine")]
+        [HttpPost("AddShoppingBasketLine")]
         [Authorize]
-        public async Task<ActionResult<ShoppingBasket>> CreateShoppingBasketLine(Guid userId, ShoppingBasketLine shoppingBasketLine)
+        public async Task<ActionResult<ShoppingBasket>> CreateShoppingBasketLine(ShoppingBasketLine shoppingBasketLine)
         {
+            if (UserId == null)
+            {
+                return BadRequest();
+            }
+
+            var userId = Guid.Parse(UserId);
             var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);
             if (shoppingBasket == null)
             {
@@ -46,11 +57,16 @@ namespace DemoWebshopApi.Controllers
             return CreatedAtAction("GetShoppingBasket", new { id = shoppingBasket.Id }, shoppingBasket);
         }
 
-        [HttpDelete("{userId}/DeleteShoppingBasketLine")]
+        [HttpDelete("DeleteShoppingBasketLine")]
         [Authorize]
-        public async Task<IActionResult> DeleteShoppingBasketLine(Guid userId, ShoppingBasketLine shoppingBasketLine)
+        public async Task<IActionResult> DeleteShoppingBasketLine(ShoppingBasketLine shoppingBasketLine)
         {
-            var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);
+            if (UserId == null)
+            {
+                return BadRequest();
+            }
+
+            var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(Guid.Parse(UserId));
             if (shoppingBasket == null)
             {
                 return NotFound();
