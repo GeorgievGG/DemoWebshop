@@ -67,9 +67,9 @@ namespace DemoWebshopApi.Data.Repositories
             return false;
         }
 
-        public async Task<IdentityResult> AddUserToRoleAsync(User user, string password)
+        public async Task<IdentityResult> AddUserToRoleAsync(User user, string role)
         {
-            return await AddToRoleAsync(user, password);
+            return await AddToRoleAsync(user, role);
         }
     }
 }

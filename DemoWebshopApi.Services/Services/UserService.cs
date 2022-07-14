@@ -28,6 +28,7 @@ namespace DemoWebshopApi.Services.Services
         public async Task<User> CreateUser(User user, string password)
         {
             await _userManager.CreateUserAsync(user, password);
+            await _userManager.AddUserToRoleAsync(user, "User");
 
             return await _userManager.FindByNameAsync(user.UserName);
         }
