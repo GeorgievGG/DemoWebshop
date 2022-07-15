@@ -38,15 +38,15 @@ namespace DemoWebshopApi.Data.Repositories
             return await UpdateAsync(user);
         }
 
-        public async Task<bool> VerifyEmail(string email)
+        public async Task<bool> CheckIfEmailExists(string email)
         {
             if (await Users.AnyAsync(u => u.Email == email))
             {
-                return false;
+                return true;
             }
             else
             {
-                return true;
+                return false;
             }
         }
 

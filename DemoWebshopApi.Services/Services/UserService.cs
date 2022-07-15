@@ -1,16 +1,18 @@
 ﻿using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.Data.Interfaces;
-using System.Security.Claims;
+using DemoWebshopApi.Services.Interfaces;
 
 namespace DemoWebshopApi.Services.Services
 {
     public class UserService : IUserService
     {
         private readonly IIdentityUserManager _userManager;
+        private readonly IValidationService _validationService;
 
-        public UserService(IIdentityUserManager userManager)
+        public UserService(IIdentityUserManager userManager, IValidationService validationService)
         {
             _userManager = userManager;
+            _validationService = validationService;
         }
 
         public async Task<List<User>> GetAllUsers()
@@ -27,66 +29,64 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<User> CreateUser(User user, string password)
         {
+            _validationService.EnsureMinLenghtIsValid(password, 7, nameof(password));
+            _validationService.EnsureMinLenghtIsValid(user.FirstName, 2, nameof(user.FirstName));
+            _validationService.EnsureMinLenghtIsValid(user.LastName, 2, nameof(user.LastName));
+
+            _validationService.EnsureEmailIsValid(user.Email);
+            await _validationService.EnsureEmailIsUniqueAsync(user.Email);
+
             await _userManager.CreateUserAsync(user, password);
             await _userManager.AddUserToRoleAsync(user, "User");
 
             return await _userManager.FindByNameAsync(user.UserName);
         }
 
-        public async Task<bool> UpdateUser(User user)
+        public async Task UpdateUser(User user)
         {
+            _validationService.EnsureMinLenghtIsValid(user.FirstName, 2, nameof(user.FirstName));
+            _validationService.EnsureMinLenghtIsValid(user.LastName, 2, nameof(user.FirstName));
+
             var existingUser = await _userManager.FindByIdAsync(user.Id.ToString());
-            if (existingUser == null)
-            {
-                return false;
-            }
+            _validationService.EnsureUserExist(existingUser);
+
+            _validationService.EnsureEmailIsValid(user.Email);
+            await _validationService.EnsureEmailIsUniqueAsync(user.Email);
 
             existingUser.UserName = user.UserName;
             existingUser.FirstName = user.FirstName;
             existingUser.LastName = user.LastName;
             existingUser.Email = user.Email;
             await _userManager.UpdateUserDataAsync(existingUser);
-
-            return true;
         }
 
-        public async Task<bool> UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto)
+        public async Task UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto)
         {
             var existingUser = await _userManager.FindByIdAsync(id.ToString());
-            if (existingUser == null || updatePasswordDto.NewPassword != updatePasswordDto.RepeatNewPassword)
-            {
-                return false;
-            }
+            _validationService.EnsureUserExist(existingUser);
+            _validationService.EnsurePasswordsMatch(updatePasswordDto.NewPassword, updatePasswordDto.RepeatNewPassword);
+            _validationService.EnsureMinLenghtIsValid(updatePasswordDto.NewPassword, 7, nameof(updatePasswordDto.NewPassword));
 
             await _userManager.ChangePasswordAsync(existingUser, updatePasswordDto.CurrentPassword, updatePasswordDto.NewPassword);
-
-            return true;
         }
 
-        public async Task<bool> DeleteUser(Guid id)
+        public async Task DeleteUser(Guid id)
         {
             var checkUser = await _userManager.FindByIdAsync(id.ToString());
+            _validationService.EnsureUserExist(checkUser);
+            _validationService.EnsureUserDoesntHaveOrders(checkUser);
+            _validationService.EnsureUserDoesntHaveBasket(checkUser);
 
             await _userManager.DeleteUserAsync(checkUser);
-            return true;
         }
 
-        public async Task<User> GetCurrentUser(ClaimsPrincipal principal)
-        {
-            return await _userManager.GetUserAsync(principal);
-        }
-
-        public async Task<bool> SetUserInRole(Guid userId, string roleName)
+        public async Task SetUserInRole(Guid userId, string roleName)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null)
-            {
-                return false;
-            }
+            _validationService.EnsureUserExist(user);
+            await _validationService.EnsureUserIsAdminAsync(user);
 
             await _userManager.AddUserToRoleAsync(user, roleName);
-
-            return true;
         }
     }
 }

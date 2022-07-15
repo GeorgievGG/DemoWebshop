@@ -2,6 +2,7 @@
 using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.DTOs.RequestModels;
 using DemoWebshopApi.DTOs.ResponseModels;
+using DemoWebshopApi.Services.Interfaces;
 using DemoWebshopApi.Services.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,11 +47,7 @@ namespace DemoWebshopApi.Controllers
             var updatedUser = _mapper.Map<User>(user);
             updatedUser.Id = Guid.Parse(UserId);
 
-            var isSuccessful = await _userService.UpdateUser(_mapper.Map<User>(updatedUser));
-            if (!isSuccessful)
-            {
-                return NotFound();
-            }
+            await _userService.UpdateUser(_mapper.Map<User>(updatedUser));
 
             return NoContent();
         }
@@ -64,11 +61,7 @@ namespace DemoWebshopApi.Controllers
                 return BadRequest();
             }
 
-            var isSuccessful = await _userService.UpdateUserPasswrod(Guid.Parse(UserId), updatePasswordDto);
-            if (!isSuccessful)
-            {
-                return NotFound();
-            }
+            await _userService.UpdateUserPasswrod(Guid.Parse(UserId), updatePasswordDto);
 
             return NoContent();
         }
@@ -77,11 +70,7 @@ namespace DemoWebshopApi.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SetUserRole(Guid id)
         {
-            var isSuccessful = await _userService.SetUserInRole(id, "Admin");
-            if (!isSuccessful)
-            {
-                return NotFound();
-            }
+            await _userService.SetUserInRole(id, "Admin");
 
             return NoContent();
         }
@@ -98,11 +87,7 @@ namespace DemoWebshopApi.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
-            var isSuccessful = await _userService.DeleteUser(id);
-            if (!isSuccessful)
-            {
-                return NotFound();
-            }
+            await _userService.DeleteUser(id);
 
             return NoContent();
         }
