@@ -8,10 +8,12 @@ namespace DemoWebshopApi.Services.Services
     public class ProductService : IProductService
     {
         private readonly WebshopContext _context;
+        private readonly IValidationService _validationService;
 
-        public ProductService(WebshopContext context)
+        public ProductService(WebshopContext context, IValidationService validationService)
         {
             _context = context;
+            _validationService = validationService;
         }
 
         public async Task<IEnumerable<Product>> GetProducts()
@@ -21,57 +23,45 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<Product> GetProduct(Guid id)
         {
-            return await _context.Products.FindAsync(id);
-        }
+            var product = await _context.Products.FindAsync(id);
+            _validationService.EnsureNotNull(product, nameof(product));
 
-        public async Task<bool> UpdateProduct(Guid id, Product product)
-        {
-            _context.Entry(product).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-
-                return true;
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductExists(id))
-                {
-                    return false;
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            return product;
         }
 
         public async Task<Product> CreateProduct(Product product)
         {
+            _validationService.EnsureProductUnique(product);
+            _validationService.EnsureValueIsNotEqual(product.AvailableQuantity, 0, nameof(product.AvailableQuantity));
+            _validationService.EnsureValueIsNotEqual(product.Price, 0, nameof(product.Price));
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
             return product;
         }
 
-        public async Task<bool> DeleteProduct(Guid id)
+        public async Task UpdateProduct(Guid id, Product product)
         {
+            product.Id = id;
+            await _validationService.EnsureProductExists(id);
+            _validationService.EnsureProductUnique(product);
+            _validationService.EnsureValueIsNotEqual(product.AvailableQuantity, 0, nameof(product.AvailableQuantity));
+            _validationService.EnsureValueIsNotEqual(product.Price, 0, nameof(product.Price));
+            _context.Entry(product).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteProduct(Guid id)
+        {
+            await _validationService.EnsureProductExists(id);
+            _validationService.EnsureProductDoesntHaveBaskets(id);
+            _validationService.EnsureProductDoesntHaveOrders(id);
+
             var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return false;
-            }
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
-
-            return true;
-        }
-
-        private bool ProductExists(Guid id)
-        {
-            return (_context.Products?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

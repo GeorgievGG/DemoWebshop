@@ -39,10 +39,6 @@ namespace DemoWebshopApi.Controllers
         public async Task<ActionResult<ProductResponseDto>> GetProduct(Guid id)
         {
             var product = await _productService.GetProduct(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
 
             return _mapper.Map<ProductResponseDto>(product);
         }
@@ -54,11 +50,7 @@ namespace DemoWebshopApi.Controllers
             var updatedProduct = _mapper.Map<Product>(product);
             updatedProduct.Id = id;
 
-            var isSuccessful = await _productService.UpdateProduct(id, _mapper.Map<Product>(updatedProduct));
-            if (!isSuccessful)
-            {
-                return NotFound();
-            }
+            await _productService.UpdateProduct(id, _mapper.Map<Product>(updatedProduct));
 
             return NoContent();
         }
@@ -76,11 +68,7 @@ namespace DemoWebshopApi.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
-            var isSuccessful = await _productService.DeleteProduct(id);
-            if (!isSuccessful)
-            {
-                return NotFound();
-            }
+            await _productService.DeleteProduct(id);
 
             return NoContent();
         }
