@@ -22,9 +22,10 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<User> GetUserById(Guid id)
         {
-            var checkUser = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            _validationService.EnsureUserExist(user);
 
-            return checkUser;
+            return user;
         }
 
         public async Task<User> CreateUser(User user, string password)
@@ -33,8 +34,9 @@ namespace DemoWebshopApi.Services.Services
             _validationService.EnsureMinLenghtIsValid(user.FirstName, 2, nameof(user.FirstName));
             _validationService.EnsureMinLenghtIsValid(user.LastName, 2, nameof(user.LastName));
 
+            await _validationService.EnsureUsernameIsUniqueAsync(user.Id, user.UserName);
             _validationService.EnsureEmailIsValid(user.Email);
-            await _validationService.EnsureEmailIsUniqueAsync(user.Email);
+            await _validationService.EnsureEmailIsUniqueAsync(user.Id, user.Email);
 
             await _userManager.CreateUserAsync(user, password);
             await _userManager.AddUserToRoleAsync(user, "User");
@@ -49,9 +51,10 @@ namespace DemoWebshopApi.Services.Services
 
             var existingUser = await _userManager.FindByIdAsync(user.Id.ToString());
             _validationService.EnsureUserExist(existingUser);
+            await _validationService.EnsureUsernameIsUniqueAsync(user.Id, user.UserName);
 
             _validationService.EnsureEmailIsValid(user.Email);
-            await _validationService.EnsureEmailIsUniqueAsync(user.Email);
+            await _validationService.EnsureEmailIsUniqueAsync(user.Id, user.Email);
 
             existingUser.UserName = user.UserName;
             existingUser.FirstName = user.FirstName;

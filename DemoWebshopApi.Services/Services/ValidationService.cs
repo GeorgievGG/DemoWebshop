@@ -35,9 +35,19 @@ namespace DemoWebshopApi.Services.Services
             }
         }
 
-        public async Task EnsureEmailIsUniqueAsync(string email)
+        public async Task EnsureUsernameIsUniqueAsync(Guid id, string username)
         {
-            if (await _userManager.CheckIfEmailExists(email) == true)
+            var existingUser = await _userManager.FindByNameAsync(username);
+            if (existingUser != null && existingUser.Id != id)
+            {
+                throw new EmailAlreadyInUseException(Constants.UsernameAreadyInUse);
+            }
+        }
+
+        public async Task EnsureEmailIsUniqueAsync(Guid id, string email)
+        {
+            var users = await _userManager.GetAllAsync();
+            if (users.Any(x => x.Id != id && x.Email == email))
             {
                 throw new EmailAlreadyInUseException(Constants.EmailAreadyInUse);
             }

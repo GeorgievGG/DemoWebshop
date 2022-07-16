@@ -6,7 +6,8 @@ namespace DemoWebshopApi.Services.Interfaces
     {
         void EnsureMinLenghtIsValid(string forCheck, int length, string argumentName);
         void EnsureEmailIsValid(string email);
-        Task EnsureEmailIsUniqueAsync(string email);
+        Task EnsureUsernameIsUniqueAsync(Guid id, string username);
+        Task EnsureEmailIsUniqueAsync(Guid id, string email);
         void EnsureUserExist(User user);
         void EnsurePasswordsMatch(string newPassword, string repeatNewPassword);
         Task EnsureUserIsAdminAsync(User user);

@@ -27,10 +27,6 @@ namespace DemoWebshopApi.Controllers
         public async Task<ActionResult<UserResponseDto>> GetUser(Guid id)
         {
             var user = await _userService.GetUserById(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
 
             return _mapper.Map<UserResponseDto>(user);
         }
