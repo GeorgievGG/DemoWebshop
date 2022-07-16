@@ -39,6 +39,7 @@ namespace DemoWebshopApi.Controllers
         public async Task<ActionResult<OrderResponseDto>> GetOrder(Guid id)
         {
             var order = await _orderService.GetOrder(id);
+            //order exists
             if (order == null)
             {
                 return NotFound();
@@ -59,33 +60,27 @@ namespace DemoWebshopApi.Controllers
             var toBeCreated = _mapper.Map<Order>(order);
             toBeCreated.OrderDate = DateTime.UtcNow;
             toBeCreated.ClientId = Guid.Parse(UserId);
+            //client exists
+            //oorderlines unique
             var newOrder = await _orderService.CreateOrder(toBeCreated);
 
             return CreatedAtAction("GetOrder", new { id = newOrder.Id }, _mapper.Map<OrderResponseDto>(newOrder));
-        }
-
-        [HttpPut("{id}/SetDeliveryDate")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> SetDeliveryDate(Guid id, DateTime deliveryDate)
-        {
-            var isSuccessful = await _orderService.SetDeliveryDate(id, deliveryDate);
-            if (!isSuccessful)
-            {
-                return NotFound();
-            }
-
-            return NoContent();
         }
 
         [HttpPut("{id}/ConfirmOrder")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ConfirmOrder(Guid id)
         {
-            var isSuccessful = await _orderService.ConfirmOrder(id);
-            if (!isSuccessful)
-            {
-                return NotFound();
-            }
+            await _orderService.ConfirmOrder(id);
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}/SetDeliveryDate")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> SetDeliveryDate(Guid id, DateTime deliveryDate)
+        {
+            await _orderService.SetDeliveryDate(id, deliveryDate);
 
             return NoContent();
         }
@@ -94,13 +89,7 @@ namespace DemoWebshopApi.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteOrder(Guid id)
         {
-            var order = await _orderService.GetOrder(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            await _orderService.DeleteOrder(order);
+            await _orderService.DeleteOrder(id);
 
             return NoContent();
         }

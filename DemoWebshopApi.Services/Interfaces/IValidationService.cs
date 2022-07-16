@@ -18,5 +18,7 @@ namespace DemoWebshopApi.Services.Interfaces
         Task EnsureProductExists(Guid id);
         void EnsureProductDoesntHaveBaskets(Guid productId);
         void EnsureProductDoesntHaveOrders(Guid productId);
+        void EnsureOrderConfirmed(Order order);
+        void EnsureOrderLinesUnique(Order order);
     }
 }

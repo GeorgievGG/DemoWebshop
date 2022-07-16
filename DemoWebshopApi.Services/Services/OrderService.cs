@@ -8,10 +8,12 @@ namespace DemoWebshopApi.Services.Services
     public class OrderService : IOrderService
     {
         private readonly WebshopContext _context;
+        private readonly IValidationService _validationService;
 
-        public OrderService(WebshopContext context)
+        public OrderService(WebshopContext context, IValidationService validationService)
         {
             _context = context;
+            _validationService = validationService;
         }
 
         public async Task<IEnumerable<Order>> GetOrders()
@@ -21,51 +23,49 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<Order> GetOrder(Guid id)
         {
-            return await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(id);
+            _validationService.EnsureNotNull(order, nameof(order));
+
+            return order;
         }
 
         public async Task<Order> CreateOrder(Order order)
         {
             _context.Orders.Add(order);
+            _validationService.EnsureOrderLinesUnique(order);
             await _context.SaveChangesAsync();
 
             return order;
         }
 
-        public async Task<bool> SetDeliveryDate(Guid id, DateTime date)
+        public async Task ConfirmOrder(Guid id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return false;
-            }
-
-            order.DeliveryDate = date;
-
-            _context.Entry(order).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-
-            return true;
-        }
-
-        public async Task<bool> ConfirmOrder(Guid id)
-        {
-            var order = await _context.Orders.FindAsync(id);
-            if (order == null)
-            {
-                return false;
-            }
+            _validationService.EnsureNotNull(order, nameof(order));
 
             order.Confirmed = true;
 
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-
-            return true;
         }
 
-        public async Task DeleteOrder(Order order)
+        public async Task SetDeliveryDate(Guid id, DateTime date)
         {
+            var order = await _context.Orders.FindAsync(id);
+            _validationService.EnsureNotNull(order, nameof(order));
+            _validationService.EnsureOrderConfirmed(order);
+
+            order.DeliveryDate = date;
+
+            _context.Entry(order).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteOrder(Guid id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            _validationService.EnsureNotNull(order, nameof(order));
+
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
         }

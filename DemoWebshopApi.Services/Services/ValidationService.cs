@@ -134,5 +134,27 @@ namespace DemoWebshopApi.Services.Services
                 throw new UserHasDependenciesException(string.Format(Constants.ObjectHasDependencies, "product", "order"));
             }
         }
+
+        public void EnsureOrderConfirmed(Order order)
+        {
+            if (!order.Confirmed)
+            {
+                throw new OrderNotConfirmedException(Constants.OrderNotConfirmed);
+            }
+        }
+
+        public void EnsureOrderLinesUnique(Order order)
+        {
+            var countByProduct = order.OrderLines.GroupBy(product => product.ProductId)
+                        .Select(group => new
+                        {
+                            Key = group.Key,
+                            Count = group.Count()
+                        });
+            if (countByProduct.Any(x => x.Count > 1))
+            {
+                throw new DuplicatedOrderLinesException(Constants.DuplicatedOrderLines);
+            }
+        }
     }
 }
