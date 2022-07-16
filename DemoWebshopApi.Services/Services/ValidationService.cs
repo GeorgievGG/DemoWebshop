@@ -53,11 +53,11 @@ namespace DemoWebshopApi.Services.Services
             }
         }
 
-        public void EnsureUserExist(User user)
+        public void EnsureNotNull<T>(T input, string argumentName)
         {
-            if (user == null)
+            if (input == null)
             {
-                throw new EntityNotFoundException(String.Format(Constants.NotFound, "User"));
+                throw new EntityNotFoundException(String.Format(Constants.NotFound, argumentName));
             }
         }
 
@@ -81,7 +81,7 @@ namespace DemoWebshopApi.Services.Services
         {
             if (user.Orders.Count > 0)
             {
-                throw new UserHasDependenciesException(Constants.UserHasDependenciesOrder);
+                throw new UserHasDependenciesException(string.Format(Constants.ObjectHasDependencies, "user", "order"));
             }
         }
 
@@ -89,7 +89,49 @@ namespace DemoWebshopApi.Services.Services
         {
             if (user.Basket != null)
             {
-                throw new UserHasDependenciesException(Constants.UserHasDependenciesBasket);
+                throw new UserHasDependenciesException(string.Format(Constants.ObjectHasDependencies, "user", "basket"));
+            }
+        }
+
+        public void EnsureProductUnique(Product product)
+        {
+            if (_context.Products.Any(x => x.Id != product.Id &&
+                                        x.Name == product.Name &&
+                                        x.Model == product.Model))
+            {
+                throw new ProductAlreadyExistsException(Constants.ProductAlreadyExists);
+            }
+        }
+
+        public void EnsureValueIsNotEqual<T>(T value, T comparison, string argumentName) where T : struct
+        {
+            if (value.Equals(comparison))
+            {
+                throw new ValueInvalidException(string.Format(Constants.ValueIsNotValid, value, argumentName));
+            }
+        }
+
+        public async Task EnsureProductExists(Guid id)
+        {
+            if (await _context.Products.FindAsync(id) == null)
+            {
+                throw new EntityNotFoundException(string.Format(Constants.NotFound, "Product"));
+            }
+        }
+
+        public void EnsureProductDoesntHaveBaskets(Guid productId)
+        {
+            if (_context.ShoppingBasketLines.Any(x => x.ProductId == productId))
+            {
+                throw new UserHasDependenciesException(string.Format(Constants.ObjectHasDependencies, "product", "basket"));
+            }
+        }
+
+        public void EnsureProductDoesntHaveOrders(Guid productId)
+        {
+            if (_context.OrderLines.Any(x => x.ProductId == productId))
+            {
+                throw new UserHasDependenciesException(string.Format(Constants.ObjectHasDependencies, "product", "order"));
             }
         }
     }

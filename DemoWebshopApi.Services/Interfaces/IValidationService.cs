@@ -8,10 +8,15 @@ namespace DemoWebshopApi.Services.Interfaces
         void EnsureEmailIsValid(string email);
         Task EnsureUsernameIsUniqueAsync(Guid id, string username);
         Task EnsureEmailIsUniqueAsync(Guid id, string email);
-        void EnsureUserExist(User user);
+        void EnsureNotNull<T>(T input, string argumentName);
         void EnsurePasswordsMatch(string newPassword, string repeatNewPassword);
         Task EnsureUserIsAdminAsync(User user);
         void EnsureUserDoesntHaveOrders(User user);
         void EnsureUserDoesntHaveBasket(User user);
+        void EnsureProductUnique(Product product);
+        void EnsureValueIsNotEqual<T>(T value, T comparison, string argumentName) where T : struct;
+        Task EnsureProductExists(Guid id);
+        void EnsureProductDoesntHaveBaskets(Guid productId);
+        void EnsureProductDoesntHaveOrders(Guid productId);
     }
 }

@@ -23,7 +23,7 @@ namespace DemoWebshopApi.Services.Services
         public async Task<User> GetUserById(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            _validationService.EnsureUserExist(user);
+            _validationService.EnsureNotNull(user, nameof(user));
 
             return user;
         }
@@ -50,7 +50,7 @@ namespace DemoWebshopApi.Services.Services
             _validationService.EnsureMinLenghtIsValid(user.LastName, 2, nameof(user.FirstName));
 
             var existingUser = await _userManager.FindByIdAsync(user.Id.ToString());
-            _validationService.EnsureUserExist(existingUser);
+            _validationService.EnsureNotNull(existingUser, nameof(user));
             await _validationService.EnsureUsernameIsUniqueAsync(user.Id, user.UserName);
 
             _validationService.EnsureEmailIsValid(user.Email);
@@ -66,7 +66,7 @@ namespace DemoWebshopApi.Services.Services
         public async Task UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto)
         {
             var existingUser = await _userManager.FindByIdAsync(id.ToString());
-            _validationService.EnsureUserExist(existingUser);
+            _validationService.EnsureNotNull(existingUser, nameof(existingUser));
             _validationService.EnsurePasswordsMatch(updatePasswordDto.NewPassword, updatePasswordDto.RepeatNewPassword);
             _validationService.EnsureMinLenghtIsValid(updatePasswordDto.NewPassword, 7, nameof(updatePasswordDto.NewPassword));
 
@@ -75,18 +75,18 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task DeleteUser(Guid id)
         {
-            var checkUser = await _userManager.FindByIdAsync(id.ToString());
-            _validationService.EnsureUserExist(checkUser);
-            _validationService.EnsureUserDoesntHaveOrders(checkUser);
-            _validationService.EnsureUserDoesntHaveBasket(checkUser);
+            var existingUser = await _userManager.FindByIdAsync(id.ToString());
+            _validationService.EnsureNotNull(existingUser, nameof(existingUser));
+            _validationService.EnsureUserDoesntHaveOrders(existingUser);
+            _validationService.EnsureUserDoesntHaveBasket(existingUser);
 
-            await _userManager.DeleteUserAsync(checkUser);
+            await _userManager.DeleteUserAsync(existingUser);
         }
 
         public async Task SetUserInRole(Guid userId, string roleName)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            _validationService.EnsureUserExist(user);
+            _validationService.EnsureNotNull(user, nameof(user));
             await _validationService.EnsureUserIsAdminAsync(user);
 
             await _userManager.AddUserToRoleAsync(user, roleName);
