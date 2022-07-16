@@ -69,6 +69,15 @@ namespace DemoWebshopApi.Services.Services
             }
         }
 
+        public async Task EnsureUserExists(Guid userId)
+        {
+            var existingUser = await _userManager.FindByIdAsync(userId.ToString());
+            if (existingUser == null)
+            {
+                throw new UserNotExistException(Constants.ClientDoesNotExist);
+            }
+        }
+
         public async Task EnsureUserIsAdminAsync(User user)
         {
             if (await _userManager.IsUserInRole(user.Id, "Admin"))

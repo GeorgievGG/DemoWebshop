@@ -20,5 +20,6 @@ namespace DemoWebshopApi.Services.Interfaces
         void EnsureProductDoesntHaveOrders(Guid productId);
         void EnsureOrderConfirmed(Order order);
         void EnsureOrderLinesUnique(Order order);
+        Task EnsureUserExists(Guid userId);
     }
 }

@@ -32,6 +32,7 @@ namespace DemoWebshopApi.Services.Services
         public async Task<Order> CreateOrder(Order order)
         {
             _context.Orders.Add(order);
+            _validationService.EnsureUserExists(order.ClientId);
             _validationService.EnsureOrderLinesUnique(order);
             await _context.SaveChangesAsync();
 

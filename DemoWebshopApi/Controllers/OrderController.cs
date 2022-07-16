@@ -39,7 +39,6 @@ namespace DemoWebshopApi.Controllers
         public async Task<ActionResult<OrderResponseDto>> GetOrder(Guid id)
         {
             var order = await _orderService.GetOrder(id);
-            //order exists
             if (order == null)
             {
                 return NotFound();
@@ -60,8 +59,6 @@ namespace DemoWebshopApi.Controllers
             var toBeCreated = _mapper.Map<Order>(order);
             toBeCreated.OrderDate = DateTime.UtcNow;
             toBeCreated.ClientId = Guid.Parse(UserId);
-            //client exists
-            //oorderlines unique
             var newOrder = await _orderService.CreateOrder(toBeCreated);
 
             return CreatedAtAction("GetOrder", new { id = newOrder.Id }, _mapper.Map<OrderResponseDto>(newOrder));

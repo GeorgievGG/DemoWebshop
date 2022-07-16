@@ -14,5 +14,6 @@
         public const string ValueIsNotValid = "{0} is not a valid value for {1}";
         public const string OrderNotConfirmed = "Can't set delivery date for unconfirmed order";
         public const string DuplicatedOrderLines = "Can't create an order with duplicated product lines!";
+        public const string ClientDoesNotExist = "Client with such ID does not existy!";
     }
 }
