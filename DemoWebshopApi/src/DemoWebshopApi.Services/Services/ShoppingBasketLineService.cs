@@ -23,7 +23,10 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<ShoppingBasketLine> GetShoppingBasketLine(Guid id)
         {
-            return await _context.ShoppingBasketLines.FirstOrDefaultAsync(x => x.Id == id);
+            var basketLine = await _context.ShoppingBasketLines.FindAsync(id);
+            _validationService.EnsureNotNull(basketLine, nameof(basketLine));
+
+            return basketLine;
         }
 
         public async Task<ShoppingBasket> ChangeBasketLineQuantity(Guid userId, ShoppingBasketLine shoppingBasketLine)
