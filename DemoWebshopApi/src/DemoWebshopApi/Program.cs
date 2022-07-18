@@ -50,6 +50,12 @@ builder.Services.AddSwaggerGen(config =>
     });
 });
 
+var corsSource = builder.Configuration.GetSection("CorsSettings")["AllowedCorsSource"];
+builder.Services.AddCors(p => p.AddPolicy(builder.Configuration.GetSection("CorsSettings")["PolicyName"], builder =>
+{
+    builder.WithOrigins(corsSource).AllowAnyMethod().AllowAnyHeader();
+}));
+
 var connectionString = builder.Configuration.GetConnectionString("AppDb");
 builder.Services.AddDbContext<WebshopContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -115,6 +121,7 @@ builder.Services
 var app = builder.Build();
 
 DatabaseSeeder.Seed(app.Services);
+app.UseCors(builder.Configuration.GetSection("CorsSettings")["PolicyName"]);
 app.UseIdentityServer();
 
 // Configure the HTTP request pipeline.
