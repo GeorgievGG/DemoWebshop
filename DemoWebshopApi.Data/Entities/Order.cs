@@ -2,6 +2,11 @@
 {
     public class Order
     {
+        public Order()
+        {
+            OrderLines = new List<OrderLine>();
+        }
+
         public Guid Id { get; set; }
 
         public DateTime OrderDate { get; set; }

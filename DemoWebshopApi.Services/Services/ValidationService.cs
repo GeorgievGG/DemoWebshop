@@ -120,6 +120,14 @@ namespace DemoWebshopApi.Services.Services
             }
         }
 
+        public void EnsureValueIsGreater<T>(T value, T comparison, string argumentName) where T : IComparable<T>
+        {
+            if (value.CompareTo(comparison) <= 0)
+            {
+                throw new ValueInvalidException(string.Format(Constants.ValueIsNotValid, value, argumentName));
+            }
+        }
+
         public async Task EnsureProductExists(Guid id)
         {
             if (await _context.Products.FindAsync(id) == null)

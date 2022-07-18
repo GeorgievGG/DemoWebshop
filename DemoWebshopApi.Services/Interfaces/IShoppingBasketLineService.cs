@@ -5,7 +5,7 @@ namespace DemoWebshopApi.Services.Interfaces
     public interface IShoppingBasketLineService
     {
         Task<ShoppingBasketLine> GetShoppingBasketLine(Guid id);
-        Task<bool> CreateShoppingBasketLine(Guid basketId, ShoppingBasketLine shoppingBasketLine);
-        Task<bool> DeleteShoppingBasketLine(Guid basketId, Guid lineId);
+        Task<ShoppingBasket> ChangeBasketLineQuantity(Guid clientId, ShoppingBasketLine shoppingBasketLine);
+        Task DeleteShoppingBasketLine(Guid clientId, Guid lineId);
     }
 }

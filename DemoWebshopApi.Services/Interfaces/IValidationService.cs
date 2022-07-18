@@ -15,6 +15,7 @@ namespace DemoWebshopApi.Services.Interfaces
         void EnsureUserDoesntHaveBasket(User user);
         void EnsureProductUnique(Product product);
         void EnsureValueIsNotEqual<T>(T value, T comparison, string argumentName) where T : struct;
+        void EnsureValueIsGreater<T>(T value, T comparison, string argumentName) where T : IComparable<T>;
         Task EnsureProductExists(Guid id);
         void EnsureProductDoesntHaveBaskets(Guid productId);
         void EnsureProductDoesntHaveOrders(Guid productId);

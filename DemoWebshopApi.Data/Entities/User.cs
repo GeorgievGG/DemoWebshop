@@ -4,6 +4,11 @@ namespace DemoWebshopApi.Data.Entities
 {
     public class User : IdentityUser<Guid>
     {
+        public User()
+        {
+            Orders = new List<Order>();
+        }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

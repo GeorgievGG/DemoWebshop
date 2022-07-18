@@ -2,6 +2,11 @@
 {
     public class ShoppingBasket
     {
+        public ShoppingBasket()
+        {
+            BasketLines = new List<ShoppingBasketLine>();
+        }
+
         public Guid Id { get; set; }
 
         public Guid ClientId { get; set; }
