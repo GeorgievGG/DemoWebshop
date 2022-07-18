@@ -31,6 +31,9 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<Product> CreateProduct(Product product)
         {
+            _validationService.EnsureMaxLenghtIsValid(product.Name, 120, nameof(product.Name));
+            _validationService.EnsureMaxLenghtIsValid(product.Model, 120, nameof(product.Model));
+
             _validationService.EnsureProductUnique(product);
             _validationService.EnsureValueIsNotEqual(product.AvailableQuantity, 0, nameof(product.AvailableQuantity));
             _validationService.EnsureValueIsNotEqual(product.Price, 0, nameof(product.Price));
@@ -42,6 +45,9 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task UpdateProduct(Guid id, Product product)
         {
+            _validationService.EnsureMaxLenghtIsValid(product.Name, 120, nameof(product.Name));
+            _validationService.EnsureMaxLenghtIsValid(product.Model, 120, nameof(product.Model));
+
             product.Id = id;
             await _validationService.EnsureProductExists(id);
             _validationService.EnsureProductUnique(product);

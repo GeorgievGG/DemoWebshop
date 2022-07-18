@@ -5,6 +5,7 @@ namespace DemoWebshopApi.Services.Interfaces
     public interface IValidationService
     {
         void EnsureMinLenghtIsValid(string forCheck, int length, string argumentName);
+        void EnsureMaxLenghtIsValid(string forCheck, int length, string argumentName);
         void EnsureEmailIsValid(string email);
         Task EnsureUsernameIsUniqueAsync(Guid id, string username);
         Task EnsureEmailIsUniqueAsync(Guid id, string email);

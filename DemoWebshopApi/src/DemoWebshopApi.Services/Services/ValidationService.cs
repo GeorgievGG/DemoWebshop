@@ -23,7 +23,15 @@ namespace DemoWebshopApi.Services.Services
         {
             if (forCheck.Length <= length)
             {
-                throw new InvalidLengthException(String.Format(Constants.InvalidLength, argumentName, length));
+                throw new InvalidLengthException(String.Format(Constants.TextTooShort, argumentName, length));
+            }
+        }
+
+        public void EnsureMaxLenghtIsValid(string forCheck, int length, string argumentName)
+        {
+            if (forCheck.Length >= length)
+            {
+                throw new InvalidLengthException(String.Format(Constants.TextTooLong, argumentName, length));
             }
         }
 

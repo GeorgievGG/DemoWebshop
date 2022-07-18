@@ -74,7 +74,7 @@ namespace DemoWebshopApi.Controllers
         [HttpPost]
         public async Task<ActionResult<UserResponseDto>> CreateUser(CreateUserRequestDto user)
         {
-            var newUser = await _userService.CreateUser(_mapper.Map<User>(user), user.Password);
+            var newUser = await _userService.CreateUser(_mapper.Map<User>(user), user.Password, user.ConfirmPassword);
 
             return CreatedAtAction("GetUser", new { id = newUser.Id }, _mapper.Map<UserResponseDto>(newUser));
         }

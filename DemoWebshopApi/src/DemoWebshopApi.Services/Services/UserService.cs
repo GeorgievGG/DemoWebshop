@@ -28,15 +28,19 @@ namespace DemoWebshopApi.Services.Services
             return user;
         }
 
-        public async Task<User> CreateUser(User user, string password)
+        public async Task<User> CreateUser(User user, string password, string confirmPassword)
         {
+            _validationService.EnsureMinLenghtIsValid(user.UserName, 2, nameof(user.UserName));
+            _validationService.EnsureMaxLenghtIsValid(user.UserName, 64, nameof(user.UserName));
             _validationService.EnsureMinLenghtIsValid(password, 7, nameof(password));
-            _validationService.EnsureMinLenghtIsValid(user.FirstName, 2, nameof(user.FirstName));
-            _validationService.EnsureMinLenghtIsValid(user.LastName, 2, nameof(user.LastName));
+            _validationService.EnsureMaxLenghtIsValid(user.FirstName, 64, nameof(user.FirstName));
+            _validationService.EnsureMaxLenghtIsValid(user.LastName, 64, nameof(user.LastName));
 
             await _validationService.EnsureUsernameIsUniqueAsync(user.Id, user.UserName);
             _validationService.EnsureEmailIsValid(user.Email);
             await _validationService.EnsureEmailIsUniqueAsync(user.Id, user.Email);
+
+            _validationService.EnsurePasswordsMatch(password, confirmPassword);
 
             await _userManager.CreateUserAsync(user, password);
             await _userManager.AddUserToRoleAsync(user, "User");

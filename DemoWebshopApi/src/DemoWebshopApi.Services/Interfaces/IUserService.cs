@@ -8,7 +8,7 @@ namespace DemoWebshopApi.Services.Interfaces
     {
         Task<List<User>> GetAllUsers();
         Task<User> GetUserById(Guid id);
-        Task<User> CreateUser(User user, string password);
+        Task<User> CreateUser(User user, string password, string confirmPassword);
         Task UpdateUser(User user);
         Task SetUserInRole(Guid userId, string roleName);
         Task DeleteUser(Guid id);
