@@ -55,6 +55,7 @@ builder.Services.AddDbContext<WebshopContext>(options => options.UseSqlServer(co
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<IIdentityUserManager, IdentityUserManager>();
+builder.Services.AddTransient<IValidationService, ValidationService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
