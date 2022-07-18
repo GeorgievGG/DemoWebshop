@@ -1,9 +1,28 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import About from "./components/About";
+import Login from "./components/Login";
 
 function App() {
+  const [showAboutLink, setShowAboutLink] = useState(true)
+
+  const toggleAboutLinkStatus = () => {
+    setShowAboutLink(!showAboutLink)
+  }
+
+  const login = async (userCredentials) => {
+    const res = await fetch('https://localhost:7000/api/Authentication/Login', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(userCredentials)
+    })
+    const data = await res.json()
+  }
+
   return (
     <Router>
         <div className="container">
@@ -13,11 +32,19 @@ function App() {
             <Route path='/' element={
               <>
                 <div>Body</div>
+                <Link to="/login">Login</Link>
               </>
               } />
-            <Route path='/about' element={<About />} />
+            <Route path='/login' element=
+              {
+                <Login onLogin={login} />
+              } />
+            <Route path='/about' element=
+              {
+                <About onGoBackClick={toggleAboutLinkStatus}/>
+              } />
           </Routes>
-          <Footer />
+          <Footer onAboutClick={toggleAboutLinkStatus} showAboutLink={ showAboutLink } />
         </div>
     </Router>
   );
