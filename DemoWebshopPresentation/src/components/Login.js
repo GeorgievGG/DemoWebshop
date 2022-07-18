@@ -18,6 +18,10 @@ const Login = ({onLogin}) => {
     }
 
     onLogin({ username, password })
+    flushForm()
+  }
+  
+  const flushForm = () => {
     setUsername('')
     setPassword('')
   }
