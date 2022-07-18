@@ -12,6 +12,7 @@ namespace DemoWebshopApi.Profiles
             SetupUserMaps();
             SetupProductMaps();
             SetupOrderMaps();
+            SetupSoppingBasketMaps();
         }
 
         private void SetupUserMaps()
@@ -33,6 +34,13 @@ namespace DemoWebshopApi.Profiles
             CreateMap<OrderLineRequestDto, OrderLine>();
             CreateMap<Order, OrderResponseDto>();
             CreateMap<OrderLine, OrderLineResponseDto>();
+        }
+
+        private void SetupSoppingBasketMaps()
+        {
+            CreateMap<ShoppingBasketLineRequestDto, ShoppingBasketLine>();
+            CreateMap<ShoppingBasket, ShoppingBasketResponseDto>();
+            CreateMap<ShoppingBasketLine, ShoppingBasketLineResponseDto>();
         }
     }
 }
