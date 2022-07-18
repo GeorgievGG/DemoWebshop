@@ -4,6 +4,7 @@ using DemoWebshopApi.Data.Interfaces;
 using DemoWebshopApi.Data.Repositories;
 using DemoWebshopApi.DTOs;
 using DemoWebshopApi.IdentityAuth;
+using DemoWebshopApi.Middleware;
 using DemoWebshopApi.Services.Interfaces;
 using DemoWebshopApi.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -123,6 +124,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<GlobalErrorHandler>();
 
 app.UseAuthentication();
 app.UseAuthorization();
