@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 
-const Footer = () => {
+const Footer = ({ onAboutClick, showAboutLink }) => {
   return (
     <footer>
         <p>Copyright &copy; 2022</p>
-        <Link to="/about">About</Link>
+        {
+          showAboutLink && <Link onClick={onAboutClick} to="/about">About</Link>
+        }
     </footer>
   )
 }
