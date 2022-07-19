@@ -1,6 +1,7 @@
 import { useState } from "react"
+import Button from './Button'
 
-const Login = ({onLogin}) => {
+const Login = ({onLogin, onGoHomeClick}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -18,32 +19,29 @@ const Login = ({onLogin}) => {
     }
 
     onLogin({ username, password })
-    flushForm()
-  }
-  
-  const flushForm = () => {
-    setUsername('')
-    setPassword('')
   }
 
   return (
-    <form className="add-form"
-          onSubmit={onSubmit}>
-        <div className="form-control">
-            <label>Username</label>
-            <input type='text' 
-                   placeholder='Type username'
-                   value={username}
-                   onChange={(e) => setUsername(e.target.value)} />
-        </div>
-        <div className="form-control">
-            <label>Password</label>
-            <input type='password' 
-                   value={password}
-                   onChange={(e) => setPassword(e.target.value)} />
-        </div>
-        <input className="btn btn-block" type='submit' value='Login' />
-    </form>
+    <div>
+      <form className="add-form"
+            onSubmit={onSubmit}>
+          <div className="form-control">
+              <label>Username</label>
+              <input type='text' 
+                    placeholder='Type username'
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)} />
+          </div>
+          <div className="form-control">
+              <label>Password</label>
+              <input type='password' 
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)} />
+          </div>
+          <input className="btn btn-block" type='submit' value='Login' />
+      </form>
+      <Button text="Go Home" onClick={onGoHomeClick} />
+    </div>
   )
 }
 
