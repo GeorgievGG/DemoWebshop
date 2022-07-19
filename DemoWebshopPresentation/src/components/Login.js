@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Button from './Button'
 
-const Login = ({onLogin, onGoHomeClick}) => {
+const Login = ({onLogin, onGoBackClick}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -40,7 +40,7 @@ const Login = ({onLogin, onGoHomeClick}) => {
           </div>
           <input className="btn btn-block" type='submit' value='Login' />
       </form>
-      <Button text="Go Home" onClick={onGoHomeClick} />
+      <Button text="Go Back" onClick={onGoBackClick} />
     </div>
   )
 }

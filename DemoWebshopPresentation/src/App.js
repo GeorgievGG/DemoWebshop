@@ -8,11 +8,11 @@ import Register from "./components/Register";
 import Button from "./components/Button";
 
 function App() {
-  let navigate = useNavigate();
+  const navigate = useNavigate();
   const [showAboutLink, setShowAboutLink] = useState(true)
 
   const navigateHome = () => {
-    navigate('/')
+    navigate(-1)
   }
 
   const login = async (userCredentials) => {
@@ -23,7 +23,6 @@ function App() {
       },
       body: JSON.stringify(userCredentials)
     })
-    
     const data = await res.json()
     if (res.ok) {
       localStorage.setItem('access_token', data.access_token)
@@ -98,11 +97,11 @@ function App() {
             } />
           <Route path='/login' element=
             {
-              <Login onLogin={login} onGoHomeClick={navigateHome} />
+              <Login onLogin={login} onGoBackClick={navigateHome} />
             } />
           <Route path='/register' element=
             {
-              <Register onRegister={register} onGoHomeClick={navigateHome} />
+              <Register onRegister={register} onGoBackClick={navigateHome} />
             } />
           <Route path='/about' element=
             {

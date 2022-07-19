@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Button from './Button'
 
-const Register = ({onRegister, onGoHomeClick}) => {
+const Register = ({onRegister, onGoBackClick}) => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -81,7 +81,7 @@ const Register = ({onRegister, onGoHomeClick}) => {
             </div>
             <input className="btn btn-block" type='submit' value='Register' />
         </form>
-        <Button text="Go Home" onClick={onGoHomeClick} />
+        <Button text="Go Back" onClick={onGoBackClick} />
     </div>
   )
 }
