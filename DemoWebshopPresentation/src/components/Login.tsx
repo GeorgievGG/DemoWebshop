@@ -1,11 +1,17 @@
+import React, { MouseEventHandler, FormEventHandler } from 'react'
 import { useState } from "react"
 import Button from './Button'
 
-const Login = ({onLogin, onGoBackClick}) => {
+type Props = {
+  onLogin: Function,
+  onGoBackClick: MouseEventHandler
+}
+
+const Login = ({onLogin, onGoBackClick}: Props) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const onSubmit = (e) => {
+  const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
 
     if (!username) {

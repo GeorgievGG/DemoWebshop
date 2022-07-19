@@ -1,6 +1,13 @@
+import React, { MouseEventHandler } from 'react'
 import { Link } from "react-router-dom";
 
-const Footer = ({ onAboutClick, showAboutLink }) => {
+
+type Props = {
+  onAboutClick: MouseEventHandler,
+  showAboutLink: boolean
+}
+
+const Footer = ({ onAboutClick, showAboutLink } : Props) => {
   return (
     <footer>
         <p>Copyright &copy; 2022</p>

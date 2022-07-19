@@ -1,11 +1,26 @@
+import React from 'react'
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, Link, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import About from "./components/About";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Button from "./components/Button";
+
+type UserCreds = {
+  username: string,
+  password: string
+}
+
+type RegistrationInput = {
+  username: string
+  email: string
+  firstName: string
+  lastName: string
+  password: string
+  confirmPassword: string
+}
 
 function App() {
   const navigate = useNavigate();
@@ -15,7 +30,7 @@ function App() {
     navigate(-1)
   }
 
-  const login = async (userCredentials) => {
+  const login = async (userCredentials: UserCreds) => {
     const res = await fetch('https://localhost:7000/api/Authentication/Login', {
       method: 'POST',
       headers: {
@@ -34,7 +49,7 @@ function App() {
     }
   }
 
-  const refreshToken = async (refreshToken) => {
+  const refreshToken = async (refreshToken: string) => {
     const res = await fetch('https://localhost:7000/api/Authentication/RefreshToken', {
       method: 'POST',
       headers: {
@@ -54,7 +69,7 @@ function App() {
     }
   }
 
-  const register = async (userInput) => {
+  const register = async (userInput: RegistrationInput) => {
     const res = await fetch('https://localhost:7000/api/User', {
       method: 'POST',
       headers: {
