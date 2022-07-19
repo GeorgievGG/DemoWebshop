@@ -27,12 +27,35 @@ namespace DemoWebshopApi.Controllers
             var url = "https://localhost:7000/connect/token";
 
             var identityServerParameters = new List<KeyValuePair<string, string>>();
-            identityServerParameters.Add(new KeyValuePair<string, string>("grant_type", _authSettings.Value.GrantType));
+            identityServerParameters.Add(new KeyValuePair<string, string>("grant_type", _authSettings.Value.GrantTypeLogin));
             identityServerParameters.Add(new KeyValuePair<string, string>("username", loginModel.Username));
             identityServerParameters.Add(new KeyValuePair<string, string>("password", loginModel.Password));
             identityServerParameters.Add(new KeyValuePair<string, string>("client_id", _authSettings.Value.ClientId));
             identityServerParameters.Add(new KeyValuePair<string, string>("client_secret", _authSettings.Value.ClientSecret));
             identityServerParameters.Add(new KeyValuePair<string, string>("scope", _authSettings.Value.Scope));
+
+            using (client)
+            {
+                HttpResponseMessage response = await client.PostAsync(url, new FormUrlEncodedContent(identityServerParameters));
+                var content = await response.Content.ReadAsStringAsync();
+                var json = GetFormattedJson(content);
+
+                return StatusCode((int)response.StatusCode, json);
+            }
+        }
+
+        [HttpPost, Route("RefreshToken")]
+        public async Task<ActionResult<OAuthTokenResponseDTO>> RefreshToken([FromBody]string refreshToken)
+        {
+            var client = new HttpClient();
+
+            var url = "https://localhost:7000/connect/token";
+
+            var identityServerParameters = new List<KeyValuePair<string, string>>();
+            identityServerParameters.Add(new KeyValuePair<string, string>("grant_type", _authSettings.Value.GrantTypeRefresh));
+            identityServerParameters.Add(new KeyValuePair<string, string>("client_id", _authSettings.Value.ClientId));
+            identityServerParameters.Add(new KeyValuePair<string, string>("client_secret", _authSettings.Value.ClientSecret));
+            identityServerParameters.Add(new KeyValuePair<string, string>("refresh_token", refreshToken));
 
             using (client)
             {
