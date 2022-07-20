@@ -4,8 +4,7 @@ import { Buffer } from 'buffer';
 import ClaimTypes from '../enums/ClaimTypes'
 
 type Props = {
-    token: string,
-    onGetUserSuccess: (token: string) => void
+    token: string
 }
 
 type UpdateProfileInput = {
@@ -15,15 +14,13 @@ type UpdateProfileInput = {
     lastName: string
 }
 
-const UpdatePersonData = ({ token, onGetUserSuccess }: Props) => {
+const UpdatePersonData = ({ token }: Props) => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
 
     useEffect(() => {
-        // TODO: Fix token issue - it should be injected instead of setting it here
-        const token = localStorage.getItem("access_token")!
         const tokenData = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
         const userId = tokenData[ClaimTypes.UserId]
         fetch(
@@ -34,7 +31,6 @@ const UpdatePersonData = ({ token, onGetUserSuccess }: Props) => {
                 }
             })
             .then(response => handleGetUserResponse(response))
-            .then(() => onGetUserSuccess(token))
         }, []
     )
 

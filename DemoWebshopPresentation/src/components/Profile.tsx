@@ -12,11 +12,11 @@ type Props = {
 }
 
 const Profile = ({ navigate }: Props) => {
-  const [token, setToken] = useState('')
+  const token = localStorage.getItem("access_token")!
 
   return (
     <div>
-        <UpdatePersonData token={token} onGetUserSuccess={setToken} />
+        <UpdatePersonData token={token} />
         <UpdatePassword token={token} />
         <Button text="Go Back" onClick={() => navigate(-1)} />
     </div>
