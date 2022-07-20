@@ -1,4 +1,5 @@
-﻿using DemoWebshopApi.Data.Entities;
+﻿using DemoWebshopApi.Common.CustomExceptions;
+using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.Data.Interfaces;
 using DemoWebshopApi.Services.Interfaces;
 
@@ -50,8 +51,10 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task UpdateUser(User user)
         {
-            _validationService.EnsureMinLenghtIsValid(user.FirstName, 2, nameof(user.FirstName));
-            _validationService.EnsureMinLenghtIsValid(user.LastName, 2, nameof(user.FirstName));
+            _validationService.EnsureMinLenghtIsValid(user.UserName, 2, nameof(user.UserName));
+            _validationService.EnsureMaxLenghtIsValid(user.UserName, 64, nameof(user.UserName));
+            _validationService.EnsureMaxLenghtIsValid(user.FirstName, 64, nameof(user.FirstName));
+            _validationService.EnsureMaxLenghtIsValid(user.LastName, 64, nameof(user.LastName));
 
             var existingUser = await _userManager.FindByIdAsync(user.Id.ToString());
             _validationService.EnsureNotNull(existingUser, nameof(user));
@@ -74,7 +77,15 @@ namespace DemoWebshopApi.Services.Services
             _validationService.EnsurePasswordsMatch(updatePasswordDto.NewPassword, updatePasswordDto.RepeatNewPassword);
             _validationService.EnsureMinLenghtIsValid(updatePasswordDto.NewPassword, 7, nameof(updatePasswordDto.NewPassword));
 
-            await _userManager.ChangePasswordAsync(existingUser, updatePasswordDto.CurrentPassword, updatePasswordDto.NewPassword);
+            var result = await _userManager.ChangePasswordAsync(existingUser, updatePasswordDto.CurrentPassword, updatePasswordDto.NewPassword);
+            if (!result.Succeeded)
+            {
+                var error = result.Errors.FirstOrDefault();
+                if (error != null)
+                {
+                    throw new IdentityResultException(error.Description);
+                }
+            }
         }
 
         public async Task DeleteUser(Guid id)

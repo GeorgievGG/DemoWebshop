@@ -51,7 +51,20 @@ namespace DemoWebshopApi.Middleware
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { message = error?.Message });
+                var errorMessage = error?.Message;
+                if (string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    try
+                    {
+                        errorMessage = ((HttpStatusCode)response.StatusCode).ToString();
+                    }
+                    catch
+                    {
+
+                    }
+                }
+
+                var result = JsonSerializer.Serialize(new { message = errorMessage });
                 await response.WriteAsync(result);
             }
         }
