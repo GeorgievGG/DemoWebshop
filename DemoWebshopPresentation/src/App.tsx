@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import About from "./components/About";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Profile from "./components/Profile";
 
 type UserCreds = {
   username: string,
@@ -38,11 +39,12 @@ function App() {
       },
       body: JSON.stringify(userCredentials)
     })
-    const data = await res.json()
+
     if (res.ok) {
+      const data = await res.json()
       localStorage.setItem('access_token', data.access_token)
       localStorage.setItem('refresh_token', data.refresh_token)
-      setUserLogged(true);
+      setUserLogged(true)
       navigateBack()
     }
     else {
@@ -59,8 +61,8 @@ function App() {
       body: JSON.stringify(refreshToken)
     })
 
-    const data = await res.json()
     if (res.ok) {
+      const data = await res.json()
       localStorage.setItem('access_token', data.access_token)
       localStorage.setItem('refresh_token', data.refresh_token)
     }
@@ -79,13 +81,19 @@ function App() {
       body: JSON.stringify(userInput)
     })
     
-    const data = await res.json()
+    const body = await res.text()
     if (res.ok) {
+      const data = JSON.parse(body)
       alert(`User ${data.username} registered!`)
       navigateBack()
     }
     else {
-      alert(`Registration failed for user ${userInput.username}: ${data.message}`)
+      let errorMessage = 'Unknown error'
+      if (body && body !== '') {
+        const data = JSON.parse(body)
+        errorMessage = data.message
+      }
+      alert(`Registration failed for user ${userInput.username}: ${errorMessage}`)
     }
   }
 
@@ -93,6 +101,7 @@ function App() {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
     setUserLogged(false)
+    navigate("/")
   }
 
   const toggleAboutLinkStatus = () => {
@@ -119,6 +128,10 @@ function App() {
           <Route path='/register' element=
             {
               <Register onRegister={register} onGoBackClick={navigateBack} />
+            } />
+          <Route path='/profile' element=
+            {
+              <Profile navigate={navigate} />
             } />
           <Route path='/about' element=
             {

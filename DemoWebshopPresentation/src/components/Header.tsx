@@ -24,6 +24,9 @@ const Header = ({ title, userLogged, navigate, onLogoutClick }: Props) => {
                     { !userLogged && <Button text={"Register"} onClick={() => navigate("/register")} /> }
                 </li>
                 <li>
+                    { userLogged && <Button text={"Profile"} onClick={() => navigate("/profile")} /> }
+                </li>
+                <li>
                     { userLogged && <Button text={"Logout"} onClick={onLogoutClick} /> }
                 </li>
             </ul>
