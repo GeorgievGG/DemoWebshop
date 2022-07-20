@@ -7,6 +7,7 @@ import About from "./components/About";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
+import Catalog from "./components/Catalog";
 
 type UserCreds = {
   username: string,
@@ -26,6 +27,7 @@ function App() {
   const navigate = useNavigate();
   const [showAboutLink, setShowAboutLink] = useState(true)
   const [userLogged, setUserLogged] = useState(false)
+  const [token, setToken] = useState('')
 
   const navigateBack = () => {
     navigate(-1)
@@ -42,9 +44,8 @@ function App() {
 
     if (res.ok) {
       const data = await res.json()
-      localStorage.setItem('access_token', data.access_token)
-      localStorage.setItem('refresh_token', data.refresh_token)
       setUserLogged(true)
+      setToken(data.access_token)
       navigateBack()
     }
     else {
@@ -63,8 +64,6 @@ function App() {
 
     if (res.ok) {
       const data = await res.json()
-      localStorage.setItem('access_token', data.access_token)
-      localStorage.setItem('refresh_token', data.refresh_token)
     }
     else {
       alert(`Refreshing token failed. You're being logged out!`)
@@ -98,8 +97,7 @@ function App() {
   }
 
   const logout = async () => {
-    localStorage.removeItem('access_token')
-    localStorage.removeItem('refresh_token')
+    setToken('')
     setUserLogged(false)
     navigate("/")
   }
@@ -117,9 +115,7 @@ function App() {
         
         <Routes>
           <Route path='/' element={
-            <>
-              <div>Body</div>
-            </>
+              <Catalog token={token} />
             } />
           <Route path='/login' element=
             {
@@ -131,7 +127,7 @@ function App() {
             } />
           <Route path='/profile' element=
             {
-              <Profile navigate={navigate} />
+              <Profile navigate={navigate} token={token} />
             } />
           <Route path='/about' element=
             {

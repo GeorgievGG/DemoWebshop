@@ -1,19 +1,15 @@
-import React, { FormEventHandler, useEffect } from 'react'
-import { useState } from "react"
+import React from 'react'
 import { NavigateFunction } from 'react-router-dom'
-import { Buffer } from 'buffer';
-import ClaimTypes from '../enums/ClaimTypes'
 import Button from './Button'
 import UpdatePassword from './UpdatePassword';
 import UpdatePersonData from './UpdatePersonData';
 
 type Props = {
-    navigate: NavigateFunction
+    navigate: NavigateFunction,
+    token: string
 }
 
-const Profile = ({ navigate }: Props) => {
-  const token = localStorage.getItem("access_token")!
-
+const Profile = ({ navigate, token }: Props) => {
   return (
     <div>
         <UpdatePersonData token={token} />
