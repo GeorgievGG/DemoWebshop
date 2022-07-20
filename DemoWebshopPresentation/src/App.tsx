@@ -1,12 +1,11 @@
 import React from 'react'
 import { useState } from "react";
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import About from "./components/About";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Button from "./components/Button";
 
 type UserCreds = {
   username: string,
@@ -25,8 +24,9 @@ type RegistrationInput = {
 function App() {
   const navigate = useNavigate();
   const [showAboutLink, setShowAboutLink] = useState(true)
+  const [userLogged, setUserLogged] = useState(false)
 
-  const navigateHome = () => {
+  const navigateBack = () => {
     navigate(-1)
   }
 
@@ -42,7 +42,8 @@ function App() {
     if (res.ok) {
       localStorage.setItem('access_token', data.access_token)
       localStorage.setItem('refresh_token', data.refresh_token)
-      navigateHome()
+      setUserLogged(true);
+      navigateBack()
     }
     else {
       alert(`Login for user ${userCredentials.username} failed.`)
@@ -81,7 +82,7 @@ function App() {
     const data = await res.json()
     if (res.ok) {
       alert(`User ${data.username} registered!`)
-      navigateHome()
+      navigateBack()
     }
     else {
       alert(`Registration failed for user ${userInput.username}: ${data.message}`)
@@ -91,6 +92,7 @@ function App() {
   const logout = async () => {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
+    setUserLogged(false)
   }
 
   const toggleAboutLinkStatus = () => {
@@ -99,24 +101,24 @@ function App() {
 
   return (
       <div className="container">
-        <Header title='Hello from Demo Webshop!' />
+        <Header title='Hello from Demo Webshop!' 
+                userLogged={userLogged} 
+                navigate={navigate}
+                onLogoutClick={logout} />
         
         <Routes>
           <Route path='/' element={
             <>
               <div>Body</div>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-              <Button text={"Logout"} onClick={logout} />
             </>
             } />
           <Route path='/login' element=
             {
-              <Login onLogin={login} onGoBackClick={navigateHome} />
+              <Login onLogin={login} onGoBackClick={navigateBack} />
             } />
           <Route path='/register' element=
             {
-              <Register onRegister={register} onGoBackClick={navigateHome} />
+              <Register onRegister={register} onGoBackClick={navigateBack} />
             } />
           <Route path='/about' element=
             {
