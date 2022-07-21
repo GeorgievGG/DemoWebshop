@@ -22,7 +22,6 @@ namespace DemoWebshopApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<ProductResponseDto>>> GetProducts()
         {
             var products = await _productService.GetProducts();
