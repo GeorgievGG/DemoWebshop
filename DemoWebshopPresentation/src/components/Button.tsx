@@ -1,13 +1,14 @@
 import React, { MouseEventHandler } from 'react'
 
 type Props = {
+  className: string,
   text: string,
   onClick: MouseEventHandler
 }
 
-const Button = ({ text, onClick }: Props) => {
+const Button = ({ className, text, onClick }: Props) => {
   return (
-    <button className='btn btn-dark' onClick={onClick}>{text}</button>
+    <button className={className} onClick={onClick}>{text}</button>
   )
 }
 

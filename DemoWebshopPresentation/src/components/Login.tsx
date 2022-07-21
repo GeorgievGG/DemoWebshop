@@ -46,7 +46,7 @@ const Login = ({onLogin, onGoBackClick}: Props) => {
           </div>
           <input className="btn btn-dark" type='submit' value='Login' />
       </form>
-      <Button text="Go Back" onClick={onGoBackClick} />
+      <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
     </div>
   )
 }

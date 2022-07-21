@@ -14,7 +14,7 @@ const Profile = ({ navigate, token }: Props) => {
     <div>
         <UpdatePersonData token={token} />
         <UpdatePassword token={token} />
-        <Button text="Go Back" onClick={() => navigate(-1)} />
+        <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
     </div>
   )
 }

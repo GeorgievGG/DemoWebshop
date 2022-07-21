@@ -18,16 +18,16 @@ const Header = ({ title, userLogged, navigate, onLogoutClick }: Props) => {
                     <h1>{title}</h1>
                 </li>
                 <li>
-                    { !userLogged && <Button text={"Login"} onClick={() => navigate("/login")} /> }
+                    { !userLogged && <Button className="btn btn-dark" text={"Login"} onClick={() => navigate("/login")} /> }
                 </li>
                 <li>
-                    { !userLogged && <Button text={"Register"} onClick={() => navigate("/register")} /> }
+                    { !userLogged && <Button className="btn btn-dark" text={"Register"} onClick={() => navigate("/register")} /> }
                 </li>
                 <li>
-                    { userLogged && <Button text={"Profile"} onClick={() => navigate("/profile")} /> }
+                    { userLogged && <Button className="btn btn-dark" text={"Profile"} onClick={() => navigate("/profile")} /> }
                 </li>
                 <li>
-                    { userLogged && <Button text={"Logout"} onClick={onLogoutClick} /> }
+                    { userLogged && <Button className="btn btn-dark" text={"Logout"} onClick={onLogoutClick} /> }
                 </li>
             </ul>
         </header>
