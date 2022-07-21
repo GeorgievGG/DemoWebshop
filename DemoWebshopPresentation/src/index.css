@@ -114,3 +114,63 @@ footer {
 .horizontal li {
   display: inline-block;
 }
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 300px;
+  height: 562px !important;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+}
+
+.price {
+  color: grey;
+  font-size: 22px;
+  position: absolute;
+  width: 100%;
+  bottom: 4rem;
+}
+
+.card button {
+  border: none;
+  outline: 0;
+  padding: 12px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 93.5%;
+  font-size: 18px;
+}
+
+.card button:hover {
+  opacity: 0.7;
+}
+
+.pic {
+  width: 100%;
+  min-height: 298px;
+}
+
+.card .p-button {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+}
+
+.single-button {
+  margin: 0;
+}
+
+.row .product-card-buttons-row {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  margin: 0 0 1rem 0;
+}
+
+.product-card-columns {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}

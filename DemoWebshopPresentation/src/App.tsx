@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState } from "react";
+import { Buffer } from 'buffer';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -10,6 +11,7 @@ import Profile from "./components/Profile";
 import Catalog from "./components/Catalog";
 import useScript from './hooks/UseScript';
 import "bootstrap/dist/css/bootstrap.css";
+import ClaimTypes from './enums/ClaimTypes';
 
 type UserCreds = {
   username: string,
@@ -26,7 +28,6 @@ type RegistrationInput = {
 }
 
 function App() {
-  useScript('https://unpkg.com/react-dom/umd/react-dom.production.min.js');
   useScript('https://unpkg.com/react/umd/react.production.min.js');
   useScript('https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js');
 
@@ -34,6 +35,7 @@ function App() {
   const [showAboutLink, setShowAboutLink] = useState(true)
   const [userLogged, setUserLogged] = useState(false)
   const [token, setToken] = useState('')
+  const [userRole, setUserRole] = useState('')
 
   const navigateBack = () => {
     navigate(-1)
@@ -52,6 +54,8 @@ function App() {
       const data = await res.json()
       setUserLogged(true)
       setToken(data.access_token)
+      const tokenData = JSON.parse(Buffer.from(data.access_token.split('.')[1], 'base64').toString())
+      setUserRole(tokenData[ClaimTypes.UserRole])
       navigateBack()
     }
     else {
@@ -104,6 +108,7 @@ function App() {
 
   const logout = async () => {
     setToken('')
+    setUserRole('')
     setUserLogged(false)
     navigate("/")
   }
@@ -121,7 +126,7 @@ function App() {
         
         <Routes>
           <Route path='/' element={
-              <Catalog token={token} />
+              <Catalog token={token} userRole={userRole} />
             } />
           <Route path='/login' element=
             {
