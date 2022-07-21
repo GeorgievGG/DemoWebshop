@@ -8,6 +8,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
 import Catalog from "./components/Catalog";
+import useScript from './hooks/UseScript';
+import "bootstrap/dist/css/bootstrap.css";
 
 type UserCreds = {
   username: string,
@@ -24,6 +26,10 @@ type RegistrationInput = {
 }
 
 function App() {
+  useScript('https://unpkg.com/react-dom/umd/react-dom.production.min.js');
+  useScript('https://unpkg.com/react/umd/react.production.min.js');
+  useScript('https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js');
+
   const navigate = useNavigate();
   const [showAboutLink, setShowAboutLink] = useState(true)
   const [userLogged, setUserLogged] = useState(false)
