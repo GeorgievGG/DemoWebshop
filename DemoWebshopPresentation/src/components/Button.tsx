@@ -7,7 +7,7 @@ type Props = {
 
 const Button = ({ text, onClick }: Props) => {
   return (
-    <button className='btn' onClick={onClick}>{text}</button>
+    <button className='btn btn-dark' onClick={onClick}>{text}</button>
   )
 }
 

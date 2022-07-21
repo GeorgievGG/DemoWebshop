@@ -45,47 +45,47 @@ const Register = ({onRegister, onGoBackClick}: Props) => {
     <div>
         <form className="add-form"
             onSubmit={onSubmit}>
-            <div className="form-control">
+            <div className="form-control border-0">
                 <label>Username</label>
                 <input type='text' 
                     placeholder='Type username'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)} />
             </div>
-            <div className="form-control">
+            <div className="form-control border-0">
                 <label>Email</label>
                 <input type='text' 
                     placeholder='Type email'
                     value={email}
                     onChange={(e) => setEmail(e.target.value)} />
             </div>
-            <div className="form-control">
+            <div className="form-control border-0">
                 <label>First Name</label>
                 <input type='text' 
                     placeholder='Type first name'
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)} />
             </div>
-            <div className="form-control">
+            <div className="form-control border-0">
                 <label>Last Name</label>
                 <input type='text' 
                     placeholder='Type last name'
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)} />
             </div>
-            <div className="form-control">
+            <div className="form-control border-0">
                 <label>Password</label>
                 <input type='password' 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)} />
             </div>
-            <div className="form-control">
+            <div className="form-control border-0">
                 <label>Confirm Password</label>
                 <input type='password' 
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)} />
             </div>
-            <input className="btn btn-block" type='submit' value='Register' />
+            <input className="btn btn-dark" type='submit' value='Register' />
         </form>
         <Button text="Go Back" onClick={onGoBackClick} />
     </div>

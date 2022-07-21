@@ -28,16 +28,21 @@ function Catalog({ token }: Props) {
     }
 
     return (
-        <div>
+        <>
             {
                 products.length > 0 ? (
                     <div>Products</div>
                 ) :
                 (
-                  'No products to show'
+                    <div className='row'>
+                        <div className='col-sm-3'>'No products to show'</div>
+                        <div className='col-sm-3'>'No products to show'</div>
+                        <div className='col-sm-3'>'No products to show'</div>
+                        <div className='col-sm-3'>'No products to show'</div>
+                    </div>
                 )
             }
-        </div>
+        </>
     )
 }
 

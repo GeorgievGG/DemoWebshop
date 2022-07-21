@@ -65,25 +65,25 @@ const Profile = ({ token }: Props) => {
         <div>
             <form className="add-form"
                 onSubmit={onSubmitPasswords}>
-                <div className="form-control">
+                <div className="form-control border-0">
                     <label>Current Password</label>
                     <input type='password' 
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)} />
                 </div>
-                <div className="form-control">
+                <div className="form-control border-0">
                     <label>New Password</label>
                     <input type='password' 
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)} />
                 </div>
-                <div className="form-control">
+                <div className="form-control border-0">
                     <label>Confirm Password</label>
                     <input type='password' 
                         value={repeatNewPassword}
                         onChange={(e) => setRepeatNewPassword(e.target.value)} />
                 </div>
-                <input className="btn btn-block" type='submit' value='Update Password' />
+                <input className="btn btn-dark" type='submit' value='Update Password' />
             </form>
         </div>
       )

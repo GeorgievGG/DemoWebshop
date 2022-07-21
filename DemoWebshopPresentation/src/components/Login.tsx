@@ -31,20 +31,20 @@ const Login = ({onLogin, onGoBackClick}: Props) => {
     <div>
       <form className="add-form"
             onSubmit={onSubmit}>
-          <div className="form-control">
+          <div className="form-control border-0">
               <label>Username</label>
               <input type='text' 
                     placeholder='Type username'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)} />
           </div>
-          <div className="form-control">
+          <div className="form-control border-0">
               <label>Password</label>
               <input type='password' 
                     value={password}
                     onChange={(e) => setPassword(e.target.value)} />
           </div>
-          <input className="btn btn-block" type='submit' value='Login' />
+          <input className="btn btn-dark" type='submit' value='Login' />
       </form>
       <Button text="Go Back" onClick={onGoBackClick} />
     </div>

@@ -91,35 +91,35 @@ const UpdatePersonData = ({ token }: Props) => {
         <div>
             <form className="add-form"
                 onSubmit={onSubmitPersonalInfo}>
-                <div className="form-control">
+                <div className="form-control border-0">
                     <label>Username</label>
                     <input type='text' 
                         placeholder='Type username'
                         value={username}
                         onChange={(e) => setUsername(e.target.value)} />
                 </div>
-                <div className="form-control">
+                <div className="form-control border-0">
                     <label>Email</label>
                     <input type='text' 
                         placeholder='Type email'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)} />
                 </div>
-                <div className="form-control">
+                <div className="form-control border-0">
                     <label>First Name</label>
                     <input type='text' 
                         placeholder='Type first name'
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)} />
                 </div>
-                <div className="form-control">
+                <div className="form-control border-0">
                     <label>Last Name</label>
                     <input type='text' 
                         placeholder='Type last name'
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)} />
                 </div>
-                <input className="btn btn-block" type='submit' value='Update' />
+                <input className="btn btn-dark" type='submit' value='Update' />
             </form>
         </div>
       )
