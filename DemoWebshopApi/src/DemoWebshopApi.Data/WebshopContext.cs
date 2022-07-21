@@ -36,6 +36,7 @@ namespace DemoWebshopApi.Data
         private static void SetupProductsConfiguration(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Product>().HasKey(t => t.Id);
+            modelBuilder.Entity<Product>().Property(t => t.PictureUrl).IsRequired();
             modelBuilder.Entity<Product>().Property(t => t.Name).HasMaxLength(120).IsRequired();
             modelBuilder.Entity<Product>().Property(t => t.Model).HasMaxLength(120).IsRequired();
             modelBuilder.Entity<Product>().Property(t => t.AvailableQuantity).IsRequired();
