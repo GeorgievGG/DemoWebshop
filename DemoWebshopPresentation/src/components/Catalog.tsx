@@ -16,13 +16,13 @@ function Catalog({ token, userRole }: Props) {
         fetch('https://localhost:7000/api/Product', {
                 method: 'GET'
             })
-            .then(response => handleGetProductsResponse(response))
+            .then(responseponse => handleGetProductsResponse(responseponse))
         }, []
     )
 
-    const handleGetProductsResponse = async (response: Response) => {
-        if (response.ok) {
-            const data = await response.json()
+    const handleGetProductsResponse = async (responseponse: Response) => {
+        if (responseponse.ok) {
+            const data = await responseponse.json()
             setProducts(data)
         }
         else {
@@ -35,9 +35,22 @@ function Catalog({ token, userRole }: Props) {
             arr.slice(i * size, i * size + size)
     )
     
-    const handleConfirm = () => {
-        // TODO: DELETE Product
-        token += token
+    const handleConfirm = async () => {
+        const response = await fetch(`https://localhost:7000/api/User/${deletedProductId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        if (response.ok) {
+            setProducts(products.filter((product) => product.id !== deletedProductId))
+        }
+        else {
+          alert(`Couldn't delete product ${deletedProductId}!`)
+        }
+
         setOpen(false);
         setDeletedProductId('');
     }
