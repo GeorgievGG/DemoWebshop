@@ -24,7 +24,7 @@ const Product = ({ product, userRole, onDeleteClick }: Props) => {
         <img className='pic' src={product.pictureUrl} alt={`${product.name} (${product.model})`}/>
         <h1>{product.name}</h1>
         <p>{product.model}</p>
-        <p className="price">${product.price}</p>
+        <p className="price">{product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD'})}</p>
         {
           userRole === "Admin" ?
           <>
@@ -33,7 +33,6 @@ const Product = ({ product, userRole, onDeleteClick }: Props) => {
                 <Button className="btn btn-dark" text={"Update"} onClick={() => navigate("/updateProduct", { state: { product: product } })} />
               </div>
               <div className='col-sm-6 product-card-columns'>
-                {/* TODO: Get confirmation first */}
                 <Button className="btn btn-dark" text={"Delete"} onClick={() => onDeleteClick(product.id)} />
               </div>
             </div>
