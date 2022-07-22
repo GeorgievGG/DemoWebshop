@@ -4,13 +4,14 @@ import { NavigateFunction } from 'react-router-dom';
 import Button from "./Button";
 
 type Props = {
-    title: string,
-    userLogged: boolean,
-    navigate: NavigateFunction,
+    title: string
+    userLogged: boolean
+    userRole: string
+    navigate: NavigateFunction
     onLogoutClick: MouseEventHandler
 }
 
-const Header = ({ title, userLogged, navigate, onLogoutClick }: Props) => {
+const Header = ({ title, userLogged, userRole, navigate, onLogoutClick }: Props) => {
     return (
         <header>
             <ul className='horizontal'>
@@ -22,6 +23,9 @@ const Header = ({ title, userLogged, navigate, onLogoutClick }: Props) => {
                 </li>
                 <li>
                     { !userLogged && <Button className="btn btn-dark" text={"Register"} onClick={() => navigate("/register")} /> }
+                </li>
+                <li>
+                    { userRole === "Admin" && <Button className="btn btn-dark" text={"Create Product"} onClick={() => navigate("/createProduct")} /> }
                 </li>
                 <li>
                     { userLogged && <Button className="btn btn-dark" text={"Profile"} onClick={() => navigate("/profile")} /> }
