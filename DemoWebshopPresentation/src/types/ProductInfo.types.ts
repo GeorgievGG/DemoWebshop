@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-type ProductInfo = {
-    id: string
+type BasicProductInfo = {
     name: string
     model: string
     pictureUrl: string
+    availableQuantity: number
     price: number
+}
+
+type CatalogProductInfo = BasicProductInfo & {
+    id: string
 }

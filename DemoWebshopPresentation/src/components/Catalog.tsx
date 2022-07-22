@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react'
+import { SetStateAction } from 'react';
 import { Confirm } from 'react-admin';
 import CatalogLine from './CatalogLine'
 
 type Props = {
     token: string
     userRole: string
+    products: CatalogProductInfo[]
+    onProductsLoaded: (productsJson: any) => void
+    onProductDelete: (productId: string) => void
 }
 
-function Catalog({ token, userRole }: Props) {
-    const [products, setProducts] = useState<ProductInfo[]>([])
+function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete }: Props) {
     const [open, setOpen] = useState(false);
     const [deletedProductId, setDeletedProductId] = useState('');
 
@@ -16,14 +19,14 @@ function Catalog({ token, userRole }: Props) {
         fetch('https://localhost:7000/api/Product', {
                 method: 'GET'
             })
-            .then(responseponse => handleGetProductsResponse(responseponse))
+            .then(response => handleGetProductsResponse(response))
         }, []
     )
 
-    const handleGetProductsResponse = async (responseponse: Response) => {
-        if (responseponse.ok) {
-            const data = await responseponse.json()
-            setProducts(data)
+    const handleGetProductsResponse = async (response: Response) => {
+        if (response.ok) {
+            const data = await response.json()
+            onProductsLoaded(data)
         }
         else {
           alert(`Couldn't retrieve products!`)
@@ -36,7 +39,7 @@ function Catalog({ token, userRole }: Props) {
     )
     
     const handleConfirm = async () => {
-        const response = await fetch(`https://localhost:7000/api/User/${deletedProductId}`, {
+        const response = await fetch(`https://localhost:7000/api/Product/${deletedProductId}`, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
@@ -45,7 +48,7 @@ function Catalog({ token, userRole }: Props) {
         })
 
         if (response.ok) {
-            setProducts(products.filter((product) => product.id !== deletedProductId))
+            onProductDelete(deletedProductId)
         }
         else {
           alert(`Couldn't delete product ${deletedProductId}!`)

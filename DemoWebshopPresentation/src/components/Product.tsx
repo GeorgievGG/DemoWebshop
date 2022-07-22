@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Button from './Button'
 
 type Props = {
-  product: ProductInfo
+  product: CatalogProductInfo
   userRole: string
   onDeleteClick: (productId: string) => void
 }

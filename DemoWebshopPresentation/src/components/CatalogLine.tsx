@@ -2,7 +2,7 @@ import React from 'react'
 import Product from './Product'
 
 type Props = {
-  products: ProductInfo[]
+  products: CatalogProductInfo[]
   userRole: string
   onDeleteClick: (productId: string) => void
 }

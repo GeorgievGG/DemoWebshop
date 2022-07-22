@@ -12,6 +12,7 @@ import Catalog from "./components/Catalog";
 import useScript from './hooks/UseScript';
 import "bootstrap/dist/css/bootstrap.css";
 import ClaimTypes from './enums/ClaimTypes';
+import CreateProduct from './components/CreateProduct';
 
 type UserCreds = {
   username: string,
@@ -36,6 +37,7 @@ function App() {
   const [userLogged, setUserLogged] = useState(false)
   const [token, setToken] = useState('')
   const [userRole, setUserRole] = useState('')
+  const [products, setProducts] = useState<CatalogProductInfo[]>([])
 
   const navigateBack = () => {
     navigate(-1)
@@ -105,6 +107,18 @@ function App() {
       alert(`Registration failed for user ${userInput.username}: ${errorMessage}`)
     }
   }
+  
+  const fillProducts = (productsJson: any) => {
+    setProducts(productsJson)
+  }
+  
+  const addProduct = (productJson: any) => {
+    setProducts([...products, productJson])
+  }
+
+  const deleteProductById = (productId: string) => {
+    setProducts(products.filter((product) => product.id !== productId))
+  }
 
   const logout = async () => {
     setToken('')
@@ -127,7 +141,7 @@ function App() {
         
         <Routes>
           <Route path='/' element={
-              <Catalog token={token} userRole={userRole} />
+              <Catalog token={token} userRole={userRole} products={products} onProductsLoaded={fillProducts} onProductDelete={deleteProductById} />
             } />
           <Route path='/login' element=
             {
@@ -140,6 +154,10 @@ function App() {
           <Route path='/profile' element=
             {
               <Profile navigate={navigate} token={token} />
+            } />
+          <Route path='/createProduct' element=
+            {
+              <CreateProduct token={token} onProductCreate={addProduct} onGoBackClick={navigateBack} />
             } />
           <Route path='/about' element=
             {
