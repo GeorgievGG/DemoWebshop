@@ -57,7 +57,11 @@ builder.Services.AddCors(p => p.AddPolicy(builder.Configuration.GetSection("Cors
 }));
 
 var connectionString = builder.Configuration.GetConnectionString("AppDb");
-builder.Services.AddDbContext<WebshopContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<WebshopContext>(options => 
+{ 
+    options.UseSqlServer(connectionString);
+    options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+});
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddTransient<IIdentityUserManager, IdentityUserManager>();
