@@ -44,6 +44,7 @@ namespace DemoWebshopApi.Services.Services
             if (basketLine != null)
             {
                 basketLine.Quantity += shoppingBasketLine.Quantity;
+                _context.Entry(basketLine).State = EntityState.Modified;
                 if (basketLine.Quantity <= 0)
                 {
                     shoppingBasket.BasketLines.Remove(basketLine);

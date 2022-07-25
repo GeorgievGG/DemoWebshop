@@ -26,6 +26,7 @@ namespace DemoWebshopApi.Profiles
         private void SetupProductMaps()
         {
             CreateMap<ProductRequestDto, Product>();
+            CreateMap<Product, ProductBaseResponseDto>();
             CreateMap<Product, ProductResponseDto>();
         }
 
@@ -41,7 +42,9 @@ namespace DemoWebshopApi.Profiles
         {
             CreateMap<ShoppingBasketLineRequestDto, ShoppingBasketLine>();
             CreateMap<ShoppingBasket, ShoppingBasketResponseDto>();
+            CreateMap<ShoppingBasket, ShoppingBasketDetailedResponseDto>();
             CreateMap<ShoppingBasketLine, ShoppingBasketLineResponseDto>();
+            CreateMap<ShoppingBasketLine, ShoppingBasketDetailedLineResponseDto>();
         }
     }
 }

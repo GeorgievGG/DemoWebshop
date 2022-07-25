@@ -28,7 +28,7 @@ namespace DemoWebshopApi.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<ShoppingBasketResponseDto>> GetShoppingBasket()
+        public async Task<ActionResult<ShoppingBasketDetailedResponseDto>> GetShoppingBasket()
         {
             if (UserId == null)
             {
@@ -36,7 +36,7 @@ namespace DemoWebshopApi.Controllers
             }
             var basket = await _shoppingBasketService.GetShoppingBasket(Guid.Parse(UserId));
 
-            return _mapper.Map<ShoppingBasketResponseDto>(basket);
+            return _mapper.Map<ShoppingBasketDetailedResponseDto>(basket);
         }
 
         [HttpPost("IncreaseShoppingQuantity")]
