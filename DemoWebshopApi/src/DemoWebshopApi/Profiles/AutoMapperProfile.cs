@@ -20,6 +20,7 @@ namespace DemoWebshopApi.Profiles
             CreateMap<CreateUserRequestDto, User>();
             CreateMap<UpdateUserRequestDto, User>();
             CreateMap<User, UserResponseDto>();
+            CreateMap<User, UserSensitiveResponseDto>();
         }
 
         private void SetupProductMaps()

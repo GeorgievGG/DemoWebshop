@@ -29,6 +29,11 @@ namespace DemoWebshopApi.Services.Services
             return user;
         }
 
+        public async Task<IList<User>> GetUsersInRole(string roleName)
+        {
+            return await _userManager.GetUsersInRoleAsync(roleName);
+        }
+
         public async Task<User> CreateUser(User user, string password, string confirmPassword)
         {
             _validationService.EnsureMinLenghtIsValid(user.UserName, 2, nameof(user.UserName));
@@ -70,6 +75,15 @@ namespace DemoWebshopApi.Services.Services
             await _userManager.UpdateUserDataAsync(existingUser);
         }
 
+        public async Task SetUserInRole(Guid userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            _validationService.EnsureNotNull(user, nameof(user));
+            await _validationService.EnsureUserIsAdminAsync(user);
+
+            await _userManager.AddUserToRoleAsync(user, roleName);
+        }
+
         public async Task UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto)
         {
             var existingUser = await _userManager.FindByIdAsync(id.ToString());
@@ -96,15 +110,6 @@ namespace DemoWebshopApi.Services.Services
             _validationService.EnsureUserDoesntHaveBasket(existingUser);
 
             await _userManager.DeleteUserAsync(existingUser);
-        }
-
-        public async Task SetUserInRole(Guid userId, string roleName)
-        {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-            _validationService.EnsureNotNull(user, nameof(user));
-            await _validationService.EnsureUserIsAdminAsync(user);
-
-            await _userManager.AddUserToRoleAsync(user, roleName);
         }
     }
 }

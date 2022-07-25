@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DemoWebshopApi.Common.ExtensionMethods;
 using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.DTOs.RequestModels;
 using DemoWebshopApi.DTOs.ResponseModels;
@@ -20,6 +21,19 @@ namespace DemoWebshopApi.Controllers
         {
             _mapper = mapper;
             _userService = userService;
+        }
+
+        [HttpGet()]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<IEnumerable<UserSensitiveResponseDto>>> GetUsers()
+        {
+            var allUsers = _mapper.Map<IEnumerable<UserSensitiveResponseDto>>(await _userService.GetAllUsers());
+            var admins = await _userService.GetUsersInRole("Admin");
+            allUsers
+                .Where(user => admins.Any(x => x.Id == user.Id))
+                .ForEach(x => x.IsAdmin = true);
+
+            return Ok(allUsers);
         }
 
         [HttpGet("{id}")]

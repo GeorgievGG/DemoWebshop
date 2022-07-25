@@ -10,6 +10,7 @@ namespace DemoWebshopApi.Data.Interfaces
         Task<User> FindByIdAsync(string id);
         Task<User> FindByNameAsync(string userName);
         Task<User> GetUserAsync(ClaimsPrincipal principal);
+        Task<IList<User>> GetUsersInRoleAsync(string roleName);
         Task<List<string>> GetUserRolesAsync(User user);
         Task<bool> ValidateUserCredentials(string userName, string password);
         Task<IdentityResult> CreateUserAsync(User user, string password);

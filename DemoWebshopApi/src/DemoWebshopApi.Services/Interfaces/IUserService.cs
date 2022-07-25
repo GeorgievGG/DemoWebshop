@@ -1,6 +1,5 @@
 ﻿using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.Services.Services;
-using System.Security.Claims;
 
 namespace DemoWebshopApi.Services.Interfaces
 {
@@ -8,10 +7,11 @@ namespace DemoWebshopApi.Services.Interfaces
     {
         Task<List<User>> GetAllUsers();
         Task<User> GetUserById(Guid id);
+        Task<IList<User>> GetUsersInRole(string roleName);
         Task<User> CreateUser(User user, string password, string confirmPassword);
         Task UpdateUser(User user);
         Task SetUserInRole(Guid userId, string roleName);
-        Task DeleteUser(Guid id);
         Task UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto);
+        Task DeleteUser(Guid id);
     }
 }
