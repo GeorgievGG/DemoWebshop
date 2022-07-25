@@ -15,6 +15,7 @@ import ClaimTypes from './enums/ClaimTypes';
 import CreateProduct from './components/CreateProduct';
 import UpdateProduct from './components/UpdateProduct';
 import { UserList } from './components/UserList';
+import ShoppingBasket from './components/ShoppingBasket';
 
 type UserCreds = {
   username: string,
@@ -177,6 +178,10 @@ function App() {
           <Route path='/updateProduct' element=
             {
               <UpdateProduct token={token} onProductUpdate={updateProduct} onGoBackClick={navigateBack} />
+            } />
+          <Route path='/shoppingBasket' element=
+            {
+              <ShoppingBasket token={token} loggedUserId={loggedUserId} onGoBackClick={navigateBack} />
             } />
           <Route path='/about' element=
             {
