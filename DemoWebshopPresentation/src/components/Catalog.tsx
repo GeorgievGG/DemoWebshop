@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { SetStateAction } from 'react';
 import { Confirm } from 'react-admin';
 import CatalogLine from './CatalogLine'
 
