@@ -75,13 +75,14 @@ namespace DemoWebshopApi.Services.Services
             await _userManager.UpdateUserDataAsync(existingUser);
         }
 
-        public async Task SetUserInRole(Guid userId, string roleName)
+        public async Task MakeUserAdmin(Guid userId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
             _validationService.EnsureNotNull(user, nameof(user));
             await _validationService.EnsureUserIsAdminAsync(user);
 
-            await _userManager.AddUserToRoleAsync(user, roleName);
+            await _userManager.AddUserToRoleAsync(user, "Admin");
+            await _userManager.RemoveUserFromRoleAsync(user, "User");
         }
 
         public async Task UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto)

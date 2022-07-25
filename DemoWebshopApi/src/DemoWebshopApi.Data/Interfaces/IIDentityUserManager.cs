@@ -15,6 +15,7 @@ namespace DemoWebshopApi.Data.Interfaces
         Task<bool> ValidateUserCredentials(string userName, string password);
         Task<IdentityResult> CreateUserAsync(User user, string password);
         Task<IdentityResult> AddUserToRoleAsync(User user, string role);
+        Task<IdentityResult> RemoveUserFromRoleAsync(User user, string role);
         Task<bool> IsUserInRole(Guid userId, string roleName);
         Task<bool> CheckIfEmailExists(string email);
         Task<IdentityResult> UpdateUserDataAsync(User user);

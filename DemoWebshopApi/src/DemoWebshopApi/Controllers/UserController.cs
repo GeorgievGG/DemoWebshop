@@ -80,7 +80,7 @@ namespace DemoWebshopApi.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SetUserRole(Guid id)
         {
-            await _userService.SetUserInRole(id, "Admin");
+            await _userService.MakeUserAdmin(id);
 
             return NoContent();
         }

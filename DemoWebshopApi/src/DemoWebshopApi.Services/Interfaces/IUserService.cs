@@ -10,7 +10,7 @@ namespace DemoWebshopApi.Services.Interfaces
         Task<IList<User>> GetUsersInRole(string roleName);
         Task<User> CreateUser(User user, string password, string confirmPassword);
         Task UpdateUser(User user);
-        Task SetUserInRole(Guid userId, string roleName);
+        Task MakeUserAdmin(Guid userId);
         Task UpdateUserPasswrod(Guid id, UpdatePasswordDto updatePasswordDto);
         Task DeleteUser(Guid id);
     }

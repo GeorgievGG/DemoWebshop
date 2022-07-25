@@ -71,5 +71,10 @@ namespace DemoWebshopApi.Data.Repositories
         {
             return await AddToRoleAsync(user, role);
         }
+
+        public async Task<IdentityResult> RemoveUserFromRoleAsync(User user, string role)
+        {
+            return await RemoveFromRoleAsync(user, role);
+        }
     }
 }
