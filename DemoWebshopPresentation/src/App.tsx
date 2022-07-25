@@ -13,6 +13,7 @@ import useScript from './hooks/UseScript';
 import "bootstrap/dist/css/bootstrap.css";
 import ClaimTypes from './enums/ClaimTypes';
 import CreateProduct from './components/CreateProduct';
+import UpdateProduct from './components/UpdateProduct';
 
 type UserCreds = {
   username: string,
@@ -115,6 +116,12 @@ function App() {
   const addProduct = (productJson: any) => {
     setProducts([...products, productJson])
   }
+  
+  const updateProduct = (updatedProduct: CatalogProductInfo) => {
+    products.map((product) =>
+        product.id === updatedProduct.id ? updatedProduct : product
+      )
+  }
 
   const deleteProductById = (productId: string) => {
     setProducts(products.filter((product) => product.id !== productId))
@@ -158,6 +165,10 @@ function App() {
           <Route path='/createProduct' element=
             {
               <CreateProduct token={token} onProductCreate={addProduct} onGoBackClick={navigateBack} />
+            } />
+          <Route path='/updateProduct' element=
+            {
+              <UpdateProduct token={token} onProductUpdate={updateProduct} onGoBackClick={navigateBack} />
             } />
           <Route path='/about' element=
             {
