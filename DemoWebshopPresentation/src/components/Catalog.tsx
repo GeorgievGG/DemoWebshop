@@ -62,7 +62,10 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
         setDeletedProductId(productId)
     }
 
-    const handleDialogClose = () => setOpen(false);
+    const handleDialogClose = () => { 
+        setOpen(false)
+        setDeletedProductId('')
+    }
   
     return (
         <>
