@@ -14,6 +14,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import ClaimTypes from './enums/ClaimTypes';
 import CreateProduct from './components/CreateProduct';
 import UpdateProduct from './components/UpdateProduct';
+import { UserList } from './components/UserList';
 
 type UserCreds = {
   username: string,
@@ -37,6 +38,7 @@ function App() {
   const [showAboutLink, setShowAboutLink] = useState(true)
   const [userLogged, setUserLogged] = useState(false)
   const [token, setToken] = useState('')
+  const [loggedUserId, setloggedUserId] = useState('')
   const [userRole, setUserRole] = useState('')
   const [products, setProducts] = useState<CatalogProductInfo[]>([])
 
@@ -58,6 +60,7 @@ function App() {
       setUserLogged(true)
       setToken(data.access_token)
       const tokenData = JSON.parse(Buffer.from(data.access_token.split('.')[1], 'base64').toString())
+      setloggedUserId(tokenData[ClaimTypes.UserId])
       setUserRole(tokenData[ClaimTypes.UserRole])
       navigateBack()
     }
@@ -129,6 +132,7 @@ function App() {
 
   const logout = async () => {
     setToken('')
+    setloggedUserId('')
     setUserRole('')
     setUserLogged(false)
     navigate("/")
@@ -161,6 +165,10 @@ function App() {
           <Route path='/profile' element=
             {
               <Profile navigate={navigate} token={token} />
+            } />
+          <Route path='/userList' element=
+            {
+              <UserList token={token} loggedUserId={loggedUserId} onGoBackClick={navigateBack} />
             } />
           <Route path='/createProduct' element=
             {

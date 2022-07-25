@@ -28,6 +28,9 @@ const Header = ({ title, userLogged, userRole, navigate, onLogoutClick }: Props)
                     { userRole === "Admin" && <Button className="btn btn-dark" text={"Create Product"} onClick={() => navigate("/createProduct")} /> }
                 </li>
                 <li>
+                    { userRole === "Admin" && <Button className="btn btn-dark" text={"Users"} onClick={() => navigate("/userList")} /> }
+                </li>
+                <li>
                     { userLogged && <Button className="btn btn-dark" text={"Profile"} onClick={() => navigate("/profile")} /> }
                 </li>
                 <li>
