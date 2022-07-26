@@ -15,6 +15,7 @@ const Product = ({ product, userRole, onAddToCart, onDeleteClick }: Props) => {
   const addToCart = async () => {
     if (userRole !== "User") {
       navigate("/login")
+      return
     }
     
     onAddToCart(product.id)
