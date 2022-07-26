@@ -18,10 +18,16 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<ShoppingBasket> GetShoppingBasket(Guid userId)
         {
-            return await _context.ShoppingBaskets
+            var shoppingBasket = await _context.ShoppingBaskets
                 .Include(x => x.BasketLines)
                 .ThenInclude(x => x.Product)
                 .FirstOrDefaultAsync(x => x.ClientId == userId);
+            if (shoppingBasket == null)
+            {
+                shoppingBasket = await CreateShoppingBasket(userId);
+            }
+
+            return shoppingBasket;
         }
 
         public async Task<ShoppingBasket> CreateShoppingBasket(Guid userId)

@@ -78,7 +78,7 @@ namespace DemoWebshopApi.Controllers
                 return BadRequest();
             }
 
-            var updatedShoppingBasket = await _shoppingBasketLineService.ChangeBasketLineQuantity(Guid.Parse(UserId), _mapper.Map<ShoppingBasketLine>(shoppingBasketLine));
+            var updatedShoppingBasket = await _shoppingBasketLineService.ChangeBasketLineQuantity(Guid.Parse(UserId), _mapper.Map<ShoppingBasketLine>(shoppingBasketLine), overrideQty: true);
 
             return CreatedAtAction("GetShoppingBasket", new { id = updatedShoppingBasket.Id }, _mapper.Map<ShoppingBasketResponseDto>(updatedShoppingBasket));
         }

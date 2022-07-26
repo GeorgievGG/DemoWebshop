@@ -29,7 +29,7 @@ namespace DemoWebshopApi.Services.Services
             return basketLine;
         }
 
-        public async Task<ShoppingBasket> ChangeBasketLineQuantity(Guid userId, ShoppingBasketLine shoppingBasketLine)
+        public async Task<ShoppingBasket> ChangeBasketLineQuantity(Guid userId, ShoppingBasketLine shoppingBasketLine, bool overrideQty = false)
         {
             var shoppingBasket = await _shoppingBasketService.GetShoppingBasket(userId);
             if (shoppingBasket == null && shoppingBasketLine.Quantity > 0)
@@ -43,7 +43,14 @@ namespace DemoWebshopApi.Services.Services
             var basketLine = shoppingBasket.BasketLines.FirstOrDefault(x => x.ProductId == shoppingBasketLine.ProductId);
             if (basketLine != null)
             {
-                basketLine.Quantity += shoppingBasketLine.Quantity;
+                if (overrideQty)
+                {
+                    basketLine.Quantity = shoppingBasketLine.Quantity;
+                }
+                else
+                {
+                    basketLine.Quantity += shoppingBasketLine.Quantity;
+                }
                 _context.Entry(basketLine).State = EntityState.Modified;
                 if (basketLine.Quantity <= 0)
                 {
@@ -54,7 +61,8 @@ namespace DemoWebshopApi.Services.Services
             else
             {
                 _validationService.EnsureValueIsGreater(shoppingBasketLine.Quantity, 0, nameof(shoppingBasketLine.Quantity));
-                shoppingBasket.BasketLines.Add(shoppingBasketLine);
+                shoppingBasket.BasketLines.Add(shoppingBasketLine); 
+                _context.ShoppingBaskets.Update(shoppingBasket);
             }
 
             await _context.SaveChangesAsync();
