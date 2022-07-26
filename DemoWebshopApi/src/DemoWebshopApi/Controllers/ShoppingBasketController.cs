@@ -39,7 +39,7 @@ namespace DemoWebshopApi.Controllers
             return _mapper.Map<ShoppingBasketDetailedResponseDto>(basket);
         }
 
-        [HttpPost("IncreaseShoppingQuantity")]
+        [HttpPost("IncreaseShoppingQuantity/{productId}")]
         [Authorize]
         public async Task<ActionResult<ShoppingBasketResponseDto>> IncreaseShoppingBasketLineQuantity(Guid productId)
         {
@@ -54,7 +54,7 @@ namespace DemoWebshopApi.Controllers
             return CreatedAtAction("GetShoppingBasket", new { id = updatedShoppingBasket.Id }, _mapper.Map<ShoppingBasketResponseDto>(updatedShoppingBasket));
         }
 
-        [HttpPost("DecreaseShoppingQuantity")]
+        [HttpPost("DecreaseShoppingQuantity/{productId}")]
         [Authorize]
         public async Task<ActionResult<ShoppingBasketResponseDto>> DecreaseShoppingBasketLineQuantity(Guid productId)
         {

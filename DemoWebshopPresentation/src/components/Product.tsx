@@ -5,17 +5,19 @@ import Button from './Button'
 type Props = {
   product: CatalogProductInfo
   userRole: string
+  onAddToCart: (productId: string) => void
   onDeleteClick: (productId: string) => void
 }
 
-const Product = ({ product, userRole, onDeleteClick }: Props) => {
+const Product = ({ product, userRole, onAddToCart, onDeleteClick }: Props) => {
   const navigate = useNavigate();
 
-  const addToCart = () => {
+  const addToCart = async () => {
     if (userRole !== "User") {
       navigate("/login")
     }
-  
+    
+    onAddToCart(product.id)
   }
 
   return (

@@ -36,6 +36,31 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
         Array.from({ length: Math.ceil(arr.length / size) }, (_v, i) =>
             arr.slice(i * size, i * size + size)
     )
+
+    const addToCart = async (productId: string) => {
+        
+        
+        const res = await fetch(`https://localhost:7000/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        
+        if (res.ok) {
+            alert(`Added to cart!`)
+        }
+        else {
+            let errorMessage = 'Unknown error'
+            const body = await res.text()
+            if (body && body !== '') {
+                const data = JSON.parse(body)
+                errorMessage = data.message
+            }
+            alert(`Adding to cart failed: ${errorMessage}`)
+        }
+      }
     
     const handleConfirm = async () => {
         const response = await fetch(`https://localhost:7000/api/Product/${deletedProductId}`, {
@@ -83,7 +108,7 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
                 products.length > 0 ?
                 chunk(products, 4).map((productsChunk, index) => {
                     return (
-                        <CatalogLine key={index} products={productsChunk} userRole={userRole} onDeleteClick={openConfirmDialog} />
+                        <CatalogLine key={index} products={productsChunk} userRole={userRole} onAddToCart={addToCart} onDeleteClick={openConfirmDialog} />
                     )
                 }) :
                 (
