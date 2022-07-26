@@ -181,7 +181,7 @@ function App() {
             } />
           <Route path='/shoppingBasket' element=
             {
-              <ShoppingBasket token={token} loggedUserId={loggedUserId} onGoBackClick={navigateBack} />
+              <ShoppingBasket token={token} onGoBackClick={navigateBack} />
             } />
           <Route path='/about' element=
             {
