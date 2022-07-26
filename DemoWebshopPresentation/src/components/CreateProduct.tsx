@@ -15,7 +15,7 @@ const CreateProduct = ({token, onProductCreate, onGoBackClick}: Props) => {
   const [availableQuantity, setAvailableQuantity] = useState(0)
   const [price, setPrice] = useState(0.00)
 
-  const createProduct = async (userInput: BasicProductInfo) => {
+  const createProduct = async (userInput: FormProductInfo) => {
     const res = await fetch('https://localhost:7000/api/Product', {
       method: 'POST',
       headers: {

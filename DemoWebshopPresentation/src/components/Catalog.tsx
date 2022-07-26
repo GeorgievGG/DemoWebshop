@@ -38,8 +38,6 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
     )
 
     const addToCart = async (productId: string) => {
-        
-        
         const res = await fetch(`https://localhost:7000/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
             method: 'POST',
             headers: {
@@ -60,7 +58,7 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
             }
             alert(`Adding to cart failed: ${errorMessage}`)
         }
-      }
+    }
     
     const handleConfirm = async () => {
         const response = await fetch(`https://localhost:7000/api/Product/${deletedProductId}`, {

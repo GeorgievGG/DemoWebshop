@@ -28,7 +28,7 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
     )
 
 
-    const updateProduct = async (userInput: BasicProductInfo) => {
+    const updateProduct = async (userInput: FormProductInfo) => {
         const res = await fetch(`https://localhost:7000/api/Product/${state.product.id}`, {
         method: 'PUT',
         headers: {

@@ -1,12 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 type BasicProductInfo = {
     name: string
-    model: string
-    pictureUrl: string
     availableQuantity: number
     price: number
 }
 
-type CatalogProductInfo = BasicProductInfo & {
+type BasketProductInfo = BasicProductInfo & {
     id: string
+}
+
+type CatalogProductInfo = FormProductInfo & {
+    id: string
+}
+
+type FormProductInfo = BasicProductInfo & {
+    model: string
+    pictureUrl: string
 }
