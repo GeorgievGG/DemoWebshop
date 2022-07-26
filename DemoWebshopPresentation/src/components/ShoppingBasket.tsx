@@ -138,30 +138,43 @@ const ShoppingBasket = ({ token, onGoBackClick }: Props) => {
     return (
         <div>
             <table className="table">
-            <thead>
-                <tr>
-                    <th scope="col">Product</th>
-                    <th scope="col">Purchase quantity</th>
-                    <th scope="col">Price per unit</th>
-                    <th scope="col">Price for all</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    hasLoaded ?
-                    shoppingBasket.basketLines.map((basketLine) => (
-                        <ShoppingBasketRow key={basketLine.product.id} basketLine={basketLine} onMinusClicked={decreaseShoppingQuantity} onQuantityChanged={setShoppingQuantity} onPlusClicked={increaseShoppingQuantity}   />
-                    )) :
+                <thead>
                     <tr>
-                        <td colSpan={4} className="text-center">
-                            Loading....
+                        <th scope="col">Product</th>
+                        <th scope="col">Purchase quantity</th>
+                        <th scope="col">Price per unit</th>
+                        <th scope="col">Price for all</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {
+                        hasLoaded ?
+                        shoppingBasket.basketLines.map((basketLine) => (
+                            <ShoppingBasketRow key={basketLine.product.id} basketLine={basketLine} onMinusClicked={decreaseShoppingQuantity} onQuantityChanged={setShoppingQuantity} onPlusClicked={increaseShoppingQuantity}   />
+                        )) :
+                        <tr>
+                            <td colSpan={4} className="text-center">
+                                Loading....
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td colSpan={2} />
+                        <td className='fw-bold'>TOTAL:</td>
+                        <td className='fw-bold'>
+                            {
+                                shoppingBasket.basketLines
+                                    .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+                                    .toLocaleString('en-US', { style: 'currency', currency: 'USD'})
+                            }
                         </td>
                     </tr>
-                }
-            </tbody>
+                </tbody>
             </table>
-    
-            <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+            <div className='float-end'>
+                <Button className="btn btn-dark" text="Checkout" onClick={onGoBackClick} />
+                <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+            </div>
         </div>
       )
 }

@@ -151,43 +151,45 @@ function App() {
                 navigate={navigate}
                 onLogoutClick={logout} />
         
-        <Routes>
-          <Route path='/' element={
-              <Catalog token={token} userRole={userRole} products={products} onProductsLoaded={fillProducts} onProductDelete={deleteProductById} />
-            } />
-          <Route path='/login' element=
-            {
-              <Login onLogin={login} onGoBackClick={navigateBack} />
-            } />
-          <Route path='/register' element=
-            {
-              <Register onRegister={register} onGoBackClick={navigateBack} />
-            } />
-          <Route path='/profile' element=
-            {
-              <Profile navigate={navigate} token={token} />
-            } />
-          <Route path='/userList' element=
-            {
-              <UserList token={token} loggedUserId={loggedUserId} onGoBackClick={navigateBack} />
-            } />
-          <Route path='/createProduct' element=
-            {
-              <CreateProduct token={token} onProductCreate={addProduct} onGoBackClick={navigateBack} />
-            } />
-          <Route path='/updateProduct' element=
-            {
-              <UpdateProduct token={token} onProductUpdate={updateProduct} onGoBackClick={navigateBack} />
-            } />
-          <Route path='/shoppingBasket' element=
-            {
-              <ShoppingBasket token={token} onGoBackClick={navigateBack} />
-            } />
-          <Route path='/about' element=
-            {
-              <About onGoBackClick={toggleAboutLinkStatus}/>
-            } />
-        </Routes>
+        <div className='body-wrapper'>
+          <Routes>
+            <Route path='/' element={
+                <Catalog token={token} userRole={userRole} products={products} onProductsLoaded={fillProducts} onProductDelete={deleteProductById} />
+              } />
+            <Route path='/login' element=
+              {
+                <Login onLogin={login} onGoBackClick={navigateBack} />
+              } />
+            <Route path='/register' element=
+              {
+                <Register onRegister={register} onGoBackClick={navigateBack} />
+              } />
+            <Route path='/profile' element=
+              {
+                <Profile navigate={navigate} token={token} />
+              } />
+            <Route path='/userList' element=
+              {
+                <UserList token={token} loggedUserId={loggedUserId} onGoBackClick={navigateBack} />
+              } />
+            <Route path='/createProduct' element=
+              {
+                <CreateProduct token={token} onProductCreate={addProduct} onGoBackClick={navigateBack} />
+              } />
+            <Route path='/updateProduct' element=
+              {
+                <UpdateProduct token={token} onProductUpdate={updateProduct} onGoBackClick={navigateBack} />
+              } />
+            <Route path='/shoppingBasket' element=
+              {
+                <ShoppingBasket token={token} onGoBackClick={navigateBack} />
+              } />
+            <Route path='/about' element=
+              {
+                <About onGoBackClick={toggleAboutLinkStatus}/>
+              } />
+          </Routes>
+        </div>
         <Footer onAboutClick={toggleAboutLinkStatus} showAboutLink={ showAboutLink } />
       </div>
   );
