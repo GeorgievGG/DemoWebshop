@@ -8,16 +8,6 @@ type Props = {
     onDeleteUser: (userId: string) => void
 }
 
-type UserInfo = {
-    id: string
-    username: string
-    email: string
-    firstName: string
-    lastName: string
-    isAdmin: boolean
-}
-
-
 const UserRow = ({ user, loggedUserId, onSetAdmin, onDeleteUser }: Props) => {
     return (
         <tr>

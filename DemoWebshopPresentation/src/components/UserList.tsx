@@ -9,15 +9,6 @@ type Props = {
   onGoBackClick: MouseEventHandler
 }
 
-type UserInfo = {
-  id: string
-  username: string
-  email: string
-  firstName: string
-  lastName: string
-  isAdmin: boolean
-}
-
 export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
   const [users, setUsers] = useState<UserInfo[]>([])
   const [open, setOpen] = useState(false);

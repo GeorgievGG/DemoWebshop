@@ -5,12 +5,6 @@ type Props = {
     token: string
 }
 
-type UpdatePasswordInput = {
-    currentPassword: string
-    newPassword: string
-    repeatNewPassword: string
-}
-
 const Profile = ({ token }: Props) => {
     const [currentPassword, setCurrentPassword] = useState('')
     const [newPassword, setNewPassword] = useState('')

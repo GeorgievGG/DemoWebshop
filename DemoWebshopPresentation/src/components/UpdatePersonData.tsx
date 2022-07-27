@@ -7,13 +7,6 @@ type Props = {
     token: string
 }
 
-type UpdateProfileInput = {
-    username: string
-    email: string
-    firstName: string
-    lastName: string
-}
-
 const UpdatePersonData = ({ token }: Props) => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
