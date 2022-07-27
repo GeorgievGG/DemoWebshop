@@ -8,9 +8,9 @@
 
         public bool Confirmed { get; set; }
 
-        public DateTime DeliveryDate { get; set; }
+        public DateTime? DeliveryDate { get; set; }
 
-        public Guid ClientId { get; set; }
+        public UsernameResponseDto Client { get; set; }
 
         public ICollection<OrderLineResponseDto> OrderLines { get; set; }
     }

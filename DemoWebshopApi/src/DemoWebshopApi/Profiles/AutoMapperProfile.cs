@@ -19,6 +19,7 @@ namespace DemoWebshopApi.Profiles
         {
             CreateMap<CreateUserRequestDto, User>();
             CreateMap<UpdateUserRequestDto, User>();
+            CreateMap<User, UsernameResponseDto>();
             CreateMap<User, UserResponseDto>();
             CreateMap<User, UserSensitiveResponseDto>();
         }

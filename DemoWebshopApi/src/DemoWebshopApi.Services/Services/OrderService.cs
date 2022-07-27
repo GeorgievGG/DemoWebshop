@@ -18,12 +18,12 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<IEnumerable<Order>> GetOrders()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders.Include(x => x.OrderLines).Include(x => x.Client).ToListAsync();
         }
 
         public async Task<Order> GetOrder(Guid id)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.Include(x => x.OrderLines).Include(x => x.Client).FirstOrDefaultAsync(x => x.Id == id);
             _validationService.EnsureNotNull(order, nameof(order));
 
             return order;
