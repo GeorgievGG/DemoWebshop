@@ -86,8 +86,8 @@ const Register = ({onRegister, onGoBackClick}: Props) => {
                     onChange={(e) => setConfirmPassword(e.target.value)} />
             </div>
             <input className="btn btn-dark" type='submit' value='Register' />
+            <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
         </form>
-        <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
     </div>
   )
 }
