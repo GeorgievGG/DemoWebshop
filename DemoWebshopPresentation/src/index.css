@@ -178,3 +178,7 @@ footer {
 .body-wrapper {
   min-height: 70vh;
 }
+
+.logo {
+  height: 60px;
+}

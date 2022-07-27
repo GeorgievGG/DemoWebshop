@@ -1,22 +1,21 @@
 import React from 'react'
-import { MouseEventHandler } from 'react';
-import { NavigateFunction } from 'react-router-dom';
-import Button from "./Button";
+import { MouseEventHandler } from 'react'
+import { NavigateFunction } from 'react-router-dom'
+import Button from "./Button"
 
 type Props = {
-    title: string
     userLogged: boolean
     userRole: string
     navigate: NavigateFunction
     onLogoutClick: MouseEventHandler
 }
 
-const Header = ({ title, userLogged, userRole, navigate, onLogoutClick }: Props) => {
+const Header = ({ userLogged, userRole, navigate, onLogoutClick }: Props) => {
     return (
         <header>
             <ul className='horizontal'>
                 <li>
-                    <h1>{title}</h1>
+                    <img className='logo' src="../images/logo.png" alt="Failed to load logo" onClick={() => navigate("/")} />
                 </li>
                 <li>
                     { !userLogged && <Button className="btn btn-dark" text={"Login"} onClick={() => navigate("/login")} /> }

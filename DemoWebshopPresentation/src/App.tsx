@@ -145,8 +145,7 @@ function App() {
 
   return (
       <div className="container">
-        <Header title='Hello from Demo Webshop!' 
-                userLogged={userLogged} 
+        <Header userLogged={userLogged} 
                 userRole={userRole}
                 navigate={navigate}
                 onLogoutClick={logout} />
