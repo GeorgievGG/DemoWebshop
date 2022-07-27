@@ -1,11 +1,11 @@
-import React, { MouseEventHandler, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from './Button'
 import ShoppingBasketRow from './ShoppingBasketRow'
 
 
 type Props = {
     token: string
-    onGoBackClick: MouseEventHandler
+    navigateBack: () => void
 }
 
 type Basket = {
@@ -18,7 +18,7 @@ type ShoppingBasketLine = {
     product: BasketProductInfo
 }
 
-const ShoppingBasket = ({ token, onGoBackClick }: Props) => {
+const ShoppingBasket = ({ token, navigateBack }: Props) => {
     const [shoppingBasket, setShoppingBasket] = useState<Basket>({id: '', basketLines: []})
     const [hasLoaded, setHasLoaded] = useState(false)
 
@@ -135,6 +135,34 @@ const ShoppingBasket = ({ token, onGoBackClick }: Props) => {
         }
     }
 
+    const createOrder = async () => {
+        const orderLines = shoppingBasket.basketLines.map(function (basketLine) {
+            return { quantity: basketLine.quantity, price: basketLine.product.price, productId: basketLine.product.id }
+        })
+        const res = await fetch(`https://localhost:7000/api/Order`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ orderLines: orderLines })
+        })
+        
+        if (res.ok) {
+            alert(`Order created successfully!`)
+            navigateBack()
+        }
+        else {
+            let errorMessage = 'Unknown error'
+            const body = await res.text()
+            if (body && body !== '') {
+                const data = JSON.parse(body)
+                errorMessage = data.message
+            }
+            alert(`Adding to cart failed: ${errorMessage}`)
+        }
+    }
+
     return (
         <div>
             <table className="table">
@@ -172,8 +200,8 @@ const ShoppingBasket = ({ token, onGoBackClick }: Props) => {
                 </tbody>
             </table>
             <div className='float-end'>
-                <Button className="btn btn-dark" text="Checkout" onClick={onGoBackClick} />
-                <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+                <Button className="btn btn-dark" text="Checkout" onClick={createOrder} />
+                <Button className="btn btn-dark" text="Go Back" onClick={navigateBack} />
             </div>
         </div>
       )

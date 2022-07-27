@@ -16,20 +16,7 @@ import CreateProduct from './components/CreateProduct';
 import UpdateProduct from './components/UpdateProduct';
 import { UserList } from './components/UserList';
 import ShoppingBasket from './components/ShoppingBasket';
-
-type UserCreds = {
-  username: string,
-  password: string
-}
-
-type RegistrationInput = {
-  username: string
-  email: string
-  firstName: string
-  lastName: string
-  password: string
-  confirmPassword: string
-}
+import { OrderList } from './components/OrderList';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -181,7 +168,7 @@ function App() {
               } />
             <Route path='/shoppingBasket' element=
               {
-                <ShoppingBasket token={token} onGoBackClick={navigateBack} />
+                <ShoppingBasket token={token} navigateBack={navigateBack} />
               } />
             <Route path='/about' element=
               {

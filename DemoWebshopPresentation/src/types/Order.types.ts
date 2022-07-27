@@ -10,5 +10,11 @@ type OrderInfo = {
 type OrderLine = {
     quantity: number
     price: number
-    product: BasketProductInfo
+    productId: string
+}
+
+type CreationOrderLine = {
+    quantity: number
+    price: number
+    productId: string
 }
