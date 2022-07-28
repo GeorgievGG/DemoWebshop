@@ -103,7 +103,12 @@ function App() {
   }
   
   const fillProducts = (productsJson: any) => {
-    setProducts(productsJson)
+    if (userRole === 'Admin') {
+      setProducts(productsJson)
+    }
+    else {
+      setProducts(productsJson.filter((product: CatalogProductInfo) => product.availableQuantity !== 0))
+    }
   }
   
   const addProduct = (productJson: any) => {
@@ -126,6 +131,7 @@ function App() {
     setUserRole('')
     setUserLogged(false)
     navigate("/")
+    setProducts(products.filter((product) => product.availableQuantity !== 0))
   }
 
   const toggleAboutLinkStatus = () => {
