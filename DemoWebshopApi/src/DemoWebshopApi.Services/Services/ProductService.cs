@@ -58,6 +58,21 @@ namespace DemoWebshopApi.Services.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task ReduceProductQuantities(ICollection<OrderLine> orderLines)
+        {
+            var products = await GetProducts();
+            foreach (var orderLine in orderLines)
+            {
+                var product = products.FirstOrDefault(x => x.Id == orderLine.ProductId);
+                _validationService.EnsureNotNull(product, nameof(product));
+
+                product.AvailableQuantity -= orderLine.Quantity;
+                _context.Entry(product).State = EntityState.Modified;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteProduct(Guid id)
         {
             await _validationService.EnsureProductExists(id);

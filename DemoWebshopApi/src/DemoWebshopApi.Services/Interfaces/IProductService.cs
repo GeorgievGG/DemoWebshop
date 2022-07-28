@@ -8,6 +8,7 @@ namespace DemoWebshopApi.Services.Interfaces
         Task<Product> GetProduct(Guid id);
         Task<Product> CreateProduct(Product product);
         Task UpdateProduct(Guid id, Product product);
+        Task ReduceProductQuantities(ICollection<OrderLine> orderLines);
         Task DeleteProduct(Guid id);
     }
 }

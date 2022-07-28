@@ -9,11 +9,13 @@ namespace DemoWebshopApi.Services.Services
     {
         private readonly WebshopContext _context;
         private readonly IValidationService _validationService;
+        private readonly IProductService _productService;
 
-        public OrderService(WebshopContext context, IValidationService validationService)
+        public OrderService(WebshopContext context, IValidationService validationService, IProductService productService)
         {
             _context = context;
             _validationService = validationService;
+            _productService = productService;
         }
 
         public async Task<IEnumerable<Order>> GetOrders()
@@ -35,6 +37,7 @@ namespace DemoWebshopApi.Services.Services
             await _validationService.EnsureUserExists(order.ClientId);
             _validationService.EnsureOrderLinesUnique(order);
             _validationService.EnsureQuantityIsSufficient(order.OrderLines);
+            await _productService.ReduceProductQuantities(order.OrderLines);
             await _context.SaveChangesAsync();
 
             return order;
