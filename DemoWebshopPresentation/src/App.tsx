@@ -10,13 +10,15 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 import Catalog from "./components/Catalog";
 import useScript from './hooks/UseScript';
-import "bootstrap/dist/css/bootstrap.css";
 import ClaimTypes from './enums/ClaimTypes';
 import CreateProduct from './components/CreateProduct';
 import UpdateProduct from './components/UpdateProduct';
 import { UserList } from './components/UserList';
 import ShoppingBasket from './components/ShoppingBasket';
 import { OrderList } from './components/OrderList';
+
+import "bootstrap/dist/css/bootstrap.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -169,6 +171,10 @@ function App() {
             <Route path='/shoppingBasket' element=
               {
                 <ShoppingBasket token={token} navigateBack={navigateBack} />
+              } />
+            <Route path='/orderList' element=
+              {
+                <OrderList token={token} onGoBackClick={navigateBack} />
               } />
             <Route path='/about' element=
               {

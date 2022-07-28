@@ -182,3 +182,7 @@ footer {
 .logo {
   height: 60px;
 }
+
+.react-datepicker-wrapper input {
+  visibility: collapse;
+}
