@@ -71,7 +71,7 @@ namespace DemoWebshopApi.Data
         {
             modelBuilder.Entity<ShoppingBasketLine>().HasKey(t => t.Id);
             modelBuilder.Entity<ShoppingBasketLine>().Property(t => t.Quantity).IsRequired();
-            modelBuilder.Entity<ShoppingBasketLine>().HasOne(t => t.Basket).WithMany(u => u.BasketLines).HasForeignKey(t => t.BasketId).IsRequired().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ShoppingBasketLine>().HasOne(t => t.Basket).WithMany(u => u.BasketLines).HasForeignKey(t => t.BasketId).IsRequired().OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<ShoppingBasketLine>().HasOne(t => t.Product).WithMany().HasForeignKey(t => t.ProductId).IsRequired().OnDelete(DeleteBehavior.Restrict);
         }
     }

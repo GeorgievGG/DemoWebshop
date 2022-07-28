@@ -96,5 +96,19 @@ namespace DemoWebshopApi.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete]
+        [Authorize]
+        public async Task<IActionResult> DeleteShoppingBasket()
+        {
+            if (UserId == null)
+            {
+                return BadRequest();
+            }
+
+            await _shoppingBasketService.DeleteShoppingBasket(Guid.Parse(UserId));
+
+            return NoContent();
+        }
     }
 }
