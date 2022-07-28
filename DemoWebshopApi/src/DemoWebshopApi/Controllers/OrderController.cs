@@ -57,7 +57,7 @@ namespace DemoWebshopApi.Controllers
             }
 
             var toBeCreated = _mapper.Map<Order>(order);
-            toBeCreated.OrderDate = DateTime.UtcNow;
+            toBeCreated.OrderDate = DateTime.UtcNow.Date;
             toBeCreated.ClientId = Guid.Parse(UserId);
             var newOrder = await _orderService.CreateOrder(toBeCreated);
 
@@ -75,9 +75,9 @@ namespace DemoWebshopApi.Controllers
 
         [HttpPut("{id}/SetDeliveryDate")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> SetDeliveryDate(Guid id, DateTime deliveryDate)
+        public async Task<IActionResult> SetDeliveryDate(Guid id, SetDeliveryDateInput input)
         {
-            await _orderService.SetDeliveryDate(id, deliveryDate);
+            await _orderService.SetDeliveryDate(id, input.DeliveryDate.Date);
 
             return NoContent();
         }
