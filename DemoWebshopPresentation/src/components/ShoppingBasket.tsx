@@ -105,6 +105,18 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
     }
     
     const setShoppingQuantity = async (productId: string, purchaseQty: number) => {
+        if (!purchaseQty) {
+            setShoppingBasket({
+                ...shoppingBasket, 
+                basketLines: shoppingBasket.basketLines.map(
+                    (line) => line.product.id === productId ? 
+                    { ...line, quantity: purchaseQty} : 
+                    line
+                )
+            })
+            return
+        }
+
         const res = await fetch(`https://localhost:7000/api/ShoppingBasket/SetShoppingQuantity`, {
             method: 'POST',
             headers: {
@@ -150,6 +162,8 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
         
         if (res.ok) {
             alert(`Order created successfully!`)
+            await clearShoppingBasket()
+            setShoppingBasket({id: '', basketLines: []})
             navigateBack()
         }
         else {
@@ -160,6 +174,20 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
                 errorMessage = data.message
             }
             alert(`Adding to cart failed: ${errorMessage}`)
+        }
+    }
+
+    const clearShoppingBasket = async () => {
+        const res = await fetch(`https://localhost:7000/api/ShoppingBasket`, {
+            method: 'DELETE',
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        
+        if (res.ok) {
+            
         }
     }
 

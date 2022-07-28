@@ -6,5 +6,6 @@ namespace DemoWebshopApi.Services.Interfaces
     {
         Task<ShoppingBasket> GetShoppingBasket(Guid userId);
         Task<ShoppingBasket> CreateShoppingBasket(Guid userId);
+        Task DeleteShoppingBasket(Guid userId);
     }
 }

@@ -38,5 +38,14 @@ namespace DemoWebshopApi.Services.Services
 
             return newBasket;
         }
+
+        public async Task DeleteShoppingBasket(Guid userId)
+        {
+            var shoppingBasket = await _context.ShoppingBaskets.FirstOrDefaultAsync(x => x.ClientId == userId);
+            _validationService.EnsureNotNull(shoppingBasket, nameof(shoppingBasket));
+
+            _context.ShoppingBaskets.Remove(shoppingBasket);
+            await _context.SaveChangesAsync();
+        }
     }
 }
