@@ -16,5 +16,6 @@
         public const string OrderNotConfirmed = "Can't set delivery date for unconfirmed order";
         public const string DuplicatedOrderLines = "Can't create an order with duplicated product lines!";
         public const string ClientDoesNotExist = "Client with such ID does not existy!";
+        public const string InsufficientProductQuantity = "Not have enough available quantity for product \"{0}\". Please reduce ordered quantity!";
     }
 }

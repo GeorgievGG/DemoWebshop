@@ -1,4 +1,5 @@
 ﻿using DemoWebshopApi.Common;
+using DemoWebshopApi.Common.CustomExceptions;
 using DemoWebshopApi.Data;
 using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.Data.Interfaces;
@@ -179,6 +180,19 @@ namespace DemoWebshopApi.Services.Services
             if (countByProduct.Any(x => x.Count > 1))
             {
                 throw new DuplicatedOrderLinesException(Constants.DuplicatedOrderLines);
+            }
+        }
+
+        public void EnsureQuantityIsSufficient(ICollection<OrderLine> orderLines)
+        {
+            var products = _context.Products.ToList();
+            foreach (var orderLine in orderLines)
+            {
+                var orderLineProduct = products.FirstOrDefault(x => x.Id == orderLine.ProductId);
+                if (orderLineProduct != null && orderLineProduct.AvailableQuantity < orderLine.Quantity)
+                {
+                    throw new ProductQuantityInsufficientException(string.Format(Constants.InsufficientProductQuantity, orderLineProduct.Name));
+                }
             }
         }
     }
