@@ -57,7 +57,7 @@ const UpdatePersonData = ({ token }: Props) => {
     }
 
     const updateProfile = async (userInput: UpdateProfileInput) => {
-        const res = await fetch('https://localhost:7000/api/User', {
+        const response = await fetch('https://localhost:7000/api/User', {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -66,12 +66,12 @@ const UpdatePersonData = ({ token }: Props) => {
             body: JSON.stringify(userInput)
         })
         
-        if (res.ok) {
+        if (response.ok) {
             alert(`User updated!`)
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message

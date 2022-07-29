@@ -38,7 +38,7 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
     )
 
     const addToCart = async (productId: string) => {
-        const res = await fetch(`https://localhost:7000/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
+        const response = await fetch(`https://localhost:7000/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -46,12 +46,12 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
             }
         })
         
-        if (res.ok) {
+        if (response.ok) {
             alert(`Added to cart!`)
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message

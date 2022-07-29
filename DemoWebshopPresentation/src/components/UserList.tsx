@@ -36,7 +36,7 @@ export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
   }
 
   const onSetAdmin = async (userId: string) => {
-    const res = await fetch(`https://localhost:7000/api/User/${userId}/SetUserAdmin`, {
+    const response = await fetch(`https://localhost:7000/api/User/${userId}/SetUserAdmin`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -44,7 +44,7 @@ export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
             }
         })
         
-        if (res.ok) {
+        if (response.ok) {
             alert(`User updated!`)
             setUsers(users.map((user) =>
               user.id === userId ? { ...user, isAdmin: true } : user
@@ -52,7 +52,7 @@ export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message
@@ -79,7 +79,9 @@ export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
       deleteUserById(deletedUserId)
     }
     else {
-      alert(`Couldn't delete product!`)
+      const body = await response.text()
+      const bodyJson = JSON.parse(body)
+      alert(`Couldn't delete user: ${bodyJson.message}!`)
     }
 
     setOpen(false);

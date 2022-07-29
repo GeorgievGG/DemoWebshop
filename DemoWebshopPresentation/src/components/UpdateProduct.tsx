@@ -29,7 +29,7 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
 
 
     const updateProduct = async (userInput: FormProductInfo) => {
-        const res = await fetch(`https://localhost:7000/api/Product/${state.product.id}`, {
+        const response = await fetch(`https://localhost:7000/api/Product/${state.product.id}`, {
         method: 'PUT',
         headers: {
             'Content-type': 'application/json',
@@ -38,8 +38,8 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
         body: JSON.stringify(userInput)
         })
         
-        const body = await res.text()
-        if (res.ok) {
+        const body = await response.text()
+        if (response.ok) {
             var updatedProduct = { ...userInput, id: state.product.id } as CatalogProductInfo
             onProductUpdate(updatedProduct)
             alert(`Product ${updatedProduct.name} updated!`)

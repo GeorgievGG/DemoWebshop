@@ -37,7 +37,7 @@ function App() {
   }
 
   const login = async (userCredentials: UserCreds) => {
-    const res = await fetch('https://localhost:7000/api/Authentication/Login', {
+    const response = await fetch('https://localhost:7000/api/Authentication/Login', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -45,8 +45,8 @@ function App() {
       body: JSON.stringify(userCredentials)
     })
 
-    if (res.ok) {
-      const data = await res.json()
+    if (response.ok) {
+      const data = await response.json()
       setUserLogged(true)
       setToken(data.access_token)
       const tokenData = JSON.parse(Buffer.from(data.access_token.split('.')[1], 'base64').toString())
@@ -60,7 +60,7 @@ function App() {
   }
 
   const refreshToken = async (refreshToken: string) => {
-    const res = await fetch('https://localhost:7000/api/Authentication/RefreshToken', {
+    const response = await fetch('https://localhost:7000/api/Authentication/RefreshToken', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -68,8 +68,8 @@ function App() {
       body: JSON.stringify(refreshToken)
     })
 
-    if (res.ok) {
-      const data = await res.json()
+    if (response.ok) {
+      const data = await response.json()
     }
     else {
       alert(`Refreshing token failed. You're being logged out!`)
@@ -78,7 +78,7 @@ function App() {
   }
 
   const register = async (userInput: RegistrationInput) => {
-    const res = await fetch('https://localhost:7000/api/User', {
+    const response = await fetch('https://localhost:7000/api/User', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -86,8 +86,8 @@ function App() {
       body: JSON.stringify(userInput)
     })
     
-    const body = await res.text()
-    if (res.ok) {
+    const body = await response.text()
+    if (response.ok) {
       const data = JSON.parse(body)
       alert(`User ${data.username} registered!`)
       navigateBack()

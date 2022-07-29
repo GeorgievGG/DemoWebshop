@@ -34,7 +34,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
   }
 
   const confirmOrder = async (orderId: string) => {
-    const res = await fetch(`https://localhost:7000/api/Order/${orderId}/ConfirmOrder`, {
+    const response = await fetch(`https://localhost:7000/api/Order/${orderId}/ConfirmOrder`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -42,7 +42,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
             }
         })
         
-        if (res.ok) {
+        if (response.ok) {
             alert(`Order updated!`)
             setOrders(orders.map((order) =>
               order.id === orderId ? { ...order, confirmed: true } : order
@@ -50,7 +50,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message
@@ -60,7 +60,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
   }
 
   const setOrderDeliveryDate = async (orderId: string, deliveryDate: Date) => {
-    const res = await fetch(`https://localhost:7000/api/Order/${orderId}/SetDeliveryDate`, {
+    const response = await fetch(`https://localhost:7000/api/Order/${orderId}/SetDeliveryDate`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -69,7 +69,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
             body: JSON.stringify({ deliveryDate })
         })
         
-        if (res.ok) {
+        if (response.ok) {
             alert(`Order updated!`)
             setOrders(orders.map((order) =>
               order.id === orderId ? { ...order, deliveryDate: deliveryDate } : order
@@ -77,7 +77,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message

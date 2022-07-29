@@ -45,7 +45,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
     }
 
     const increaseShoppingQuantity = async (productId: string) => {
-        const res = await fetch(`https://localhost:7000/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
+        const response = await fetch(`https://localhost:7000/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -53,7 +53,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             }
         })
         
-        if (res.ok) {
+        if (response.ok) {
             setShoppingBasket({
                 ...shoppingBasket, 
                 basketLines: shoppingBasket.basketLines.map(
@@ -65,7 +65,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message
@@ -75,7 +75,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
     }
     
     const decreaseShoppingQuantity = async (productId: string) => {
-        const res = await fetch(`https://localhost:7000/api/ShoppingBasket/DecreaseShoppingQuantity/${productId}`, {
+        const response = await fetch(`https://localhost:7000/api/ShoppingBasket/DecreaseShoppingQuantity/${productId}`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -83,7 +83,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             }
         })
         
-        if (res.ok) {
+        if (response.ok) {
             setShoppingBasket({
                 ...shoppingBasket, 
                 basketLines: shoppingBasket.basketLines.map(
@@ -95,7 +95,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message
@@ -112,12 +112,12 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
                     (line) => line.product.id === productId ? 
                     { ...line, quantity: purchaseQty} : 
                     line
-                )
+                ).filter((line) => line.quantity > 0)
             })
             return
         }
 
-        const res = await fetch(`https://localhost:7000/api/ShoppingBasket/SetShoppingQuantity`, {
+        const response = await fetch(`https://localhost:7000/api/ShoppingBasket/SetShoppingQuantity`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -126,7 +126,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             body: JSON.stringify({ quantity: purchaseQty, productId})
         })
         
-        if (res.ok) {
+        if (response.ok) {
             setShoppingBasket({
                 ...shoppingBasket, 
                 basketLines: shoppingBasket.basketLines.map(
@@ -138,7 +138,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message
@@ -151,7 +151,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
         const orderLines = shoppingBasket.basketLines.map(function (basketLine) {
             return { quantity: basketLine.quantity, price: basketLine.product.price, productId: basketLine.product.id }
         })
-        const res = await fetch(`https://localhost:7000/api/Order`, {
+        const response = await fetch(`https://localhost:7000/api/Order`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -160,7 +160,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             body: JSON.stringify({ orderLines: orderLines })
         })
         
-        if (res.ok) {
+        if (response.ok) {
             alert(`Order created successfully!`)
             await clearShoppingBasket()
             setShoppingBasket({id: '', basketLines: []})
@@ -168,7 +168,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message
@@ -178,17 +178,13 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
     }
 
     const clearShoppingBasket = async () => {
-        const res = await fetch(`https://localhost:7000/api/ShoppingBasket`, {
+        await fetch(`https://localhost:7000/api/ShoppingBasket`, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         })
-        
-        if (res.ok) {
-            
-        }
     }
 
     return (

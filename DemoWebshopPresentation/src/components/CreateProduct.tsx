@@ -16,7 +16,7 @@ const CreateProduct = ({token, onProductCreate, onGoBackClick}: Props) => {
   const [price, setPrice] = useState(0.00)
 
   const createProduct = async (userInput: FormProductInfo) => {
-    const res = await fetch('https://localhost:7000/api/Product', {
+    const response = await fetch('https://localhost:7000/api/Product', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -25,8 +25,8 @@ const CreateProduct = ({token, onProductCreate, onGoBackClick}: Props) => {
       body: JSON.stringify(userInput)
     })
     
-    const body = await res.text()
-    if (res.ok) {
+    const body = await response.text()
+    if (response.ok) {
       const data = JSON.parse(body)
       onProductCreate(data)
       alert(`Product ${data.name} created!`)

@@ -32,7 +32,7 @@ const Profile = ({ token }: Props) => {
     }
 
     const updatePasswords = async (userInput: UpdatePasswordInput) => {
-        const res = await fetch('https://localhost:7000/api/User/UpdatePassword', {
+        const response = await fetch('https://localhost:7000/api/User/UpdatePassword', {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -41,12 +41,12 @@ const Profile = ({ token }: Props) => {
             body: JSON.stringify(userInput)
         })
         
-        if (res.ok) {
+        if (response.ok) {
             alert(`Password updated!`)
         }
         else {
             let errorMessage = 'Unknown error'
-            const body = await res.text()
+            const body = await response.text()
             if (body && body !== '') {
                 const data = JSON.parse(body)
                 errorMessage = data.message
