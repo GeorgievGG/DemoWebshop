@@ -45,6 +45,8 @@ namespace DemoWebshopApi.Middleware
                     case OrderNotConfirmedException orderNotConfirmedException:
                     case PasswordsDontMatchException passwordsDontMatchException:
                     case ValueInvalidException valueInvalidException:
+                    case DeliveryDatePrecedesOrderException deliveryDatePrecedesOrderException:
+                    case ProductQuantityInsufficientException productQuantityInsufficientException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;
                     default:

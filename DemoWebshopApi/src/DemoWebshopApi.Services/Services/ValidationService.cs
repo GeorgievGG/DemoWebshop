@@ -195,5 +195,13 @@ namespace DemoWebshopApi.Services.Services
                 }
             }
         }
+
+        public void EnsureOrderDatePrecedesDelivery(Order order, DateTime deliveryDate)
+        {
+            if (order.OrderDate >= deliveryDate)
+            {
+                throw new DeliveryDatePrecedesOrderException(Constants.DeliveryDatePrecedesOrder);
+            }
+        }
     }
 }

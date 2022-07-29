@@ -24,5 +24,6 @@ namespace DemoWebshopApi.Services.Interfaces
         void EnsureOrderLinesUnique(Order order);
         Task EnsureUserExists(Guid userId);
         void EnsureQuantityIsSufficient(ICollection<OrderLine> orderLines);
+        void EnsureOrderDatePrecedesDelivery(Order order, DateTime deliceryDate);
     }
 }

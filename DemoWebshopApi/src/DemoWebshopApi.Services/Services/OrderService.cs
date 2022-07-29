@@ -54,13 +54,14 @@ namespace DemoWebshopApi.Services.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task SetDeliveryDate(Guid id, DateTime date)
+        public async Task SetDeliveryDate(Guid orderId, DateTime deliveryDate)
         {
-            var order = await _context.Orders.FindAsync(id);
+            var order = await _context.Orders.FindAsync(orderId);
             _validationService.EnsureNotNull(order, nameof(order));
             _validationService.EnsureOrderConfirmed(order);
+            _validationService.EnsureOrderDatePrecedesDelivery(order, deliveryDate);
 
-            order.DeliveryDate = date;
+            order.DeliveryDate = deliveryDate;
 
             _context.Entry(order).State = EntityState.Modified;
             await _context.SaveChangesAsync();
