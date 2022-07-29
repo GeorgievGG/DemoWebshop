@@ -1,4 +1,5 @@
-﻿using DemoWebshopApi.Services.Services;
+﻿using DemoWebshopApi.Common.CustomExceptions;
+using DemoWebshopApi.Services.Services;
 using System.Net;
 using System.Text.Json;
 

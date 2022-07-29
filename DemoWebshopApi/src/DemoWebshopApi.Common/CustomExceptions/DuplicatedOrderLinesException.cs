@@ -1,7 +1,7 @@
 ﻿using System.Runtime.Serialization;
 
-namespace DemoWebshopApi.Services.Services
-{
+namespace DemoWebshopApi.Common.CustomExceptions 
+{ 
     [Serializable]
     public class DuplicatedOrderLinesException : Exception
     {
