@@ -55,7 +55,7 @@ namespace DemoWebshopApi.Middleware
                 }
 
                 var errorMessage = error?.Message;
-                if (string.IsNullOrWhiteSpace(errorMessage))
+                if (string.IsNullOrWhiteSpace(errorMessage) || response.StatusCode == (int)HttpStatusCode.InternalServerError)
                 {
                     try
                     {
