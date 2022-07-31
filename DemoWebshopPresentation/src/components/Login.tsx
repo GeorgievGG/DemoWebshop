@@ -1,13 +1,11 @@
-import React, { MouseEventHandler, FormEventHandler } from 'react'
-import { useState } from "react"
+import React, { FormEventHandler, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { ILoginProps } from '../pages/LoginPage/types';
 import Button from './Button'
 
-type Props = {
-  onLogin: Function,
-  onGoBackClick: MouseEventHandler
-}
 
-const Login = ({onLogin, onGoBackClick}: Props) => {
+const Login = ({onLogin}: ILoginProps ) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -45,7 +43,7 @@ const Login = ({onLogin, onGoBackClick}: Props) => {
                   onChange={(e) => setPassword(e.target.value)} />
         </div>
         <input className="btn btn-dark" type='submit' value='Login' />
-        <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+        <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
       </form>
     </div>
   )

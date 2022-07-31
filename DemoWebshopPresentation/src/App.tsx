@@ -1,16 +1,13 @@
 import React from 'react'
 import { useState } from "react";
-import { Buffer } from 'buffer';
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import About from "./components/About";
-import Login from "./components/Login";
 import Register from "./components/Register";
 import Profile from "./components/Profile";
 import Catalog from "./components/Catalog";
 import useScript from './hooks/UseScript';
-import ClaimTypes from './enums/ClaimTypes';
 import CreateProduct from './components/CreateProduct';
 import UpdateProduct from './components/UpdateProduct';
 import { UserList } from './components/UserList';
@@ -19,6 +16,7 @@ import { OrderList } from './components/OrderList';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
+import LoginPage from './pages/LoginPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -31,33 +29,8 @@ function App() {
   const [loggedUserId, setloggedUserId] = useState('')
   const [userRole, setUserRole] = useState('')
   const [products, setProducts] = useState<CatalogProductInfo[]>([])
-
-  const navigateBack = () => {
-    navigate(-1)
-  }
-
-  const login = async (userCredentials: UserCreds) => {
-    const response = await fetch('https://localhost:7000/api/Authentication/Login', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(userCredentials)
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-      setUserLogged(true)
-      setToken(data.access_token)
-      const tokenData = JSON.parse(Buffer.from(data.access_token.split('.')[1], 'base64').toString())
-      setloggedUserId(tokenData[ClaimTypes.UserId])
-      setUserRole(tokenData[ClaimTypes.UserRole])
-      navigateBack()
-    }
-    else {
-      alert(`Login for user ${userCredentials.username} failed.`)
-    }
-  }
+  const navigateBack = () => navigate(-1)
+  
 
   const refreshToken = async (refreshToken: string) => {
     const response = await fetch('https://localhost:7000/api/Authentication/RefreshToken', {
@@ -152,7 +125,7 @@ function App() {
               } />
             <Route path='/login' element=
               {
-                <Login onLogin={login} onGoBackClick={navigateBack} />
+                <LoginPage />
               } />
             <Route path='/register' element=
               {
