@@ -1,7 +1,7 @@
 import React, { FormEventHandler, useEffect } from 'react'
 import { useState } from "react"
 import { Buffer } from 'buffer';
-import ClaimTypes from '../enums/ClaimTypes'
+import ClaimTypes from '../../enums/ClaimTypes';
 
 type Props = {
     token: string
