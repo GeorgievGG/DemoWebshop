@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import ClaimTypes from '../../enums/ClaimTypes';
 import { IUserLoginInput } from '../../pages/LoginPage/types';
-import { setState } from '../../store';
+import { setSessionData } from '../../store/sessionSlice';
 import Button from '../common/Button'
 
 const Login = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -40,7 +40,7 @@ const Login = () => {
     if (response.ok) {
       const data = await response.json()
       const tokenData = JSON.parse(Buffer.from(data.access_token.split('.')[1], 'base64').toString())
-      dispatch(setState({Token: data.access_token, UserLogged: true, LoggedUserId: tokenData[ClaimTypes.UserId], LoggedUserRole: tokenData[ClaimTypes.UserRole]}))
+      dispatch(setSessionData({Token: data.access_token, UserLogged: true, LoggedUserId: tokenData[ClaimTypes.UserId], LoggedUserRole: tokenData[ClaimTypes.UserRole]}))
       navigate(-1)
     }
     else {
