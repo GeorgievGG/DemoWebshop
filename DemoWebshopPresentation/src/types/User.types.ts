@@ -7,15 +7,6 @@ type ListUserInfo = BasicUserInfo & {
     id: string
 }
 
-type RegistrationInput = {
-  username: string
-  email: string
-  firstName: string
-  lastName: string
-  password: string
-  confirmPassword: string
-}
-
 type UserInfo = BasicUserInfo & {
     id: string
     email: string

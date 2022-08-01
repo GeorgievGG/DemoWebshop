@@ -7,14 +7,14 @@ import Catalog from "./components/product/Catalog";
 import useScript from './hooks/UseScript';
 import UpdateProduct from './components/product/UpdateProduct';
 import ShoppingBasket from './components/shopping-basket/ShoppingBasket';
-import LoginPage from './pages/LoginPage';
-import Register from './components/user/Register';
 import Profile from './components/user/Profile';
 import UserList from './components/user/UserList';
 import CreateProduct from './components/product/CreateProduct';
 import OrderList from './components/order/OrderList';
 import About from './components/common/About';
 import Header from './components/common/Header';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -45,31 +45,6 @@ function App() {
     else {
       alert(`Refreshing token failed. You're being logged out!`)
       logout()
-    }
-  }
-
-  const register = async (userInput: RegistrationInput) => {
-    const response = await fetch('https://localhost:7000/api/User', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(userInput)
-    })
-    
-    const body = await response.text()
-    if (response.ok) {
-      const data = JSON.parse(body)
-      alert(`User ${data.username} registered!`)
-      navigateBack()
-    }
-    else {
-      let errorMessage = 'Unknown error'
-      if (body && body !== '') {
-        const data = JSON.parse(body)
-        errorMessage = data.message
-      }
-      alert(`Registration failed for user ${userInput.username}: ${errorMessage}`)
     }
   }
   
@@ -127,7 +102,7 @@ function App() {
               } />
             <Route path='/register' element=
               {
-                <Register onRegister={register} onGoBackClick={navigateBack} />
+                <RegisterPage />
               } />
             <Route path='/profile' element=
               {

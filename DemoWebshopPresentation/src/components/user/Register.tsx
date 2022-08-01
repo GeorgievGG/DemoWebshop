@@ -1,13 +1,11 @@
-import React, { MouseEventHandler, FormEventHandler } from 'react'
+import React, { FormEventHandler } from 'react'
 import { useState } from "react"
+import { useNavigate } from 'react-router-dom'
+import { IRegisterProps } from '../../pages/RegisterPage/types'
 import Button from '../common/Button'
 
-type Props = {
-  onRegister: Function,
-  onGoBackClick: MouseEventHandler
-}
-
-const Register = ({onRegister, onGoBackClick}: Props) => {
+const Register = ({onRegister}: IRegisterProps) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [firstName, setFirstName] = useState('')
@@ -86,7 +84,7 @@ const Register = ({onRegister, onGoBackClick}: Props) => {
                     onChange={(e) => setConfirmPassword(e.target.value)} />
             </div>
             <input className="btn btn-dark" type='submit' value='Register' />
-            <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+            <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
         </form>
     </div>
   )
