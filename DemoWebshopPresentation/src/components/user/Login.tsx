@@ -1,7 +1,7 @@
 import React, { FormEventHandler, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ILoginProps } from '../pages/LoginPage/types';
-import Button from './Button'
+import { ILoginProps } from '../../pages/LoginPage/types';
+import Button from '../common/Button'
 
 
 const Login = ({onLogin}: ILoginProps ) => {

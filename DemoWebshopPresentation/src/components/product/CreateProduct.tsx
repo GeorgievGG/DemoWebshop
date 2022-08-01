@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, FormEventHandler } from 'react'
 import { useState } from "react"
-import Button from './Button'
+import Button from '../common/Button'
 
 type Props = {
     token: string

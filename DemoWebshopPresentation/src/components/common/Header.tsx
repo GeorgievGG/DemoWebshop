@@ -1,7 +1,7 @@
 import React from 'react'
 import { MouseEventHandler } from 'react'
 import { NavigateFunction } from 'react-router-dom'
-import Button from "./Button"
+import Button from './Button'
 
 type Props = {
     userLogged: boolean

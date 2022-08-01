@@ -1,5 +1,5 @@
 import React, { MouseEventHandler, useEffect, useState } from 'react'
-import Button from './Button'
+import Button from '../common/Button'
 import OrderRow from './OrderRow'
 
 type Props = {
@@ -121,3 +121,5 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
     </>
   )
 }
+
+export default OrderList

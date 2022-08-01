@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, FormEventHandler, useEffect } from 'react'
 import { useState } from "react"
 import { useLocation } from 'react-router-dom'
-import Button from './Button'
+import Button from '../common/Button'
 
 type Props = {
     token: string

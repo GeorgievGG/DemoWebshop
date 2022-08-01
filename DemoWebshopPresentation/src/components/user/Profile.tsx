@@ -1,8 +1,8 @@
 import React from 'react'
 import { NavigateFunction } from 'react-router-dom'
-import Button from './Button'
-import UpdatePassword from './UpdatePassword';
-import UpdatePersonData from './UpdatePersonData';
+import Button from '../common/Button'
+import UpdatePassword from './UpdatePassword'
+import UpdatePersonData from './UpdatePersonData'
 
 type Props = {
     navigate: NavigateFunction,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import Login from '../../components/Login'
+import Login from '../../components/user/Login'
 import ClaimTypes from '../../enums/ClaimTypes';
 import { setState } from '../../store';
 import { Buffer } from 'buffer';

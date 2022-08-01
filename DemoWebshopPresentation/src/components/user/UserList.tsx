@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, useEffect, useState } from 'react'
 import { Confirm } from 'react-admin'
-import Button from './Button'
+import Button from '../common/Button'
 import UserRow from './UserRow'
 
 type Props = {
@@ -135,3 +135,5 @@ export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
     </>
   )
 }
+
+export default UserList

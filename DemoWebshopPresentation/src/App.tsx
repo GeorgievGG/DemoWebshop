@@ -1,22 +1,20 @@
-import React from 'react'
-import { useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import About from "./components/About";
-import Register from "./components/Register";
-import Profile from "./components/Profile";
-import Catalog from "./components/Catalog";
-import useScript from './hooks/UseScript';
-import CreateProduct from './components/CreateProduct';
-import UpdateProduct from './components/UpdateProduct';
-import { UserList } from './components/UserList';
-import ShoppingBasket from './components/ShoppingBasket';
-import { OrderList } from './components/OrderList';
-
+import React, { useState } from 'react'
 import "bootstrap/dist/css/bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Footer from "./components/common/Footer";
+import Catalog from "./components/product/Catalog";
+import useScript from './hooks/UseScript';
+import UpdateProduct from './components/product/UpdateProduct';
+import ShoppingBasket from './components/shopping-basket/ShoppingBasket';
 import LoginPage from './pages/LoginPage';
+import Register from './components/user/Register';
+import Profile from './components/user/Profile';
+import UserList from './components/user/UserList';
+import CreateProduct from './components/product/CreateProduct';
+import OrderList from './components/order/OrderList';
+import About from './components/common/About';
+import Header from './components/common/Header';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
