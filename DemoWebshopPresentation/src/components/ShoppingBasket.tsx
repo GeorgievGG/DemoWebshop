@@ -105,7 +105,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
     }
     
     const setShoppingQuantity = async (productId: string, purchaseQty: number) => {
-        if (!purchaseQty) {
+        if (!purchaseQty && purchaseQty !== 0) {
             setShoppingBasket({
                 ...shoppingBasket, 
                 basketLines: shoppingBasket.basketLines.map(
