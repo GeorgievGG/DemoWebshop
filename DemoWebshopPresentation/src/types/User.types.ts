@@ -16,11 +16,6 @@ type RegistrationInput = {
   confirmPassword: string
 }
 
-type UserCreds = {
-  username: string,
-  password: string
-}
-
 type UserInfo = BasicUserInfo & {
     id: string
     email: string
