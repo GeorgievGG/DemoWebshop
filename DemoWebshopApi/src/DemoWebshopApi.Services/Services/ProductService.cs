@@ -51,7 +51,7 @@ namespace DemoWebshopApi.Services.Services
             product.Id = id;
             await _validationService.EnsureProductExists(id);
             _validationService.EnsureProductUnique(product);
-            _validationService.EnsureValueIsNotEqual(product.AvailableQuantity, 0, nameof(product.AvailableQuantity));
+            _validationService.EnsureValueIsGreater(product.AvailableQuantity, -1, nameof(product.AvailableQuantity));
             _validationService.EnsureValueIsNotEqual(product.Price, 0, nameof(product.Price));
             _context.Entry(product).State = EntityState.Modified;
 

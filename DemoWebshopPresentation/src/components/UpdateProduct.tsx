@@ -67,7 +67,7 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
             case !model:
                 alert('Please type in product model!')
                 return
-            case !availableQuantity:
+            case !availableQuantity && availableQuantity !== 0:
                 alert('Please type in available quantity!')
                 return
             case availableQuantity < 0:
