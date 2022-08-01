@@ -1,7 +1,3 @@
-export interface IRegisterProps {
-    onRegister: (input: IRegistrationInput) => void
-}
-
 export interface IRegistrationInput {
     username: string
     email: string

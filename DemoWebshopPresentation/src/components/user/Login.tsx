@@ -1,11 +1,14 @@
 import React, { FormEventHandler, useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
-import { ILoginProps } from '../../pages/LoginPage/types';
+import ClaimTypes from '../../enums/ClaimTypes';
+import { IUserLoginInput } from '../../pages/LoginPage/types';
+import { setState } from '../../store';
 import Button from '../common/Button'
 
-
-const Login = ({onLogin}: ILoginProps ) => {
+const Login = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -22,7 +25,27 @@ const Login = ({onLogin}: ILoginProps ) => {
         return
     }
 
-    onLogin({ username, password })
+    login({ username, password })
+  }
+
+  const login = async (userCredentials: IUserLoginInput) => {
+    const response = await fetch('https://localhost:7000/api/Authentication/Login', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(userCredentials)
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+      const tokenData = JSON.parse(Buffer.from(data.access_token.split('.')[1], 'base64').toString())
+      dispatch(setState({Token: data.access_token, UserLogged: true, LoggedUserId: tokenData[ClaimTypes.UserId], LoggedUserRole: tokenData[ClaimTypes.UserRole]}))
+      navigate(-1)
+    }
+    else {
+      alert(`Login for user ${userCredentials.username} failed.`)
+    }
   }
 
   return (
