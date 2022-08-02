@@ -1,26 +1,29 @@
-import React, { MouseEventHandler, FormEventHandler } from 'react'
+import React, { FormEventHandler } from 'react'
 import { useState } from "react"
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { selectSessionState } from '../../store'
+import { IUserSessionData, RootState } from '../../store/types'
+import { addProduct } from '../../store/productsSlice'
 import Button from '../common/Button'
 
-type Props = {
-    token: string
-    onProductCreate: (productJson: any) => void
-    onGoBackClick: MouseEventHandler
-}
-
-const CreateProduct = ({token, onProductCreate, onGoBackClick}: Props) => {
+const CreateProduct = () => {
   const [name, setName] = useState('')
   const [pictureUrl, setPictureUrl] = useState('')
   const [model, setModel] = useState('')
   const [availableQuantity, setAvailableQuantity] = useState(0)
   const [price, setPrice] = useState(0.00)
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
+
   const createProduct = async (userInput: FormProductInfo) => {
     const response = await fetch('https://localhost:7000/api/Product', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${sessionState.Token}`
       },
       body: JSON.stringify(userInput)
     })
@@ -28,7 +31,7 @@ const CreateProduct = ({token, onProductCreate, onGoBackClick}: Props) => {
     const body = await response.text()
     if (response.ok) {
       const data = JSON.parse(body)
-      onProductCreate(data)
+      dispatch(addProduct(data))
       alert(`Product ${data.name} created!`)
     }
     else {
@@ -111,7 +114,7 @@ const CreateProduct = ({token, onProductCreate, onGoBackClick}: Props) => {
             </div>
             <input className="btn btn-dark" type='submit' value='Create' />
         </form>
-        <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+        <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
     </div>
   )
 }

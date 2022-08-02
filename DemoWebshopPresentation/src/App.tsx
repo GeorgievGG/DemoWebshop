@@ -6,15 +6,15 @@ import Footer from "./components/common/Footer";
 import useScript from './hooks/UseScript';
 import UpdateProduct from './components/product/UpdateProduct';
 import ShoppingBasket from './components/shopping-basket/ShoppingBasket';
-import Profile from './components/user/Profile';
-import UserList from './components/user/UserList';
-import CreateProduct from './components/product/CreateProduct';
 import OrderList from './components/order/OrderList';
 import About from './components/common/About';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import CatalogPage from './pages/CatalogPage';
 import HeaderPage from './pages/HeaderPage';
+import ProfilePage from './pages/ProfilePage';
+import UserListPage from './pages/UserListPage';
+import CreateProductPage from './pages/CreateProductPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -23,15 +23,8 @@ function App() {
   const navigate = useNavigate();
   const [showAboutLink, setShowAboutLink] = useState(true)
   const [token, setToken] = useState('')
-  const [loggedUserId, setloggedUserId] = useState('')
   const [products, setProducts] = useState<CatalogProductInfo[]>([])
   const navigateBack = () => navigate(-1)
-  
-
-  
-  const addProduct = (productJson: any) => {
-    setProducts([...products, productJson])
-  }
   
   const updateProduct = (updatedProduct: CatalogProductInfo) => {
     products.map((product) =>
@@ -66,11 +59,11 @@ function App() {
               } />
             <Route path='/userList' element=
               {
-                <UserList token={token} loggedUserId={loggedUserId} onGoBackClick={navigateBack} />
+                <UserListPage />
               } />
             <Route path='/createProduct' element=
               {
-                <CreateProduct token={token} onProductCreate={addProduct} onGoBackClick={navigateBack} />
+                <CreateProductPage />
               } />
             <Route path='/updateProduct' element=
               {

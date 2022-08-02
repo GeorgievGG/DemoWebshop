@@ -1,24 +1,24 @@
-import React, { MouseEventHandler, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Confirm } from 'react-admin'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { selectSessionState } from '../../store'
+import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
 import UserRow from './UserRow'
 
-type Props = {
-  token: string
-  loggedUserId: string
-  onGoBackClick: MouseEventHandler
-}
-
-export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
+export const UserList = () => {
   const [users, setUsers] = useState<UserInfo[]>([])
   const [open, setOpen] = useState(false);
   const [deletedUserId, setDeletedUserId] = useState('');
+  const navigate = useNavigate()
+  const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
 
   useEffect(() => {
     fetch('https://localhost:7000/api/User', {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${token}`
+              'Authorization': `Bearer ${sessionState.Token}`
             }
         })
         .then(response => handleGetUsersResponse(response))
@@ -40,7 +40,7 @@ export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             }
         })
         
@@ -71,7 +71,7 @@ export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
         method: 'DELETE',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${sessionState.Token}`
         }
     })
 
@@ -124,13 +124,13 @@ export const UserList = ({ token, loggedUserId, onGoBackClick }: Props) => {
           <tbody>
             {
               users.map((user) => (
-                  <UserRow key={user.id} loggedUserId={loggedUserId} user={user} onSetAdmin={onSetAdmin} onDeleteUser={openConfirmDialog} />
+                  <UserRow key={user.id} loggedUserId={sessionState.LoggedUserId} user={user} onSetAdmin={onSetAdmin} onDeleteUser={openConfirmDialog} />
               ))
             }
           </tbody>
         </table>
 
-        <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+        <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
       </div>
     </>
   )
