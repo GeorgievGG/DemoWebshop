@@ -4,7 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Footer from "./components/common/Footer";
 import useScript from './hooks/UseScript';
-import ShoppingBasket from './components/shopping-basket/ShoppingBasket';
 import OrderList from './components/order/OrderList';
 import About from './components/common/About';
 import LoginPage from './pages/LoginPage';
@@ -15,6 +14,7 @@ import ProfilePage from './pages/ProfilePage';
 import UserListPage from './pages/UserListPage';
 import CreateProductPage from './pages/CreateProductPage';
 import UpdateProductPage from './pages/UpdateProductPage';
+import ShoppingBasketPage from './pages/ShoppingBasketPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -64,7 +64,7 @@ function App() {
               } />
             <Route path='/shoppingBasket' element=
               {
-                <ShoppingBasket token={token} navigateBack={navigateBack} />
+                <ShoppingBasketPage />
               } />
             <Route path='/orderList' element=
               {

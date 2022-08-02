@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { selectSessionState } from '../../store'
+import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
 import ShoppingBasketRow from './ShoppingBasketRow'
-
-
-type Props = {
-    token: string
-    navigateBack: () => void
-}
 
 type Basket = {
     id: string
@@ -18,15 +16,18 @@ type ShoppingBasketLine = {
     product: BasketProductInfo
 }
 
-const ShoppingBasket = ({ token, navigateBack }: Props) => {
+const ShoppingBasket = () => {
     const [shoppingBasket, setShoppingBasket] = useState<Basket>({id: '', basketLines: []})
     const [hasLoaded, setHasLoaded] = useState(false)
+    
+    const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetch('https://localhost:7000/api/ShoppingBasket', {
                 method: 'GET',
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${sessionState.Token}`
                 }
             })
             .then(response => handleGetShoppingBasketResponse(response))
@@ -49,7 +50,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             }
         })
         
@@ -79,7 +80,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             }
         })
         
@@ -121,7 +122,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             },
             body: JSON.stringify({ quantity: purchaseQty, productId})
         })
@@ -155,7 +156,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             },
             body: JSON.stringify({ orderLines: orderLines })
         })
@@ -164,7 +165,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             alert(`Order created successfully!`)
             await clearShoppingBasket()
             setShoppingBasket({id: '', basketLines: []})
-            navigateBack()
+            navigate(-1)
         }
         else {
             let errorMessage = 'Unknown error'
@@ -182,7 +183,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             }
         })
     }
@@ -225,7 +226,7 @@ const ShoppingBasket = ({ token, navigateBack }: Props) => {
             </table>
             <div className='float-end'>
                 <Button className="btn btn-dark" text="Checkout" onClick={createOrder} />
-                <Button className="btn btn-dark" text="Go Back" onClick={navigateBack} />
+                <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
             </div>
         </div>
       )
