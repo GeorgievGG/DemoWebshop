@@ -18,5 +18,7 @@
         public const string ClientDoesNotExist = "Client with such ID does not existy!";
         public const string InsufficientProductQuantity = "Not have enough available quantity for product \"{0}\". Please reduce ordered quantity!";
         public const string DeliveryDatePrecedesOrder = "Delivery date should not precede order date!";
+        public const string UserNotAuthenticated = "User is not authenticated!";
+        public const string UserNotAuthorized = "User is not authorized to execute this action!";
     }
 }

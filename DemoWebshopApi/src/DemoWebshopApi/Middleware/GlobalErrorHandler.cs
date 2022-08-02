@@ -1,5 +1,5 @@
-﻿using DemoWebshopApi.Common.CustomExceptions;
-using DemoWebshopApi.Services.Services;
+﻿using DemoWebshopApi.Common;
+using DemoWebshopApi.Common.CustomExceptions;
 using System.Net;
 using System.Text.Json;
 
@@ -19,6 +19,23 @@ namespace DemoWebshopApi.Middleware
             try
             {
                 await _next(context);
+                var errorMessage = string.Empty;
+                var response = context.Response;
+                if (response.StatusCode == (int)HttpStatusCode.Unauthorized)
+                {
+                    errorMessage = Constants.UserNotAuthenticated;
+                }
+                if (response.StatusCode == (int)HttpStatusCode.Forbidden)
+                {
+                    errorMessage = Constants.UserNotAuthorized;
+                }
+
+                if (!string.IsNullOrWhiteSpace(errorMessage))
+                {
+                    response.ContentType = "application/json";
+                    var result = JsonSerializer.Serialize(new { message = errorMessage });
+                    await response.WriteAsync(result);
+                }
             }
             catch (Exception error)
             {
