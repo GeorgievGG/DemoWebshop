@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Footer from "./components/common/Footer";
-import Catalog from "./components/product/Catalog";
 import useScript from './hooks/UseScript';
 import UpdateProduct from './components/product/UpdateProduct';
 import ShoppingBasket from './components/shopping-basket/ShoppingBasket';
@@ -15,6 +14,7 @@ import About from './components/common/About';
 import Header from './components/common/Header';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import CatalogPage from './pages/CatalogPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -48,15 +48,6 @@ function App() {
     }
   }
   
-  const fillProducts = (productsJson: any) => {
-    if (userRole === 'Admin') {
-      setProducts(productsJson)
-    }
-    else {
-      setProducts(productsJson.filter((product: CatalogProductInfo) => product.availableQuantity !== 0))
-    }
-  }
-  
   const addProduct = (productJson: any) => {
     setProducts([...products, productJson])
   }
@@ -65,10 +56,6 @@ function App() {
     products.map((product) =>
         product.id === updatedProduct.id ? updatedProduct : product
       )
-  }
-
-  const deleteProductById = (productId: string) => {
-    setProducts(products.filter((product) => product.id !== productId))
   }
 
   const logout = async () => {
@@ -94,7 +81,7 @@ function App() {
         <div className='body-wrapper'>
           <Routes>
             <Route path='/' element={
-                <Catalog token={token} userRole={userRole} products={products} onProductsLoaded={fillProducts} onProductDelete={deleteProductById} />
+                <CatalogPage />
               } />
             <Route path='/login' element=
               {

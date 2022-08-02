@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Confirm } from 'react-admin';
+import { Confirm } from 'react-admin'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectProductsState, selectSessionState } from '../../store'
+import { deleteProduct, setProducts } from '../../store/productsSlice'
+import { IUserSessionData, RootState } from '../../store/types'
 import CatalogLine from './CatalogLine'
 
-type Props = {
-    token: string
-    userRole: string
-    products: CatalogProductInfo[]
-    onProductsLoaded: (productsJson: any) => void
-    onProductDelete: (productId: string) => void
-}
-
-function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete }: Props) {
-    const [open, setOpen] = useState(false);
-    const [deletedProductId, setDeletedProductId] = useState('');
+function Catalog() {
+    const dispatch = useDispatch()
+    const [open, setOpen] = useState(false)
+    const [deletedProductId, setDeletedProductId] = useState('')
+    const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
+    const products = useSelector<RootState, CatalogProductInfo[]>(selectProductsState)
 
     useEffect(() => {
         fetch('https://localhost:7000/api/Product', {
@@ -24,8 +23,13 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
 
     const handleGetProductsResponse = async (response: Response) => {
         if (response.ok) {
-            const data = await response.json()
-            onProductsLoaded(data)
+            const productsJson = await response.json()
+            if (sessionState.LoggedUserRole === 'Admin') {
+                dispatch(setProducts(productsJson))
+            }
+            else {
+                dispatch(setProducts(productsJson.filter((product: CatalogProductInfo) => product.availableQuantity !== 0)))
+            }
         }
         else {
           alert(`Couldn't retrieve products!`)
@@ -42,7 +46,7 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             }
         })
         
@@ -65,19 +69,19 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             }
         })
 
         if (response.ok) {
-            onProductDelete(deletedProductId)
+            deleteProduct(deletedProductId)
         }
         else {
           alert(`Couldn't delete product ${deletedProductId}!`)
         }
 
-        setOpen(false);
-        setDeletedProductId('');
+        setOpen(false)
+        setDeletedProductId('')
     }
 
     const openConfirmDialog = (productId: string) => { 
@@ -106,7 +110,7 @@ function Catalog({ token, userRole, products, onProductsLoaded, onProductDelete 
                 products.length > 0 ?
                 chunk(products, 4).map((productsChunk, index) => {
                     return (
-                        <CatalogLine key={index} products={productsChunk} userRole={userRole} onAddToCart={addToCart} onDeleteClick={openConfirmDialog} />
+                        <CatalogLine key={index} products={productsChunk} userRole={sessionState.LoggedUserRole} onAddToCart={addToCart} onDeleteClick={openConfirmDialog} />
                     )
                 }) :
                 (

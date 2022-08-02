@@ -11,4 +11,8 @@ export interface UserSessionSliceState {
     userSession: IUserSessionData
 }
 
+export interface ProductsSliceState {
+    products: CatalogProductInfo[]
+}
+
 export type RootState = ReturnType<typeof store.getState>
