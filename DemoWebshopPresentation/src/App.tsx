@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import "bootstrap/dist/css/bootstrap.css";
 import "react-datepicker/dist/react-datepicker.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Footer from "./components/common/Footer";
 import useScript from './hooks/UseScript';
-import OrderList from './components/order/OrderList';
 import About from './components/common/About';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -15,15 +14,13 @@ import UserListPage from './pages/UserListPage';
 import CreateProductPage from './pages/CreateProductPage';
 import UpdateProductPage from './pages/UpdateProductPage';
 import ShoppingBasketPage from './pages/ShoppingBasketPage';
+import OrderListPage from './pages/OrderListPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
   useScript('https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js');
 
-  const navigate = useNavigate();
   const [showAboutLink, setShowAboutLink] = useState(true)
-  const [token, setToken] = useState('')
-  const navigateBack = () => navigate(-1)
 
   const toggleAboutLinkStatus = () => {
     setShowAboutLink(!showAboutLink)
@@ -68,7 +65,7 @@ function App() {
               } />
             <Route path='/orderList' element=
               {
-                <OrderList token={token} onGoBackClick={navigateBack} />
+                <OrderListPage />
               } />
             <Route path='/about' element=
               {

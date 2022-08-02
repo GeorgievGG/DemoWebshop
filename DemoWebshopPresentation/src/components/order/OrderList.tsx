@@ -1,21 +1,23 @@
-import React, { MouseEventHandler, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { selectSessionState } from '../../store'
+import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
 import OrderRow from './OrderRow'
 
-type Props = {
-  token: string
-  onGoBackClick: MouseEventHandler
-}
-
-export const OrderList = ({ token, onGoBackClick }: Props) => {
+export const OrderList = () => {
   const [orders, setOrders] = useState<OrderInfo[]>([])
   const [hasLoaded, setHasLoaded] = useState(false)
+  
+  const navigate = useNavigate()
+  const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
 
   useEffect(() => {
     fetch('https://localhost:7000/api/Order', {
             method: 'GET',
             headers: {
-              'Authorization': `Bearer ${token}`
+              'Authorization': `Bearer ${sessionState.Token}`
             }
         })
         .then(response => handleGetOrdersResponse(response))
@@ -38,7 +40,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             }
         })
         
@@ -64,7 +66,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${sessionState.Token}`
             },
             body: JSON.stringify({ deliveryDate })
         })
@@ -116,7 +118,7 @@ export const OrderList = ({ token, onGoBackClick }: Props) => {
           </tbody>
         </table>
 
-        <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+        <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
       </div>
     </>
   )
