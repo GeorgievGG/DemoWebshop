@@ -1,15 +1,13 @@
-import React, { MouseEventHandler, FormEventHandler, useEffect } from 'react'
+import React, { FormEventHandler, useEffect } from 'react'
 import { useState } from "react"
-import { useLocation } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { selectSessionState } from '../../store'
+import { updateProduct } from '../../store/productsSlice'
+import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
 
-type Props = {
-    token: string
-    onProductUpdate: (product: CatalogProductInfo) => void
-    onGoBackClick: MouseEventHandler
-}
-
-const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
+const UpdateProduct = () => {
     const [name, setName] = useState('')
     const [pictureUrl, setPictureUrl] = useState('')
     const [model, setModel] = useState('')
@@ -17,7 +15,11 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
     const [price, setPrice] = useState(0.00)
 
     const location = useLocation()
-    const state = location.state as { product: CatalogProductInfo };
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const state = location.state as { product: CatalogProductInfo }
+    const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
+    
     useEffect(() => {
             setName(state.product.name)
             setPictureUrl(state.product.pictureUrl)
@@ -28,12 +30,12 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
     )
 
 
-    const updateProduct = async (userInput: FormProductInfo) => {
+    const update = async (userInput: FormProductInfo) => {
         const response = await fetch(`https://localhost:7000/api/Product/${state.product.id}`, {
         method: 'PUT',
         headers: {
             'Content-type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${sessionState.Token}`
         },
         body: JSON.stringify(userInput)
         })
@@ -41,7 +43,7 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
         const body = await response.text()
         if (response.ok) {
             var updatedProduct = { ...userInput, id: state.product.id } as CatalogProductInfo
-            onProductUpdate(updatedProduct)
+            dispatch(updateProduct(updatedProduct))
             alert(`Product ${updatedProduct.name} updated!`)
         }
         else {
@@ -81,7 +83,7 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
                 return
         }
 
-        updateProduct({ name, pictureUrl, model, availableQuantity, price })
+        update({ name, pictureUrl, model, availableQuantity, price })
     }
 
     return (
@@ -124,7 +126,7 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
                 </div>
                 <input className="btn btn-dark" type='submit' value='Update' />
             </form>
-            <Button className="btn btn-dark" text="Go Back" onClick={onGoBackClick} />
+            <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
         </div>
     )
 }

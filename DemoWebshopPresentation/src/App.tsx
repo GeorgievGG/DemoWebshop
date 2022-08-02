@@ -4,7 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Footer from "./components/common/Footer";
 import useScript from './hooks/UseScript';
-import UpdateProduct from './components/product/UpdateProduct';
 import ShoppingBasket from './components/shopping-basket/ShoppingBasket';
 import OrderList from './components/order/OrderList';
 import About from './components/common/About';
@@ -15,6 +14,7 @@ import HeaderPage from './pages/HeaderPage';
 import ProfilePage from './pages/ProfilePage';
 import UserListPage from './pages/UserListPage';
 import CreateProductPage from './pages/CreateProductPage';
+import UpdateProductPage from './pages/UpdateProductPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -23,14 +23,7 @@ function App() {
   const navigate = useNavigate();
   const [showAboutLink, setShowAboutLink] = useState(true)
   const [token, setToken] = useState('')
-  const [products, setProducts] = useState<CatalogProductInfo[]>([])
   const navigateBack = () => navigate(-1)
-  
-  const updateProduct = (updatedProduct: CatalogProductInfo) => {
-    products.map((product) =>
-        product.id === updatedProduct.id ? updatedProduct : product
-      )
-  }
 
   const toggleAboutLinkStatus = () => {
     setShowAboutLink(!showAboutLink)
@@ -67,7 +60,7 @@ function App() {
               } />
             <Route path='/updateProduct' element=
               {
-                <UpdateProduct token={token} onProductUpdate={updateProduct} onGoBackClick={navigateBack} />
+                <UpdateProductPage />
               } />
             <Route path='/shoppingBasket' element=
               {

@@ -15,10 +15,15 @@ export const productsSlice = createSlice({
         addProduct: (state, action: PayloadAction<CatalogProductInfo>) => {
             state.products = [...state.products, action.payload]
         },
+        updateProduct: (state, action: PayloadAction<CatalogProductInfo>) => {
+            state.products = state.products.map((product) =>
+                product.id === action.payload.id ? action.payload : product
+            )
+        },
         deleteProduct: (state, action: PayloadAction<string>) => {
             state.products = state.products.filter((product) => product.id !== action.payload)
         }
     }
 })
 
-export const { setProducts, addProduct, deleteProduct } = productsSlice.actions
+export const { setProducts, addProduct, updateProduct, deleteProduct } = productsSlice.actions
