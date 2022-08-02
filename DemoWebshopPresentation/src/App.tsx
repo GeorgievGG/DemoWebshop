@@ -15,6 +15,7 @@ import Header from './components/common/Header';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import CatalogPage from './pages/CatalogPage';
+import HeaderPage from './pages/HeaderPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -30,23 +31,6 @@ function App() {
   const navigateBack = () => navigate(-1)
   
 
-  const refreshToken = async (refreshToken: string) => {
-    const response = await fetch('https://localhost:7000/api/Authentication/RefreshToken', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(refreshToken)
-    })
-
-    if (response.ok) {
-      const data = await response.json()
-    }
-    else {
-      alert(`Refreshing token failed. You're being logged out!`)
-      logout()
-    }
-  }
   
   const addProduct = (productJson: any) => {
     setProducts([...products, productJson])
@@ -58,25 +42,13 @@ function App() {
       )
   }
 
-  const logout = async () => {
-    setToken('')
-    setloggedUserId('')
-    setUserRole('')
-    setUserLogged(false)
-    navigate("/")
-    setProducts(products.filter((product) => product.availableQuantity !== 0))
-  }
-
   const toggleAboutLinkStatus = () => {
     setShowAboutLink(!showAboutLink)
   }
 
   return (
       <div className="container">
-        <Header userLogged={userLogged} 
-                userRole={userRole}
-                navigate={navigate}
-                onLogoutClick={logout} />
+        <HeaderPage />
         
         <div className='body-wrapper'>
           <Routes>

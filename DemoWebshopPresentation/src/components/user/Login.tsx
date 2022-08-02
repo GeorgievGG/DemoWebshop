@@ -1,10 +1,11 @@
 import React, { FormEventHandler, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import ClaimTypes from '../../enums/ClaimTypes';
-import { IUserLoginInput } from '../../pages/LoginPage/types';
-import { setSessionData } from '../../store/sessionSlice';
+import ClaimTypes from '../../enums/ClaimTypes'
+import { IUserLoginInput } from '../../pages/LoginPage/types'
+import { setSessionData } from '../../store/sessionSlice'
 import Button from '../common/Button'
+import { Buffer } from 'buffer'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -47,6 +48,25 @@ const Login = () => {
       alert(`Login for user ${userCredentials.username} failed.`)
     }
   }
+
+  // TODO: use refresh token
+  // const refreshToken = async (refreshToken: string) => {
+  //   const response = await fetch('https://localhost:7000/api/Authentication/RefreshToken', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-type': 'application/json'
+  //     },
+  //     body: JSON.stringify(refreshToken)
+  //   })
+
+  //   if (response.ok) {
+  //     const data = await response.json()
+  //   }
+  //   else {
+  //     alert(`Refreshing token failed. You're being logged out!`)
+  //     logout()
+  //   }
+  // }
 
   return (
     <div>

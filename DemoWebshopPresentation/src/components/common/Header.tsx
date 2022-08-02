@@ -1,16 +1,24 @@
 import React from 'react'
-import { MouseEventHandler } from 'react'
-import { NavigateFunction } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { selectProductsState, selectSessionState } from '../../store'
+import { setProducts } from '../../store/productsSlice'
+import { flushSessionData } from '../../store/sessionSlice'
+import { IUserSessionData, RootState } from '../../store/types'
 import Button from './Button'
 
-type Props = {
-    userLogged: boolean
-    userRole: string
-    navigate: NavigateFunction
-    onLogoutClick: MouseEventHandler
-}
+const Header = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
+    const products = useSelector<RootState, CatalogProductInfo[]>(selectProductsState)
 
-const Header = ({ userLogged, userRole, navigate, onLogoutClick }: Props) => {
+    const logout = async () => {
+        dispatch(flushSessionData())
+        dispatch(setProducts(products.filter((product) => product.availableQuantity !== 0)))
+        navigate("/")
+    }
+
     return (
         <header>
             <ul className='horizontal'>
@@ -18,28 +26,28 @@ const Header = ({ userLogged, userRole, navigate, onLogoutClick }: Props) => {
                     <img className='logo' src="../images/logo.png" alt="Failed to load logo" onClick={() => navigate("/")} />
                 </li>
                 <li>
-                    { !userLogged && <Button className="btn btn-dark" text={"Login"} onClick={() => navigate("/login")} /> }
+                    { !sessionState.UserLogged && <Button className="btn btn-dark" text={"Login"} onClick={() => navigate("/login")} /> }
                 </li>
                 <li>
-                    { !userLogged && <Button className="btn btn-dark" text={"Register"} onClick={() => navigate("/register")} /> }
+                    { !sessionState.UserLogged && <Button className="btn btn-dark" text={"Register"} onClick={() => navigate("/register")} /> }
                 </li>
                 <li>
-                    { userRole === "Admin" && <Button className="btn btn-dark" text={"Create Product"} onClick={() => navigate("/createProduct")} /> }
+                    { sessionState.LoggedUserRole === "Admin" && <Button className="btn btn-dark" text={"Create Product"} onClick={() => navigate("/createProduct")} /> }
                 </li>
                 <li>
-                    { userRole === "Admin" && <Button className="btn btn-dark" text={"Users"} onClick={() => navigate("/userList")} /> }
+                    { sessionState.LoggedUserRole === "Admin" && <Button className="btn btn-dark" text={"Users"} onClick={() => navigate("/userList")} /> }
                 </li>
                 <li>
-                    { userRole === "Admin" && <Button className="btn btn-dark" text={"Orders"} onClick={() => navigate("/orderList")} /> }
+                    { sessionState.LoggedUserRole === "Admin" && <Button className="btn btn-dark" text={"Orders"} onClick={() => navigate("/orderList")} /> }
                 </li>
                 <li>
-                    { userLogged && <Button className="btn btn-dark" text={"Profile"} onClick={() => navigate("/profile")} /> }
+                    { sessionState.UserLogged && <Button className="btn btn-dark" text={"Profile"} onClick={() => navigate("/profile")} /> }
                 </li>
                 <li>
-                    { userLogged && userRole === "User" && <Button className="btn btn-dark" text={"Basket"} onClick={() => navigate("/shoppingBasket")} /> }
+                    { sessionState.UserLogged && sessionState.LoggedUserRole === "User" && <Button className="btn btn-dark" text={"Basket"} onClick={() => navigate("/shoppingBasket")} /> }
                 </li>
                 <li>
-                    { userLogged && <Button className="btn btn-dark" text={"Logout"} onClick={onLogoutClick} /> }
+                    { sessionState.UserLogged && <Button className="btn btn-dark" text={"Logout"} onClick={logout} /> }
                 </li>
             </ul>
         </header>
