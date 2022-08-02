@@ -11,7 +11,6 @@ import UserList from './components/user/UserList';
 import CreateProduct from './components/product/CreateProduct';
 import OrderList from './components/order/OrderList';
 import About from './components/common/About';
-import Header from './components/common/Header';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import CatalogPage from './pages/CatalogPage';
@@ -23,10 +22,8 @@ function App() {
 
   const navigate = useNavigate();
   const [showAboutLink, setShowAboutLink] = useState(true)
-  const [userLogged, setUserLogged] = useState(false)
   const [token, setToken] = useState('')
   const [loggedUserId, setloggedUserId] = useState('')
-  const [userRole, setUserRole] = useState('')
   const [products, setProducts] = useState<CatalogProductInfo[]>([])
   const navigateBack = () => navigate(-1)
   
@@ -65,7 +62,7 @@ function App() {
               } />
             <Route path='/profile' element=
               {
-                <Profile navigate={navigate} token={token} />
+                <ProfilePage />
               } />
             <Route path='/userList' element=
               {

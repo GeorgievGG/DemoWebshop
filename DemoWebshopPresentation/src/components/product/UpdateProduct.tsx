@@ -50,7 +50,7 @@ const UpdateProduct = ({token, onProductUpdate, onGoBackClick}: Props) => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Creation failed for product ${userInput.name}: ${errorMessage}`)
+            alert(`Update failed for product ${userInput.name}: ${errorMessage}`)
         }
     }
 
