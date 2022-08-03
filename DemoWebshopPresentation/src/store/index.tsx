@@ -1,16 +1,44 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { persistStore, persistCombineReducers, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'reduxjs-toolkit-persist';
+import storage from 'reduxjs-toolkit-persist/lib/storage'
+import autoMergeLevel1 from 'reduxjs-toolkit-persist/lib/stateReconciler/autoMergeLevel1';
 import { productsSlice } from "./productsSlice";
 import { sessionSlice } from "./sessionSlice";
 import { RootState } from "./types";
 
-const store = configureStore({ 
-    reducer: {
-       userSession: sessionSlice.reducer,
-       products: productsSlice.reducer
+const persistConfig = {
+    key: 'root',
+    storage: storage,
+    stateReconciler: autoMergeLevel1,
+};
+
+const persistedReducer = persistCombineReducers(
+    persistConfig,
+    {
+      userSession: sessionSlice.reducer,
+      products: productsSlice.reducer
     }
+);
+
+const store = configureStore({ 
+    reducer: persistedReducer,
+    middleware: getDefaultMiddleware({
+        serializableCheck: {
+          /* ignore persistance actions */
+          ignoredActions: [
+            FLUSH,
+            REHYDRATE,
+            PAUSE,
+            PERSIST,
+            PURGE,
+            REGISTER
+          ],
+        },
+    })
 })
 
 export const selectSessionState = (state: RootState) => state.userSession.userSession
 export const selectProductsState = (state: RootState) => state.products.products
+export const persistor = persistStore(store)
 
 export default store
