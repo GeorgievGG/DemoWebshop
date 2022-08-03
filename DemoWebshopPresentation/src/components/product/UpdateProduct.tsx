@@ -2,6 +2,7 @@ import React, { FormEventHandler, useEffect } from 'react'
 import { useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { selectSessionState } from '../../store'
 import { updateProduct } from '../../store/productsSlice'
 import { IUserSessionData, RootState } from '../../store/types'
@@ -44,7 +45,7 @@ const UpdateProduct = () => {
         if (response.ok) {
             var updatedProduct = { ...userInput, id: state.product.id } as CatalogProductInfo
             dispatch(updateProduct(updatedProduct))
-            alert(`Product ${updatedProduct.name} updated!`)
+            toast.success(`Product ${updatedProduct.name} updated!`)
         }
         else {
             let errorMessage = 'Unknown error'
@@ -52,7 +53,7 @@ const UpdateProduct = () => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Update failed for product ${userInput.name}: ${errorMessage}`)
+            toast.error(`Update failed for product ${userInput.name}: ${errorMessage}`)
         }
     }
 
@@ -61,25 +62,25 @@ const UpdateProduct = () => {
 
         switch(true) {
             case !name:
-                alert('Please type in product name!')
+                toast.error('Please type in product name!')
                 return
             case !pictureUrl:
-                alert('Please type in picture url!')
+                toast.error('Please type in picture url!')
                 return
             case !model:
-                alert('Please type in product model!')
+                toast.error('Please type in product model!')
                 return
             case !availableQuantity && availableQuantity !== 0:
-                alert('Please type in available quantity!')
+                toast.error('Please type in available quantity!')
                 return
             case availableQuantity < 0:
-                alert('Quantity must be 0 or more!')
+                toast.error('Quantity must be 0 or more!')
                 return
             case !price:
-                alert('Please type in product price!')
+                toast.error('Please type in product price!')
                 return
             case price <= 0:
-                alert('Price must be a positive number!')
+                toast.error('Price must be a positive number!')
                 return
         }
 

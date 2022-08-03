@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Confirm } from 'react-admin'
 import { useDispatch, useSelector } from 'react-redux'
+import { toast } from 'react-toastify'
 import { selectProductsState, selectSessionState } from '../../store'
 import { deleteProduct, setProducts } from '../../store/productsSlice'
 import { IUserSessionData, RootState } from '../../store/types'
@@ -32,7 +33,7 @@ function Catalog() {
             }
         }
         else {
-          alert(`Couldn't retrieve products!`)
+          toast.error("Couldn't retrieve products!")
         }
     }
     
@@ -51,7 +52,7 @@ function Catalog() {
         })
         
         if (response.ok) {
-            alert(`Added to cart!`)
+            toast.success('Added to basket!')
         }
         else {
             let errorMessage = 'Unknown error'
@@ -60,7 +61,7 @@ function Catalog() {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Adding to cart failed: ${errorMessage}`)
+            toast.error(`Adding to basket failed: ${errorMessage}`)
         }
     }
     
@@ -77,7 +78,7 @@ function Catalog() {
             deleteProduct(deletedProductId)
         }
         else {
-          alert(`Couldn't delete product ${deletedProductId}!`)
+          toast.error(`Couldn't delete product ${deletedProductId}!`)
         }
 
         setOpen(false)

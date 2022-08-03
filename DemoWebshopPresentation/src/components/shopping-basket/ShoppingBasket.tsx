@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { selectSessionState } from '../../store'
 import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
@@ -41,7 +42,7 @@ const ShoppingBasket = () => {
             setHasLoaded(true)
         }
         else {
-          alert(`Couldn't retrieve products!`)
+          toast.error(`Couldn't retrieve products!`)
         }
     }
 
@@ -71,7 +72,7 @@ const ShoppingBasket = () => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Adding to cart failed: ${errorMessage}`)
+            toast.error(`Adding to cart failed: ${errorMessage}`)
         }
     }
     
@@ -101,7 +102,7 @@ const ShoppingBasket = () => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Adding to cart failed: ${errorMessage}`)
+            toast.error(`Adding to cart failed: ${errorMessage}`)
         }
     }
     
@@ -144,7 +145,7 @@ const ShoppingBasket = () => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Adding to cart failed: ${errorMessage}`)
+            toast.error(`Adding to cart failed: ${errorMessage}`)
         }
     }
 
@@ -162,7 +163,7 @@ const ShoppingBasket = () => {
         })
         
         if (response.ok) {
-            alert(`Order created successfully!`)
+            toast.success(`Order created successfully!`)
             await clearShoppingBasket()
             setShoppingBasket({id: '', basketLines: []})
             navigate(-1)
@@ -174,7 +175,7 @@ const ShoppingBasket = () => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Adding to cart failed: ${errorMessage}`)
+            toast.error(`Adding to cart failed: ${errorMessage}`)
         }
     }
 

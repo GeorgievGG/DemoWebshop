@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { selectSessionState } from '../../store'
 import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
@@ -31,7 +32,7 @@ export const OrderList = () => {
         setHasLoaded(true)
     }
     else {
-      alert(`Couldn't retrieve orders!`)
+      toast.error(`Couldn't retrieve orders!`)
     }
   }
 
@@ -45,7 +46,7 @@ export const OrderList = () => {
         })
         
         if (response.ok) {
-            alert(`Order updated!`)
+            toast.success(`Order updated!`)
             setOrders(orders.map((order) =>
               order.id === orderId ? { ...order, confirmed: true } : order
             ))
@@ -57,7 +58,7 @@ export const OrderList = () => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Updating order failed: ${errorMessage}`)
+            toast.error(`Updating order failed: ${errorMessage}`)
         }
   }
 
@@ -72,7 +73,7 @@ export const OrderList = () => {
         })
         
         if (response.ok) {
-            alert(`Order updated!`)
+            toast.success(`Order updated!`)
             setOrders(orders.map((order) =>
               order.id === orderId ? { ...order, deliveryDate: deliveryDate } : order
             ))
@@ -84,7 +85,7 @@ export const OrderList = () => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Updating order failed: ${errorMessage}`)
+            toast.error(`Updating order failed: ${errorMessage}`)
         }
   }
 

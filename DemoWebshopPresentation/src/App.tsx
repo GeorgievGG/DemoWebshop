@@ -15,6 +15,8 @@ import CreateProductPage from './pages/CreateProductPage';
 import UpdateProductPage from './pages/UpdateProductPage';
 import ShoppingBasketPage from './pages/ShoppingBasketPage';
 import OrderListPage from './pages/OrderListPage';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -24,12 +26,14 @@ function App() {
 
   const toggleAboutLinkStatus = () => {
     setShowAboutLink(!showAboutLink)
+    toast.success("Success!")
+    toast.error("Error!")
   }
 
   return (
       <div className="container">
         <HeaderPage />
-        
+        <ToastContainer theme='dark' />
         <div className='body-wrapper'>
           <Routes>
             <Route path='/' element={

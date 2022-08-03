@@ -6,6 +6,7 @@ import { selectSessionState } from '../../store'
 import { IUserSessionData, RootState } from '../../store/types'
 import { addProduct } from '../../store/productsSlice'
 import Button from '../common/Button'
+import { toast } from 'react-toastify'
 
 const CreateProduct = () => {
   const [name, setName] = useState('')
@@ -32,7 +33,7 @@ const CreateProduct = () => {
     if (response.ok) {
       const data = JSON.parse(body)
       dispatch(addProduct(data))
-      alert(`Product ${data.name} created!`)
+      toast.success(`Product ${data.name} created!`)
     }
     else {
       let errorMessage = 'Unknown error'
@@ -40,7 +41,7 @@ const CreateProduct = () => {
         const data = JSON.parse(body)
         errorMessage = data.message
       }
-      alert(`Creation failed for product ${userInput.name}: ${errorMessage}`)
+      toast.error(`Creation failed for product ${userInput.name}: ${errorMessage}`)
     }
   }
 
@@ -49,25 +50,25 @@ const CreateProduct = () => {
 
     switch(true) {
         case !name:
-            alert('Please type in product name!')
+            toast.error('Please type in product name!')
             return
         case !pictureUrl:
-            alert('Please type in picture url!')
+            toast.error('Please type in picture url!')
             return
         case !model:
-            alert('Please type in product model!')
+            toast.error('Please type in product model!')
             return
         case !availableQuantity:
-            alert('Please type in available quantity!')
+            toast.error('Please type in available quantity!')
             return
         case availableQuantity < 0:
-            alert('Quantity must be 0 or more!')
+            toast.error('Quantity must be 0 or more!')
             return
         case !price:
-            alert('Please type in product price!')
+            toast.error('Please type in product price!')
             return
         case price <= 0:
-            alert('Price must be a positive number!')
+            toast.error('Price must be a positive number!')
             return
     }
 

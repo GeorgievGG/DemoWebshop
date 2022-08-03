@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Confirm } from 'react-admin'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { selectSessionState } from '../../store'
 import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
@@ -31,7 +32,7 @@ export const UserList = () => {
         setUsers(data)
     }
     else {
-      alert(`Couldn't retrieve users!`)
+      toast.error(`Couldn't retrieve users!`)
     }
   }
 
@@ -45,7 +46,7 @@ export const UserList = () => {
         })
         
         if (response.ok) {
-            alert(`User updated!`)
+            toast.success(`User updated!`)
             setUsers(users.map((user) =>
               user.id === userId ? { ...user, isAdmin: true } : user
             ))
@@ -57,7 +58,7 @@ export const UserList = () => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Updating user failed: ${errorMessage}`)
+            toast.error(`Updating user failed: ${errorMessage}`)
         }
   }
 
@@ -81,7 +82,7 @@ export const UserList = () => {
     else {
       const body = await response.text()
       const bodyJson = JSON.parse(body)
-      alert(`Couldn't delete user: ${bodyJson.message}!`)
+      toast.error(`Couldn't delete user: ${bodyJson.message}!`)
     }
 
     setOpen(false);

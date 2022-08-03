@@ -6,6 +6,7 @@ import { IUserLoginInput } from '../../pages/LoginPage/types'
 import { setSessionData } from '../../store/sessionSlice'
 import Button from '../common/Button'
 import { Buffer } from 'buffer'
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -17,12 +18,12 @@ const Login = () => {
     e.preventDefault()
 
     if (!username) {
-        alert('Please type in username!')
+        toast.error('Please type in username!')
         return
     }
     
     if (!password) {
-        alert('Please type in password!')
+        toast.error('Please type in password!')
         return
     }
 
@@ -45,7 +46,7 @@ const Login = () => {
       navigate(-1)
     }
     else {
-      alert(`Login for user ${userCredentials.username} failed.`)
+      toast.error(`Login for user ${userCredentials.username} failed.`)
     }
   }
 
@@ -63,7 +64,7 @@ const Login = () => {
   //     const data = await response.json()
   //   }
   //   else {
-  //     alert(`Refreshing token failed. You're being logged out!`)
+  //     toast.error(`Refreshing token failed. You're being logged out!`)
   //     logout()
   //   }
   // }

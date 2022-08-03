@@ -2,6 +2,7 @@ import React, { FormEventHandler, useEffect } from 'react'
 import { useState } from "react"
 import { Buffer } from 'buffer';
 import ClaimTypes from '../../enums/ClaimTypes';
+import { toast } from 'react-toastify';
 
 type Props = {
     token: string
@@ -36,7 +37,7 @@ const UpdatePersonData = ({ token }: Props) => {
             setLastName(data.lastName)
         }
         else {
-          alert(`Couldn't load your user data!`)
+          toast.error(`Couldn't load your user data!`)
         }
     }
     
@@ -44,12 +45,12 @@ const UpdatePersonData = ({ token }: Props) => {
         e.preventDefault()
     
         if (!username) {
-            alert('Please type in username!')
+            toast.error('Please type in username!')
             return
         }
     
         if (!email) {
-            alert('Please type in email!')
+            toast.error('Please type in email!')
             return
         }
     
@@ -67,7 +68,7 @@ const UpdatePersonData = ({ token }: Props) => {
         })
         
         if (response.ok) {
-            alert(`User updated!`)
+            toast.success(`User updated!`)
         }
         else {
             let errorMessage = 'Unknown error'
@@ -76,7 +77,7 @@ const UpdatePersonData = ({ token }: Props) => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Updating profile failed for user ${userInput.username}: ${errorMessage}`)
+            toast.error(`Updating profile failed for user ${userInput.username}: ${errorMessage}`)
         }
     }
 

@@ -1,5 +1,6 @@
 import React, { FormEventHandler } from 'react'
 import { useState } from "react"
+import { toast } from 'react-toastify'
 
 type Props = {
     token: string
@@ -14,17 +15,17 @@ const Profile = ({ token }: Props) => {
         e.preventDefault()
     
         if (!currentPassword) {
-            alert('Current password missing!')
+            toast.error('Current password missing!')
             return
         }
     
         if (!newPassword) {
-            alert('New password missing!')
+            toast.error('New password missing!')
             return
         }
     
         if (!repeatNewPassword) {
-            alert('Confirm password missing!')
+            toast.error('Confirm password missing!')
             return
         }
     
@@ -42,7 +43,7 @@ const Profile = ({ token }: Props) => {
         })
         
         if (response.ok) {
-            alert(`Password updated!`)
+            toast.success(`Password updated!`)
         }
         else {
             let errorMessage = 'Unknown error'
@@ -51,7 +52,7 @@ const Profile = ({ token }: Props) => {
                 const data = JSON.parse(body)
                 errorMessage = data.message
             }
-            alert(`Updating password failed: ${errorMessage}`)
+            toast.error(`Updating password failed: ${errorMessage}`)
         }
     }
 

@@ -1,6 +1,7 @@
 import React, { FormEventHandler } from 'react'
 import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { IRegistrationInput } from '../../pages/RegisterPage/types'
 import Button from '../common/Button'
 
@@ -17,22 +18,22 @@ const Register = () => {
     e.preventDefault()
 
     if (!username) {
-        alert('Please type in username!')
+        toast.error('Please type in username!')
         return
     }
 
     if (!email) {
-        alert('Please type in username!')
+        toast.error('Please type in username!')
         return
     }
     
     if (!password) {
-        alert('Please type in password!')
+        toast.error('Please type in password!')
         return
     }
     
     if (!confirmPassword) {
-        alert('Please type in password!')
+        toast.error('Please type in password!')
         return
     }
 
@@ -51,7 +52,7 @@ const Register = () => {
     const body = await response.text()
     if (response.ok) {
       const data = JSON.parse(body)
-      alert(`User ${data.username} registered!`)
+      toast.success(`User ${data.username} registered!`)
       navigate(-1)
     }
     else {
@@ -60,7 +61,7 @@ const Register = () => {
         const data = JSON.parse(body)
         errorMessage = data.message
       }
-      alert(`Registration failed for user ${userInput.username}: ${errorMessage}`)
+      toast.error(`Registration failed for user ${userInput.username}: ${errorMessage}`)
     }
 }
 
