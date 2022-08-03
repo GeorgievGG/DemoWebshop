@@ -27,7 +27,7 @@ const Product = ({ product, userRole, onAddToCart, onDeleteClick }: Props) => {
         <img className='pic' src={product.pictureUrl} alt={`${product.name} (${product.model})`}/>
         <h1>{product.name}</h1>
         <p>{product.model}</p>
-        <p className="price">{product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD'})}</p>
+        <p className="price">{product.price.toLocaleString('de-DE', { style: 'currency', currency: 'EUR'})}</p>
         {
           userRole === "Admin" ?
           <>

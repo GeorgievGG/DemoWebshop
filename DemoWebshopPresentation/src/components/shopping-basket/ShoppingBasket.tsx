@@ -218,7 +218,7 @@ const ShoppingBasket = () => {
                             {
                                 shoppingBasket.basketLines
                                     .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
-                                    .toLocaleString('en-US', { style: 'currency', currency: 'USD'})
+                                    .toLocaleString('de-DE', { style: 'currency', currency: 'EUR'})
                             }
                         </td>
                     </tr>

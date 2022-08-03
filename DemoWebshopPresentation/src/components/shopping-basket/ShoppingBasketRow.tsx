@@ -28,8 +28,8 @@ const ShoppingBasketRow = ({ basketLine, onMinusClicked, onQuantityChanged, onPl
                     </div>
                 }
             </td>
-            <td>{basketLine.product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD'})}</td>
-            <td>{(basketLine.quantity * basketLine.product.price).toLocaleString('en-US', { style: 'currency', currency: 'USD'})}</td>
+            <td>{basketLine.product.price.toLocaleString('de-DE', { style: 'currency', currency: 'EUR'})}</td>
+            <td>{(basketLine.quantity * basketLine.product.price).toLocaleString('de-DE', { style: 'currency', currency: 'EUR'})}</td>
         </tr>
     )
 }

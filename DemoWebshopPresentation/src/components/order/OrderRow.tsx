@@ -34,7 +34,7 @@ const OrderRow = ({ order, onConfirmOrder, onSetDeliveryDate }: Props) => {
             </td>
             <td>
                 {order.orderLines?.reduce((partialSum, x) => partialSum + (x.quantity * x.price), 0)
-                                    .toLocaleString('en-US', { style: 'currency', currency: 'USD'})}
+                                    .toLocaleString('de-DE', { style: 'currency', currency: 'EUR'})}
             </td>
             <td>
                 <Button className="btn btn-dark" text="Confirm" onClick={() => onConfirmOrder(order.id)} />
