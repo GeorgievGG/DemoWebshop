@@ -20,5 +20,6 @@
         public const string DeliveryDatePrecedesOrder = "Delivery date should not precede order date!";
         public const string UserNotAuthenticated = "User is not authenticated!";
         public const string UserNotAuthorized = "User is not authorized to execute this action!";
+        public const string OrderShouldNotBeEmpty = "Order should have at least one line to be created!";
     }
 }

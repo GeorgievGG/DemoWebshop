@@ -203,5 +203,13 @@ namespace DemoWebshopApi.Services.Services
                 throw new DeliveryDatePrecedesOrderException(Constants.DeliveryDatePrecedesOrder);
             }
         }
+
+        public void EnsureOrderHasLines(Order order)
+        {
+            if (order.OrderLines.Count <= 0)
+            {
+                throw new DeliveryDatePrecedesOrderException(Constants.OrderShouldNotBeEmpty);
+            }
+        }
     }
 }

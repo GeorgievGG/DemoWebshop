@@ -35,6 +35,7 @@ namespace DemoWebshopApi.Services.Services
         {
             _context.Orders.Add(order);
             await _validationService.EnsureUserExists(order.ClientId);
+            _validationService.EnsureOrderHasLines(order);
             _validationService.EnsureOrderLinesUnique(order);
             _validationService.EnsureQuantityIsSufficient(order.OrderLines);
             await _productService.ReduceProductQuantities(order.OrderLines);
