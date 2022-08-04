@@ -10,12 +10,14 @@ using DemoWebshopApi.Services.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using OnlinePayments.Sdk;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthSettings"));
+builder.Services.Configure<OgoneSettings>(builder.Configuration.GetSection("OgoneSettings"));
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -71,6 +73,15 @@ builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IShoppingBasketService, ShoppingBasketService>();
 builder.Services.AddTransient<IShoppingBasketLineService, ShoppingBasketLineService>();
+
+var paymentPlatformConfig = builder.Configuration.GetSection("OgoneSettings");
+builder.Services.AddScoped<IClient>(_ => Factory.CreateClient
+(
+    paymentPlatformConfig["ApiKey"],
+    paymentPlatformConfig["ApiSecret"],
+    new Uri(paymentPlatformConfig["ApiEndpoint"]),
+    paymentPlatformConfig["Integrator"])
+);
 
 builder.Services.AddIdentityCore<User>(options =>
 {
