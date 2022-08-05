@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { selectSessionState } from '../../store'
+import { selectPaymentState, selectSessionState } from '../../store'
+import { flushHostedCheckoutId, setHostedCheckoutId } from '../../store/paymentSlice'
 import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
 import ShoppingBasketRow from './ShoppingBasketRow'
@@ -22,7 +23,9 @@ const ShoppingBasket = () => {
     const [hasLoaded, setHasLoaded] = useState(false)
     
     const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
+    const hostedCheckoutId = useSelector<RootState, string>(selectPaymentState)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         fetch('https://localhost:7000/api/ShoppingBasket', {
@@ -44,6 +47,43 @@ const ShoppingBasket = () => {
         else {
           toast.error(`Couldn't retrieve products!`)
         }
+    }
+
+    useEffect(() => {
+        if (hostedCheckoutId && hasLoaded) {
+            fetch(`https://localhost:7000/api/Payment/${hostedCheckoutId}/CheckHostedCheckoutPagePaymentResult`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${sessionState.Token}`
+                }
+            })
+            .then(response => handleHostedCheckoutResultCheck(response))
+        }
+        }, [hasLoaded]
+    )
+
+    const handleHostedCheckoutResultCheck = async (response: Response) => {
+        if (response.ok) {
+            const data = await response.json()
+            const paymentStatus = data.createdPaymentOutput.payment.status
+            const isPaymentSuccessful = paymentStatus === 'CAPTURED'
+            if (isPaymentSuccessful){
+                createOrder()
+            }
+            else {
+                handleUnsuccessfulHostedCheckoutPayment(paymentStatus)
+            }
+            // INFO: I know that Captured status might be delayed. 
+            // For the sake of simplicity, I won't implement more detailed logic for that case
+            dispatch(flushHostedCheckoutId())
+        }
+        else {
+            handleUnsuccessfulHostedCheckoutPayment()
+        }
+    }
+
+    const handleUnsuccessfulHostedCheckoutPayment = async (paymentStatus?: string) => {
+        toast.error(`Payment unsuccessful${paymentStatus ?? `, status: ${paymentStatus}`}!`)
     }
 
     const increaseShoppingQuantity = async (productId: string) => {
@@ -149,6 +189,34 @@ const ShoppingBasket = () => {
         }
     }
 
+    const navigateToHostedCheckoutPage = async () => {
+        const orderAmount = shoppingBasket.basketLines
+        .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+        const response = await fetch('https://localhost:7000/api/Payment/GetHostedCheckoutPage', {
+            method: 'POST',           
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${sessionState.Token}`
+            },
+            body: JSON.stringify({ orderAmount, redirectUrl: window.location.href })
+        })
+        
+        if (response.ok) {
+            const data = await response.json()
+            dispatch(setHostedCheckoutId(data.hostedCheckoutId))
+            window.location.href = data.redirectUrl
+        }
+        else {
+            let errorMessage = 'Unknown error'
+            const body = await response.text()
+            if (body && body !== '') {
+                const data = JSON.parse(body)
+                errorMessage = data.message
+            }
+            toast.error(`Retrieving hosted checkout page failed: ${errorMessage}`)
+        }
+    }
+
     const createOrder = async () => {
         const orderLines = shoppingBasket.basketLines.map(function (basketLine) {
             return { quantity: basketLine.quantity, price: basketLine.product.price, productId: basketLine.product.id }
@@ -166,7 +234,7 @@ const ShoppingBasket = () => {
             toast.success(`Order created successfully!`)
             await clearShoppingBasket()
             setShoppingBasket({id: '', basketLines: []})
-            navigate(-1)
+            navigate('/')
         }
         else {
             let errorMessage = 'Unknown error'
@@ -226,7 +294,7 @@ const ShoppingBasket = () => {
                 </tbody>
             </table>
             <div className='float-end'>
-                <Button className="btn btn-dark" text="Checkout" onClick={createOrder} />
+                <Button className="btn btn-dark" text="Checkout" onClick={navigateToHostedCheckoutPage} />
                 <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
             </div>
         </div>

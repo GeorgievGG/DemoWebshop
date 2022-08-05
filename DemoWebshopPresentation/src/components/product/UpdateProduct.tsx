@@ -43,7 +43,7 @@ const UpdateProduct = () => {
         
         const body = await response.text()
         if (response.ok) {
-            var updatedProduct = { ...userInput, id: state.product.id } as CatalogProductInfo
+            const updatedProduct = { ...userInput, id: state.product.id } as CatalogProductInfo
             dispatch(updateProduct(updatedProduct))
             toast.success(`Product ${updatedProduct.name} updated!`)
         }

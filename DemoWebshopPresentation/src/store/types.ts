@@ -15,4 +15,8 @@ export interface ProductsSliceState {
     products: CatalogProductInfo[]
 }
 
+export interface PaymentSliceState {
+    hostedCheckoutId: string
+}
+
 export type RootState = ReturnType<typeof store.getState>
