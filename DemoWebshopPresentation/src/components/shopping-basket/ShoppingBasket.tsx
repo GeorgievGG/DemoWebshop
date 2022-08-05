@@ -83,7 +83,7 @@ const ShoppingBasket = () => {
     }
 
     const handleUnsuccessfulHostedCheckoutPayment = async (paymentStatus?: string) => {
-        toast.error(`Payment unsuccessful${paymentStatus ?? `, status: ${paymentStatus}`}!`)
+        toast.error(`Payment unsuccessful${paymentStatus ? `, status: ${paymentStatus}` : ''}!`)
     }
 
     const increaseShoppingQuantity = async (productId: string) => {
