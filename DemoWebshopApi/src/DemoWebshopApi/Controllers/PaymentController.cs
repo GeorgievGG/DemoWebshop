@@ -4,8 +4,6 @@ using DemoWebshopApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using OnlinePayments.Sdk;
-using OnlinePayments.Sdk.Domain;
 
 namespace DemoWebshopApi.Controllers
 {
@@ -22,15 +20,31 @@ namespace DemoWebshopApi.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpPost]
+        [HttpPost("GetHostedCheckoutPage")]
         [Authorize(Roles = "User")]
         public async Task<ActionResult> RequestHostedCheckoutPage(HostedCheckoutPageInput input)
         {
             try
             {
-                var hostedCheckoutResponse = await _paymentService.RequestHostedCheckoutPage(input.OrderAmount, _paymentProviderSettings.Value.MerchantId); ;
+                var hostedCheckoutResponse = await _paymentService.RequestHostedCheckoutPage(input.OrderAmount, input.RedirectUrl, _paymentProviderSettings.Value.MerchantId);
 
                 return Ok(hostedCheckoutResponse);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("{hostedCheckoutId}/CheckHostedCheckoutPagePaymentResult")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> CheckHostedCheckoutPagePaymentResult(string hostedCheckoutId)
+        {
+            try
+            {
+                var paymentResult = await _paymentService.GetHostedCheckoutPaymentResult(hostedCheckoutId, _paymentProviderSettings.Value.MerchantId);
+
+                return Ok(paymentResult);
             }
             catch (Exception e)
             {

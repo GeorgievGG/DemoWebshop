@@ -13,7 +13,7 @@ namespace DemoWebshopApi.Services.Services
             _paymentPlatformClient = paymentPlatformClient;
         }
 
-        public async Task<CreateHostedCheckoutResponse> RequestHostedCheckoutPage(decimal paymentAmount, string merchantId)
+        public async Task<CreateHostedCheckoutResponse> RequestHostedCheckoutPage(decimal paymentAmount, string redirectUrl, string merchantId)
         {
             var hostedCheckoutRequest = new CreateHostedCheckoutRequest
             {
@@ -24,10 +24,25 @@ namespace DemoWebshopApi.Services.Services
                         Amount = (long)(paymentAmount * 100),
                         CurrencyCode = "EUR"
                     }
+                },
+                HostedCheckoutSpecificInput = new HostedCheckoutSpecificInput()
+                {
+                    ReturnUrl = redirectUrl
+                },
+                CardPaymentMethodSpecificInput = new CardPaymentMethodSpecificInputBase()
+                {
+                    AuthorizationMode = "SALE"
                 }
             };
-
             return await _paymentPlatformClient.WithNewMerchant(merchantId).HostedCheckout.CreateHostedCheckout(hostedCheckoutRequest);
+        }
+
+        public async Task<GetHostedCheckoutResponse> GetHostedCheckoutPaymentResult(string hostedCheckoutId, string merchantId)
+        {
+            return await _paymentPlatformClient
+                .WithNewMerchant(merchantId)
+                .HostedCheckout
+                .GetHostedCheckout(hostedCheckoutId);
         }
     }
 }

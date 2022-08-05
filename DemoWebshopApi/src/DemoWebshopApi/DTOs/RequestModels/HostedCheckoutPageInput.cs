@@ -6,5 +6,7 @@ namespace DemoWebshopApi.DTOs.RequestModels
     {
         [Required]
         public decimal OrderAmount { get; set; }
+        [Required]
+        public string RedirectUrl { get; set; }
     }
 }

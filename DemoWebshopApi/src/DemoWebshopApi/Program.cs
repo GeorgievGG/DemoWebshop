@@ -73,6 +73,7 @@ builder.Services.AddTransient<IProductService, ProductService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IShoppingBasketService, ShoppingBasketService>();
 builder.Services.AddTransient<IShoppingBasketLineService, ShoppingBasketLineService>();
+builder.Services.AddTransient<IPaymentService, PaymentService>();
 
 var paymentPlatformConfig = builder.Configuration.GetSection("OgoneSettings");
 builder.Services.AddScoped<IClient>(_ => Factory.CreateClient
