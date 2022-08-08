@@ -1,4 +1,4 @@
-﻿namespace DemoWebshopApi.Services.DTOs.RequestModels
+﻿namespace DemoWebshopApi.Services.DTOs
 {
     public class UpdatePasswordDto
     {
