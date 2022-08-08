@@ -1,6 +1,8 @@
-﻿using DemoWebshopApi.Services.Interfaces;
+﻿using DemoWebshopApi.Services.DTOs;
+using DemoWebshopApi.Services.Interfaces;
 using OnlinePayments.Sdk;
 using OnlinePayments.Sdk.Domain;
+using OnlinePayments.Sdk.Merchant.Products;
 
 namespace DemoWebshopApi.Services.Services
 {
@@ -13,7 +15,7 @@ namespace DemoWebshopApi.Services.Services
             _paymentPlatformClient = paymentPlatformClient;
         }
 
-        public async Task<CreateHostedCheckoutResponse> RequestHostedCheckoutPage(decimal paymentAmount, string redirectUrl, string merchantId)
+        public async Task<CreateHostedCheckoutResponse> RequestHostedCheckoutPage(decimal paymentAmount, string currency, string redirectUrl, string merchantId)
         {
             var hostedCheckoutRequest = new CreateHostedCheckoutRequest
             {
@@ -22,7 +24,7 @@ namespace DemoWebshopApi.Services.Services
                     AmountOfMoney = new AmountOfMoney
                     {
                         Amount = (long)(paymentAmount * 100),
-                        CurrencyCode = "EUR"
+                        CurrencyCode = currency
                     }
                 },
                 HostedCheckoutSpecificInput = new HostedCheckoutSpecificInput()
@@ -35,6 +37,64 @@ namespace DemoWebshopApi.Services.Services
                 }
             };
             return await _paymentPlatformClient.WithNewMerchant(merchantId).HostedCheckout.CreateHostedCheckout(hostedCheckoutRequest);
+        }
+
+        public async Task<CreatePaymentResponse> PayServerToServer(ServerToServerPaymentInput input, string merchantId)
+        {
+            var paymentRequest = new CreatePaymentRequest
+            {
+                CardPaymentMethodSpecificInput = new CardPaymentMethodSpecificInput
+                {
+                    AuthorizationMode= "SALE",
+                    PaymentProductId = 1, 
+                    SkipAuthentication = false, 
+                    Card = new Card
+                    {
+                        CardholderName = input.CardData.CardholderName,
+                        CardNumber = input.CardData.CardNumber,
+                        Cvv = input.CardData.CardCVV,
+                        ExpiryDate = input.CardData.CardExpiryDate
+                    },
+                    ThreeDSecure = new ThreeDSecure
+                    {
+                        RedirectionData = new RedirectionData
+                        {
+                            ReturnUrl = input.RedirectUrl
+                        }
+                    }
+                },
+                Order = new Order
+                {
+                    AmountOfMoney = new AmountOfMoney
+                    {
+                        Amount = (long)(input.PaymentData.OrderAmount * 100),
+                        CurrencyCode = input.PaymentData.Currency
+                    },
+
+                    Customer = new Customer
+                    {
+                        Device = new CustomerDevice
+                        {
+                            AcceptHeader = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3",
+                            Locale = input.BrowserData.Locale,
+                            TimezoneOffsetUtcMinutes = input.BrowserData.TimezoneOffsetUtcMinutes.ToString(),
+                            UserAgent = input.BrowserData.UserAgent,
+                            BrowserData = new OnlinePayments.Sdk.Domain.BrowserData
+                            {
+                                ColorDepth = input.BrowserData.ColorDepth,
+                                JavaScriptEnabled = true,
+                                ScreenHeight = input.BrowserData.ScreenHeight.ToString(),
+                                ScreenWidth = input.BrowserData.ScreenWidth.ToString()
+                            }
+                        }
+                    }
+                }
+            };
+
+            return await _paymentPlatformClient
+                            .WithNewMerchant(merchantId)
+                            .Payments
+                            .CreatePayment(paymentRequest);
         }
 
         public async Task<GetHostedCheckoutResponse> GetHostedCheckoutPaymentResult(string hostedCheckoutId, string merchantId)

@@ -1,5 +1,6 @@
 ﻿using DemoWebshopApi.DTOs;
 using DemoWebshopApi.DTOs.RequestModels;
+using DemoWebshopApi.Services.DTOs;
 using DemoWebshopApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +27,25 @@ namespace DemoWebshopApi.Controllers
         {
             try
             {
-                var hostedCheckoutResponse = await _paymentService.RequestHostedCheckoutPage(input.OrderAmount, input.RedirectUrl, _paymentProviderSettings.Value.MerchantId);
+                var hostedCheckoutResponse = await _paymentService.RequestHostedCheckoutPage(input.OrderAmount, input.Currency, input.RedirectUrl, _paymentProviderSettings.Value.MerchantId);
 
                 return Ok(hostedCheckoutResponse);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("ServerToServerPayment")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> PayServerToServer(ServerToServerPaymentInput input)
+        {
+            try
+            {
+                var paymentResponse = await _paymentService.PayServerToServer(input, _paymentProviderSettings.Value.MerchantId);
+
+                return Ok(paymentResponse);
             }
             catch (Exception e)
             {

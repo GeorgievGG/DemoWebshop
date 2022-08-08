@@ -8,5 +8,7 @@ namespace DemoWebshopApi.DTOs.RequestModels
         public decimal OrderAmount { get; set; }
         [Required]
         public string RedirectUrl { get; set; }
+        [Required]
+        public string Currency { get; set; }
     }
 }
