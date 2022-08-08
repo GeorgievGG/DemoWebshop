@@ -2,24 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { IBasket } from '../../pages/ShoppingBasketPage/types'
 import { selectPaymentState, selectSessionState } from '../../store'
-import { flushHostedCheckoutId, setHostedCheckoutId } from '../../store/paymentSlice'
+import { flushHostedCheckoutId, setPaymentState } from '../../store/paymentSlice'
 import { IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
 import ShoppingBasketRow from './ShoppingBasketRow'
 
-type Basket = {
-    id: string
-    basketLines: ShoppingBasketLine[]
-}
-
-type ShoppingBasketLine = {
-    quantity: number
-    product: BasketProductInfo
-}
-
 const ShoppingBasket = () => {
-    const [shoppingBasket, setShoppingBasket] = useState<Basket>({id: '', basketLines: []})
+    const [shoppingBasket, setShoppingBasket] = useState<IBasket>({id: '', basketLines: []})
     const [hasLoaded, setHasLoaded] = useState(false)
     
     const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
@@ -198,12 +189,12 @@ const ShoppingBasket = () => {
                 'Content-type': 'application/json',
                 'Authorization': `Bearer ${sessionState.Token}`
             },
-            body: JSON.stringify({ orderAmount, redirectUrl: window.location.href })
+            body: JSON.stringify({ orderAmount, redirectUrl: window.location.href, currency: 'EUR' })
         })
         
         if (response.ok) {
             const data = await response.json()
-            dispatch(setHostedCheckoutId(data.hostedCheckoutId))
+            dispatch(setPaymentState({ hostedCheckoutId: data.hostedCheckoutId, paymentAmount: orderAmount, currency: 'EUR' }))
             window.location.href = data.redirectUrl
         }
         else {
@@ -215,6 +206,22 @@ const ShoppingBasket = () => {
             }
             toast.error(`Retrieving hosted checkout page failed: ${errorMessage}`)
         }
+    }
+
+    const navigateToServerToServerPayment = async () => {
+        const orderAmount = shoppingBasket.basketLines
+        .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+        const date = new Date();
+        const offsetInHours = date.getTimezoneOffset()
+        const response = await fetch('https://localhost:7000/api/Payment/ServerToServerPayment2', {
+            method: 'POST',           
+            headers: {
+                'Content-type': 'application/json',
+                'Authorization': `Bearer ${sessionState.Token}`
+            },
+            body: JSON.stringify({ orderAmount, redirectUrl: window.screen.colorDepth.toString(), currency: window.innerHeight.toString() })
+            // navigator.language, navigator.userAgent, window.screen.colorDepth, offsetInHours = date.getTimezoneOffset(), window.innerWidth, window.innerHeight
+        })
     }
 
     const createOrder = async () => {
@@ -294,7 +301,8 @@ const ShoppingBasket = () => {
                 </tbody>
             </table>
             <div className='float-end'>
-                <Button className="btn btn-dark" text="Checkout" onClick={navigateToHostedCheckoutPage} />
+                <Button className="btn btn-dark" text="Checkout by HCP" onClick={navigateToHostedCheckoutPage} />
+                <Button className="btn btn-dark" text="Checkout by S-S" onClick={navigateToServerToServerPayment} />
                 <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
             </div>
         </div>

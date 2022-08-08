@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { PaymentSliceState } from "./types"
+import { IPaymentState, PaymentSliceState } from "./types"
 
 const initialState: PaymentSliceState = {
-    hostedCheckoutId: ''
+    payment: { hostedCheckoutId: '', paymentAmount: 0, currency: 'EUR' }
 }
 
 export const paymentSlice = createSlice({
     name: 'payment',
     initialState,
     reducers: {
-        setHostedCheckoutId: (state, action: PayloadAction<string>) => {
-            state.hostedCheckoutId = action.payload
+        setPaymentState: (state, action: PayloadAction<IPaymentState>) => {
+            state.payment = action.payload
         },
         flushHostedCheckoutId: (state) => {
-            state.hostedCheckoutId = initialState.hostedCheckoutId
+            state.payment = initialState.payment
         }
     }
 })
 
-export const { setHostedCheckoutId, flushHostedCheckoutId } = paymentSlice.actions
+export const { setPaymentState, flushHostedCheckoutId } = paymentSlice.actions

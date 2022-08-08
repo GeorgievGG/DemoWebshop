@@ -1,16 +1,12 @@
 import React from 'react'
+import { IShoppingBasketLine } from '../../pages/ShoppingBasketPage/types'
 import Button from '../common/Button'
 
 type Props = {
-    basketLine: ShoppingBasketLine
+    basketLine: IShoppingBasketLine
     onMinusClicked: (productId: string) => void
     onQuantityChanged: (productId: string, purchaseQty: number) => void
     onPlusClicked: (productId: string) => void
-}
-
-type ShoppingBasketLine = {
-    quantity: number
-    product: BasketProductInfo
 }
 
 const ShoppingBasketRow = ({ basketLine, onMinusClicked, onQuantityChanged, onPlusClicked }: Props) => {

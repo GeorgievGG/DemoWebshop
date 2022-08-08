@@ -41,7 +41,7 @@ const store = configureStore({
 
 export const selectSessionState = (state: RootState) => state.userSession.userSession
 export const selectProductsState = (state: RootState) => state.products.products
-export const selectPaymentState = (state: RootState) => state.payment.hostedCheckoutId
+export const selectPaymentState = (state: RootState) => state.payment.payment
 export const persistor = persistStore(store)
 
 export default store
