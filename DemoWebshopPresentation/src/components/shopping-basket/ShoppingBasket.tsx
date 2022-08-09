@@ -55,7 +55,7 @@ const ShoppingBasket = () => {
 
     useEffect(() => {
         if (paymentState && paymentState.directPaymentId && hasLoaded) {
-            fetch(`https://localhost:7000/api/Payment/${paymentState.directPaymentId}/CheckDirectPaymentStatus`, {
+            fetch(`https://localhost:7000/api/Payment/${paymentState.directPaymentId}/CheckDirectPaymentResult`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${sessionState.Token}`
@@ -89,7 +89,7 @@ const ShoppingBasket = () => {
     const handleDirectPaymentResultCheck = async (response: Response) => {
         if (response.ok) {
             const data = await response.json()
-            const paymentStatus = data?.payment?.status ?? ''
+            const paymentStatus = data?.status ?? ''
             let isPaymentSuccessful = false
             if (paymentStatus === 'PENDING_CAPTURE') {
                 const captureResponse = await fetch(`https://localhost:7000/api/Payment/${paymentState.directPaymentId}/CapturePayment`, {
@@ -99,7 +99,10 @@ const ShoppingBasket = () => {
                         'Authorization': `Bearer ${sessionState.Token}`
                     }
                 })
-                isPaymentSuccessful = captureResponse.ok
+                if (response.ok) {
+                    const data = await captureResponse.json()
+                    isPaymentSuccessful = data?.status === 'CAPTURE_REQUESTED'
+                }
             }
 
             if (isPaymentSuccessful) {

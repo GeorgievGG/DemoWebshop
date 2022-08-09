@@ -78,7 +78,7 @@ const DirectPaymentCardForm = () => {
     const body = await response.text()
     if (response.ok) {
       const data = JSON.parse(body)
-      dispatch(setDirectPaymentId(data.payment.Id))
+      dispatch(setDirectPaymentId(data.payment.id))
       navigate(-1)
     }
     else {
