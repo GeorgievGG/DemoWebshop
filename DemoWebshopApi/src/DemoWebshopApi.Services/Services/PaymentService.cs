@@ -29,6 +29,18 @@ namespace DemoWebshopApi.Services.Services
                 },
                 HostedCheckoutSpecificInput = new HostedCheckoutSpecificInput()
                 {
+                    PaymentProductFilters = new PaymentProductFiltersHostedCheckout
+                    {
+                        Exclude = new PaymentProductFilter
+                        {
+                            Products = new List<int?> { 3, 840 }
+                        },
+                        RestrictTo = new PaymentProductFilter
+                        {
+                            Groups = new List<string> { "Cards" },
+                            //Products = new List<int?> { 1 }
+                        }
+                    },
                     ReturnUrl = redirectUrl
                 },
                 CardPaymentMethodSpecificInput = new CardPaymentMethodSpecificInputBase()
@@ -41,9 +53,6 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<CreatePaymentResponse> PayServerToServer(ServerToServerPaymentInput input, string merchantId)
         {
-            var x = _paymentPlatformClient.WithNewMerchant(merchantId).Products
-                .GetPaymentProducts(new GetPaymentProductsParams { CountryCode = "NL", CurrencyCode = "EUR" })
-                .GetAwaiter().GetResult();
             var paymentRequest = new CreatePaymentRequest
             {
                 CardPaymentMethodSpecificInput = new CardPaymentMethodSpecificInput
