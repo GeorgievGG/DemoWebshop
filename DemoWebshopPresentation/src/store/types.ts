@@ -16,8 +16,9 @@ export interface ProductsSliceState {
 }
 
 export interface IPaymentState {
-    hostedCheckoutId: string
-    paymentAmount: number
+    hostedCheckoutId?: string
+    directPaymentId?: string
+    orderAmount: number
     currency: string
 }
 

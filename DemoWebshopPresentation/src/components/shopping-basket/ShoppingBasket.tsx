@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { IBasket } from '../../pages/ShoppingBasketPage/types'
 import { selectPaymentState, selectSessionState } from '../../store'
-import { flushHostedCheckoutId, setPaymentState } from '../../store/paymentSlice'
-import { IUserSessionData, RootState } from '../../store/types'
+import { flushPaymentState, setPaymentState } from '../../store/paymentSlice'
+import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
 import Button from '../common/Button'
 import ShoppingBasketRow from './ShoppingBasketRow'
 
@@ -14,7 +14,7 @@ const ShoppingBasket = () => {
     const [hasLoaded, setHasLoaded] = useState(false)
     
     const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
-    const hostedCheckoutId = useSelector<RootState, string>(selectPaymentState)
+    const paymentState = useSelector<RootState, IPaymentState>(selectPaymentState)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
@@ -41,8 +41,8 @@ const ShoppingBasket = () => {
     }
 
     useEffect(() => {
-        if (hostedCheckoutId && hasLoaded) {
-            fetch(`https://localhost:7000/api/Payment/${hostedCheckoutId}/CheckHostedCheckoutPagePaymentResult`, {
+        if (paymentState && paymentState.hostedCheckoutId && hasLoaded) {
+            fetch(`https://localhost:7000/api/Payment/${paymentState.hostedCheckoutId}/CheckHostedCheckoutPagePaymentResult`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${sessionState.Token}`
@@ -53,27 +53,71 @@ const ShoppingBasket = () => {
         }, [hasLoaded]
     )
 
+    useEffect(() => {
+        if (paymentState && paymentState.directPaymentId && hasLoaded) {
+            fetch(`https://localhost:7000/api/Payment/${paymentState.directPaymentId}/CheckDirectPaymentStatus`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${sessionState.Token}`
+                }
+            })
+            .then(response => handleDirectPaymentResultCheck(response))
+        }
+        }, [hasLoaded]
+    )
+
     const handleHostedCheckoutResultCheck = async (response: Response) => {
         if (response.ok) {
             const data = await response.json()
-            const paymentStatus = data.createdPaymentOutput.payment.status
-            const isPaymentSuccessful = paymentStatus === 'CAPTURED'
+            const paymentStatus = data?.createdPaymentOutput?.payment?.status ?? ''
+            const isPaymentSuccessful = paymentStatus === 'CAPTURED' || paymentStatus === 'PENDING_CAPTURE'
             if (isPaymentSuccessful){
                 createOrder()
             }
             else {
-                handleUnsuccessfulHostedCheckoutPayment(paymentStatus)
+                handleUnsuccessfulPayment(paymentStatus)
             }
             // INFO: I know that Captured status might be delayed. 
             // For the sake of simplicity, I won't implement more detailed logic for that case
-            dispatch(flushHostedCheckoutId())
+            dispatch(flushPaymentState())
         }
         else {
-            handleUnsuccessfulHostedCheckoutPayment()
+            handleUnsuccessfulPayment()
         }
     }
 
-    const handleUnsuccessfulHostedCheckoutPayment = async (paymentStatus?: string) => {
+    const handleDirectPaymentResultCheck = async (response: Response) => {
+        if (response.ok) {
+            const data = await response.json()
+            const paymentStatus = data?.payment?.status ?? ''
+            let isPaymentSuccessful = false
+            if (paymentStatus === 'PENDING_CAPTURE') {
+                const captureResponse = await fetch(`https://localhost:7000/api/Payment/${paymentState.directPaymentId}/CapturePayment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Authorization': `Bearer ${sessionState.Token}`
+                    }
+                })
+                isPaymentSuccessful = captureResponse.ok
+            }
+
+            if (isPaymentSuccessful) {
+                createOrder()
+            }
+            else {
+                handleUnsuccessfulPayment()
+            }
+            // INFO: I know that Captured status might be delayed. 
+            // For the sake of simplicity, I won't implement more detailed logic for that case
+            dispatch(flushPaymentState())
+        }
+        else {
+            handleUnsuccessfulPayment()
+        }
+    }
+
+    const handleUnsuccessfulPayment = async (paymentStatus?: string) => {
         toast.error(`Payment unsuccessful${paymentStatus ? `, status: ${paymentStatus}` : ''}!`)
     }
 
@@ -194,7 +238,7 @@ const ShoppingBasket = () => {
         
         if (response.ok) {
             const data = await response.json()
-            dispatch(setPaymentState({ hostedCheckoutId: data.hostedCheckoutId, paymentAmount: orderAmount, currency: 'EUR' }))
+            dispatch(setPaymentState({ hostedCheckoutId: data.hostedCheckoutId, orderAmount: orderAmount, currency: 'EUR' }))
             window.location.href = data.redirectUrl
         }
         else {
@@ -206,22 +250,6 @@ const ShoppingBasket = () => {
             }
             toast.error(`Retrieving hosted checkout page failed: ${errorMessage}`)
         }
-    }
-
-    const navigateToServerToServerPayment = async () => {
-        const orderAmount = shoppingBasket.basketLines
-        .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
-        const date = new Date();
-        const offsetInHours = date.getTimezoneOffset()
-        const response = await fetch('https://localhost:7000/api/Payment/ServerToServerPayment2', {
-            method: 'POST',           
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${sessionState.Token}`
-            },
-            body: JSON.stringify({ orderAmount, redirectUrl: window.screen.colorDepth.toString(), currency: window.innerHeight.toString() })
-            // navigator.language, navigator.userAgent, window.screen.colorDepth, offsetInHours = date.getTimezoneOffset(), window.innerWidth, window.innerHeight
-        })
     }
 
     const createOrder = async () => {
@@ -252,6 +280,13 @@ const ShoppingBasket = () => {
             }
             toast.error(`Adding to cart failed: ${errorMessage}`)
         }
+    }
+
+    const navigateToDirectPaymentForm = async () => {
+        const orderAmount = shoppingBasket.basketLines
+        .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+        dispatch(setPaymentState({ orderAmount: orderAmount, currency: 'EUR' }))
+        navigate('/directPayment')
     }
 
     const clearShoppingBasket = async () => {
@@ -302,7 +337,7 @@ const ShoppingBasket = () => {
             </table>
             <div className='float-end'>
                 <Button className="btn btn-dark" text="Checkout by HCP" onClick={navigateToHostedCheckoutPage} />
-                <Button className="btn btn-dark" text="Checkout by S-S" onClick={navigateToServerToServerPayment} />
+                <Button className="btn btn-dark" text="Checkout by S-S" onClick={() => navigateToDirectPaymentForm()} />
                 <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
             </div>
         </div>

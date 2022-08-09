@@ -17,6 +17,7 @@ import ShoppingBasketPage from './pages/ShoppingBasketPage';
 import OrderListPage from './pages/OrderListPage';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import DirectPaymentCardForm from './components/shopping-basket/DirectPaymentCardForm';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -70,6 +71,10 @@ function App() {
             <Route path='/orderList' element=
               {
                 <OrderListPage />
+              } />
+            <Route path='/directPayment' element=
+              {
+                <DirectPaymentCardForm />
               } />
             <Route path='/about' element=
               {
