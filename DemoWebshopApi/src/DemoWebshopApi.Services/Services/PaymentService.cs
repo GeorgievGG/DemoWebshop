@@ -45,9 +45,8 @@ namespace DemoWebshopApi.Services.Services
             {
                 CardPaymentMethodSpecificInput = new CardPaymentMethodSpecificInput
                 {
-                    AuthorizationMode= "SALE",
-                    PaymentProductId = 1, 
-                    SkipAuthentication = false, 
+                    PaymentProductId = 1,
+                    SkipAuthentication = false,
                     Card = new Card
                     {
                         CardholderName = input.CardData.CardholderName,
@@ -103,6 +102,22 @@ namespace DemoWebshopApi.Services.Services
                 .WithNewMerchant(merchantId)
                 .HostedCheckout
                 .GetHostedCheckout(hostedCheckoutId);
+        }
+
+        public async Task<CaptureResponse> CapturePayment(string paymentId, string merchantId)
+        {
+            var request = new CapturePaymentRequest
+            {
+                // INFO: I am aware how this amount works, but for simplicity I will only capture the full amount (default)
+                // Amount = (long)(amount * 100),
+                IsFinal = true,
+                References = new PaymentReferences { MerchantReference = merchantId }
+            };
+
+            return await _paymentPlatformClient
+                    .WithNewMerchant(merchantId)
+                    .Payments
+                    .CapturePayment(paymentId, request);
         }
     }
 }

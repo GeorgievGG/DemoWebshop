@@ -68,5 +68,21 @@ namespace DemoWebshopApi.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("{paymentId}/CapturePayment")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> CapturePayment(string paymentId)
+        {
+            try
+            {
+                var paymentResponse = await _paymentService.CapturePayment(paymentId, _paymentProviderSettings.Value.MerchantId);
+
+                return Ok(paymentResponse);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
     }
 }

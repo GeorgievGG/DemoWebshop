@@ -8,5 +8,6 @@ namespace DemoWebshopApi.Services.Interfaces
         Task<CreateHostedCheckoutResponse> RequestHostedCheckoutPage(decimal paymentAmount, string currency, string redirectUrl, string merchantId);
         Task<CreatePaymentResponse> PayServerToServer(ServerToServerPaymentInput input, string merchantId);
         Task<GetHostedCheckoutResponse> GetHostedCheckoutPaymentResult(string hostedCheckoutId, string merchantId);
+        Task<CaptureResponse> CapturePayment(string paymentId, string merchantId);
     }
 }
