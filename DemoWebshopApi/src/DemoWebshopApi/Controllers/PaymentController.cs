@@ -69,6 +69,22 @@ namespace DemoWebshopApi.Controllers
             }
         }
 
+        [HttpGet("{paymentId}/CheckDirectPaymentResult")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> CheckDirectPaymentResult(string paymentId)
+        {
+            try
+            {
+                var paymentResult = await _paymentService.GetDirectPaymentResult(paymentId, _paymentProviderSettings.Value.MerchantId);
+
+                return Ok(paymentResult);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpPost("{paymentId}/CapturePayment")]
         [Authorize(Roles = "User")]
         public async Task<ActionResult> CapturePayment(string paymentId)

@@ -41,12 +41,15 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task<CreatePaymentResponse> PayServerToServer(ServerToServerPaymentInput input, string merchantId)
         {
+            var x = _paymentPlatformClient.WithNewMerchant(merchantId).Products
+                .GetPaymentProducts(new GetPaymentProductsParams { CountryCode = "NL", CurrencyCode = "EUR" })
+                .GetAwaiter().GetResult();
             var paymentRequest = new CreatePaymentRequest
             {
                 CardPaymentMethodSpecificInput = new CardPaymentMethodSpecificInput
                 {
-                    PaymentProductId = 1,
-                    SkipAuthentication = false,
+                    PaymentProductId = 1, //PASS
+                    SkipAuthentication = false, //PASS
                     Card = new Card
                     {
                         CardholderName = input.CardData.CardholderName,
@@ -102,6 +105,14 @@ namespace DemoWebshopApi.Services.Services
                 .WithNewMerchant(merchantId)
                 .HostedCheckout
                 .GetHostedCheckout(hostedCheckoutId);
+        }
+
+        public async Task<PaymentResponse> GetDirectPaymentResult(string paymentId, string merchantId)
+        {
+            return await _paymentPlatformClient
+                .WithNewMerchant(merchantId)
+                .Payments
+                .GetPayment(paymentId);
         }
 
         public async Task<CaptureResponse> CapturePayment(string paymentId, string merchantId)
