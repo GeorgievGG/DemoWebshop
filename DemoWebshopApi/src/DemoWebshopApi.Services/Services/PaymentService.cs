@@ -64,7 +64,7 @@ namespace DemoWebshopApi.Services.Services
                             CardholderName = input.CardholderName,
                             CardNumber = input.CardNumber,
                             Cvv = input.CardCVV,
-                            ExpiryDate = input.CardExpiryDate
+                            ExpiryDate = input.ExpiryDate
                         }
                     }
                 }
@@ -92,13 +92,6 @@ namespace DemoWebshopApi.Services.Services
                 {
                     PaymentProductId = 1, //PASS
                     SkipAuthentication = false, //PASS
-                    Card = new Card
-                    {
-                        CardholderName = input.CardData.CardholderName,
-                        CardNumber = input.CardData.CardNumber,
-                        Cvv = input.CardData.CardCVV,
-                        ExpiryDate = input.CardData.CardExpiryDate
-                    },
                     ThreeDSecure = new ThreeDSecure
                     {
                         RedirectionData = new RedirectionData
@@ -134,6 +127,21 @@ namespace DemoWebshopApi.Services.Services
                     }
                 }
             };
+
+            if (input.CardData != null)
+            {
+                paymentRequest.CardPaymentMethodSpecificInput.Card = new Card
+                {
+                    CardholderName = input.CardData.CardholderName,
+                    CardNumber = input.CardData.CardNumber,
+                    Cvv = input.CardData.CardCVV,
+                    ExpiryDate = input.CardData.ExpiryDate
+                };
+            }
+            else if (input.Token != null)
+            {
+                paymentRequest.CardPaymentMethodSpecificInput.Token = input.Token;
+            }
 
             return await _paymentPlatformClient
                             .WithNewMerchant(merchantId)

@@ -4,8 +4,8 @@ namespace DemoWebshopApi.Services.DTOs
 {
     public class ServerToServerPaymentInput
     {
-        [Required]
-        public CardData CardData { get; set; }
+        public CardData? CardData { get; set; }
+        public string? Token { get; set; }
         [Required]
         public PaymentData PaymentData { get; set; }
         [Required]
