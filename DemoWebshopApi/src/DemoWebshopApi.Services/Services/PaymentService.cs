@@ -2,7 +2,6 @@
 using DemoWebshopApi.Services.Interfaces;
 using OnlinePayments.Sdk;
 using OnlinePayments.Sdk.Domain;
-using OnlinePayments.Sdk.Merchant.Products;
 
 namespace DemoWebshopApi.Services.Services
 {
@@ -49,6 +48,32 @@ namespace DemoWebshopApi.Services.Services
                 }
             };
             return await _paymentPlatformClient.WithNewMerchant(merchantId).HostedCheckout.CreateHostedCheckout(hostedCheckoutRequest);
+        }
+
+        public async Task<CreatedTokenResponse> CreateToken(CardData input, string merchantId)
+        {
+            var tokenRequest = new CreateTokenRequest
+            {
+                PaymentProductId = 1,
+                Card = new TokenCardSpecificInput
+                {
+                    Data = new TokenData
+                    {
+                        Card = new Card
+                        {
+                            CardholderName = input.CardholderName,
+                            CardNumber = input.CardNumber,
+                            Cvv = input.CardCVV,
+                            ExpiryDate = input.CardExpiryDate
+                        }
+                    }
+                }
+            };
+
+            return await _paymentPlatformClient
+                            .WithNewMerchant(merchantId)
+                            .Tokens
+                            .CreateToken(tokenRequest);
         }
 
         public async Task<CreatePaymentResponse> PayServerToServer(ServerToServerPaymentInput input, string merchantId)

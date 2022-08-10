@@ -53,6 +53,22 @@ namespace DemoWebshopApi.Controllers
             }
         }
 
+        [HttpPost("CreateToken")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> CreateToken(CardData input)
+        {
+            try
+            {
+                var paymentResponse = await _paymentService.CreateToken(input, _paymentProviderSettings.Value.MerchantId);
+
+                return Ok(paymentResponse);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet("{hostedCheckoutId}/CheckHostedCheckoutPagePaymentResult")]
         [Authorize(Roles = "User")]
         public async Task<ActionResult> CheckHostedCheckoutPagePaymentResult(string hostedCheckoutId)
