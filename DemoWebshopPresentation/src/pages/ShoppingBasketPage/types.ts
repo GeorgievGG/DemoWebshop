@@ -8,10 +8,13 @@ export interface IShoppingBasketLine {
     product: BasketProductInfo
 }
 
-export interface IPaymentCardData {
+export interface ITokenCardData {
     cardNumber: string
     cardholderName: string
-    cardExpiryDate: string
+    expiryDate: string
+}
+
+export interface IPaymentCardData extends ITokenCardData {
     cardCvv: string
 }
 
@@ -32,7 +35,8 @@ export interface IBrowserData
 }
 
 export interface IDirectPaymentData {
-    cardData: IPaymentCardData
+    cardData?: IPaymentCardData
+    token?: string
     paymentData: IPaymentData
     browserData: IBrowserData
     redirectUrl: string

@@ -3,7 +3,7 @@ import { useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import { IDirectPaymentData, IPaymentCardData } from '../../pages/ShoppingBasketPage/types'
+import { IDirectPaymentData, IPaymentCardData, ITokenCardData } from '../../pages/ShoppingBasketPage/types'
 import { selectPaymentState, selectSessionState } from '../../store'
 import { setDirectPaymentId } from '../../store/paymentSlice'
 import { setPaymentCardToken } from '../../store/sessionSlice'
@@ -34,6 +34,7 @@ const DirectPaymentCardForm = () => {
   const handleGetTokenResponse = async (response: Response) => {
       if (response.ok) {
           const tokenJson = await response.json()
+          setTokenCardInfo(tokenJson?.card?.data?.cardWithoutCvv)
           setCardNumber(tokenJson?.card?.data?.cardWithoutCvv?.cardNumber)
           setCardholderName(tokenJson?.card?.data?.cardWithoutCvv?.cardholderName)
           setCardExpiryDate(tokenJson?.card?.data?.cardWithoutCvv?.expiryDate)
@@ -43,6 +44,7 @@ const DirectPaymentCardForm = () => {
       }
   }
   
+  const [tokenCardInfo, setTokenCardInfo] = useState<ITokenCardData>()
   const [cardholderName, setCardholderName] = useState('')
   const [cardNumber, setCardNumber] = useState('')
   const [cardCvv, setCardCvv] = useState('')
@@ -52,37 +54,49 @@ const DirectPaymentCardForm = () => {
   const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
 
-    if (!cardholderName) {
-        toast.error('Please type in username!')
+    if (!cardNumber) {
+        toast.error('Please type in card number!')
         return
     }
 
-    if (!cardNumber) {
-        toast.error('Please type in username!')
-        return
-    }
-    
-    if (!cardCvv) {
-        toast.error('Please type in password!')
+    if (!cardholderName) {
+        toast.error('Please type in cardholder name!')
         return
     }
     
     if (!cardExpiryDate) {
-        toast.error('Please type in password!')
+        toast.error('Please type in expiry date!')
+        return
+    }
+    
+    if (!cardCvv) {
+        toast.error('Please type in CVV!')
         return
     }
 
-    sendPayment({ cardNumber, cardholderName, cardExpiryDate, cardCvv})
+    sendPayment({ cardNumber, cardholderName, expiryDate: cardExpiryDate, cardCvv})
+  }
+
+  const cardInputMatchesToken = (userInput: IPaymentCardData): boolean  => {
+      if (userInput.cardNumber.substring(0, 6) !== tokenCardInfo?.cardNumber.substring(0, 6)) {
+        return false
+      }
+      if (userInput.cardNumber.substring(12, 17) !== tokenCardInfo?.cardNumber.substring(12, 17)) {
+        return false
+      }
+      if (userInput.cardholderName !== tokenCardInfo?.cardholderName) {
+        return false
+      }
+      if (userInput.expiryDate !== tokenCardInfo?.expiryDate) {
+        return false
+      }
+
+      return true
   }
 
   const generateDirectPaymentModel = (userInput: IPaymentCardData): IDirectPaymentData  => {
-    // TODO: if token exists
-    // if gettoken matches the input
-    // send token instead of carddata
     const date = new Date()
-
-    return {
-      cardData: userInput,
+    let paymentModel = {
       paymentData: paymentState,
       browserData: { 
         locale: navigator.language,
@@ -93,7 +107,16 @@ const DirectPaymentCardForm = () => {
         screenWidth: window.innerWidth
       },
       redirectUrl: window.location.href.replace('directPayment', 'shoppingBasket')
+    } as IDirectPaymentData
+
+    if (sessionState.PaymentCardToken && cardInputMatchesToken(userInput)) {
+      paymentModel.token = sessionState.PaymentCardToken
     }
+    else {
+      paymentModel.cardData = userInput
+    }
+
+    return paymentModel
   }
 
   const sendPayment = async (userInput: IPaymentCardData) => {

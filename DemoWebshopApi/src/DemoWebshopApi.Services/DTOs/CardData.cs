@@ -11,6 +11,6 @@ namespace DemoWebshopApi.Services.DTOs
         [Required]
         public string CardCVV { get; set; }
         [Required]
-        public string CardExpiryDate { get; set; }
+        public string ExpiryDate { get; set; }
     }
 }
