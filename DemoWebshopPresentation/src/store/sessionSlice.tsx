@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { IUserSessionData, UserSessionSliceState } from "./types"
 
 const initialState: UserSessionSliceState = {
-    userSession: { Token: '', UserLogged: false, LoggedUserId: '', LoggedUserRole: ''}
+    userSession: { Token: '', UserLogged: false, LoggedUserId: '', LoggedUserRole: '', PaymentCardToken: '' }
 }
 
 export const sessionSlice = createSlice({
@@ -12,10 +12,13 @@ export const sessionSlice = createSlice({
          setSessionData: (state, action: PayloadAction<IUserSessionData>) => {
              state.userSession = action.payload
          },
+         setPaymentCardToken: (state, action: PayloadAction<string>) => {
+            state.userSession.PaymentCardToken = action.payload
+        },
          flushSessionData: (state) => {
              state.userSession = initialState.userSession
          }
      }
 })
 
-export const { setSessionData, flushSessionData } = sessionSlice.actions
+export const { setSessionData, setPaymentCardToken, flushSessionData } = sessionSlice.actions

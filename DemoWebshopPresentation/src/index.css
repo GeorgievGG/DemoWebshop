@@ -186,3 +186,13 @@ footer {
 .react-datepicker-wrapper input {
   visibility: collapse;
 }
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+}
+
+[type="checkbox"] {
+  height: inherit !important;
+  width: inherit !important;
+}
