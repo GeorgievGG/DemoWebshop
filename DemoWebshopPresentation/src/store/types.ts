@@ -5,6 +5,7 @@ export interface IUserSessionData {
     UserLogged: boolean
     LoggedUserId: string
     LoggedUserRole: string
+    PaymentCardToken?: string
 }
 
 export interface UserSessionSliceState {
