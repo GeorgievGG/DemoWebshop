@@ -230,6 +230,12 @@ const ShoppingBasket = () => {
     const navigateToHostedCheckoutPage = async () => {
         const orderAmount = shoppingBasket.basketLines
         .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+
+        if (orderAmount === 0) {
+            toast.error("Can't checkout an empty order!")
+            return
+        }
+
         const response = await fetch('https://localhost:7000/api/Payment/GetHostedCheckoutPage', {
             method: 'POST',           
             headers: {
@@ -287,7 +293,13 @@ const ShoppingBasket = () => {
 
     const navigateToDirectPaymentForm = async () => {
         const orderAmount = shoppingBasket.basketLines
-        .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+            .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+            
+        if (orderAmount === 0) {
+            toast.error("Can't checkout an empty order!")
+            return
+        }
+
         dispatch(setPaymentState({ orderAmount: orderAmount, currency: 'EUR' }))
         navigate('/directPayment')
     }
@@ -340,7 +352,7 @@ const ShoppingBasket = () => {
             </table>
             <div className='float-end'>
                 <Button className="btn btn-dark" text="Checkout by HCP" onClick={navigateToHostedCheckoutPage} />
-                <Button className="btn btn-dark" text="Checkout by S-S" onClick={() => navigateToDirectPaymentForm()} />
+                <Button className="btn btn-dark" text="Checkout by S-S" onClick={navigateToDirectPaymentForm} />
                 <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
             </div>
         </div>
