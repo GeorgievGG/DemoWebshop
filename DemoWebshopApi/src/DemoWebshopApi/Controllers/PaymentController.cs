@@ -53,15 +53,31 @@ namespace DemoWebshopApi.Controllers
             }
         }
 
-        [HttpPost("CreateToken")]
+        [HttpPost("Token")]
         [Authorize(Roles = "User")]
         public async Task<ActionResult> CreateToken(CardData input)
         {
             try
             {
-                var paymentResponse = await _paymentService.CreateToken(input, _paymentProviderSettings.Value.MerchantId);
+                var createTokenResponse = await _paymentService.CreateToken(input, _paymentProviderSettings.Value.MerchantId);
 
-                return Ok(paymentResponse);
+                return Ok(createTokenResponse);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("Token/{tokenId}")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> GetToken(string tokenId)
+        {
+            try
+            {
+                var getTokenResponse = await _paymentService.GetToken(tokenId, _paymentProviderSettings.Value.MerchantId);
+
+                return Ok(getTokenResponse);
             }
             catch (Exception e)
             {

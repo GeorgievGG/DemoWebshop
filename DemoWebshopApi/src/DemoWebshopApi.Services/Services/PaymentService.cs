@@ -76,6 +76,14 @@ namespace DemoWebshopApi.Services.Services
                             .CreateToken(tokenRequest);
         }
 
+        public async Task<TokenResponse> GetToken(string tokenId, string merchantId)
+        {
+            return await _paymentPlatformClient
+                            .WithNewMerchant(merchantId)
+                            .Tokens
+                            .GetToken(tokenId);
+        }
+
         public async Task<CreatePaymentResponse> PayServerToServer(ServerToServerPaymentInput input, string merchantId)
         {
             var paymentRequest = new CreatePaymentRequest
