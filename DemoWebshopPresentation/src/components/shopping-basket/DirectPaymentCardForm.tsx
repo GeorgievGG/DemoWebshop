@@ -1,4 +1,4 @@
-import React, { FormEventHandler } from 'react'
+import React, { FormEventHandler, useEffect } from 'react'
 import { useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -14,10 +14,34 @@ const DirectPaymentCardForm = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  // TODO: on load -> check the state for token, call getToken if it exists and fill in data
-
   const paymentState = useSelector<RootState, IPaymentState>(selectPaymentState)
   const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
+
+  useEffect(() => {
+      if (sessionState.PaymentCardToken) {
+        fetch(`https://localhost:7000/api/Payment/Token/${sessionState.PaymentCardToken}`, {
+          method: 'GET',
+          headers: {
+            'Content-type': 'application/json',
+            'Authorization': `Bearer ${sessionState.Token}`
+          }
+        })
+        .then(response => handleGetTokenResponse(response))
+      }
+    }, []
+  )
+
+  const handleGetTokenResponse = async (response: Response) => {
+      if (response.ok) {
+          const tokenJson = await response.json()
+          setCardNumber(tokenJson?.card?.data?.cardWithoutCvv?.cardNumber)
+          setCardholderName(tokenJson?.card?.data?.cardWithoutCvv?.cardholderName)
+          setCardExpiryDate(tokenJson?.card?.data?.cardWithoutCvv?.expiryDate)
+      }
+      else {
+        toast.error("Couldn't retrieve products!")
+      }
+  }
   
   const [cardholderName, setCardholderName] = useState('')
   const [cardNumber, setCardNumber] = useState('')
@@ -74,7 +98,7 @@ const DirectPaymentCardForm = () => {
 
   const sendPayment = async (userInput: IPaymentCardData) => {
     if (shouldTokenizeCardData) {
-      const tokenResponse = await fetch('https://localhost:7000/api/Payment/CreateToken', {
+      const tokenResponse = await fetch('https://localhost:7000/api/Payment/Token', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
