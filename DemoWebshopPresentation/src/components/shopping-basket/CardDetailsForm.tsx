@@ -71,8 +71,10 @@ const CardDetailsForm = ({ tokenizable, onCheckout, tokenCardData, shouldTokeniz
                     onChange={(e) => setCardCvv(e.target.value)} />
             </div>
             { tokenizable && <TokenizationCheckbox shouldTokenizeCardData={shouldTokenizeCardData} onChecked={onTokenizationChecked} /> }
-            <input className="btn btn-dark" type='submit' value='Pay' />
-            <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
+            <div className='float-end'>
+              <input className="btn btn-dark" type='submit' value='Pay' />
+              <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
+            </div>
         </form>
     </div>
   )
