@@ -132,5 +132,21 @@ namespace DemoWebshopApi.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("AddBatchPayment")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> AddBatchPayment(CardPaymentInput input)
+        {
+            try
+            {
+                _paymentService.AddBatchPayment(input, _paymentProviderSettings.Value.MerchantId, UserId, _paymentProviderSettings.Value.ApiKey);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }
