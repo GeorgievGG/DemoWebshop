@@ -66,6 +66,14 @@ const ShoppingBasket = () => {
         }, [hasLoaded]
     )
 
+    useEffect(() => {
+        if (paymentState && paymentState.batchPaymentAdded && hasLoaded) {
+            createOrder()
+            dispatch(flushPaymentState())
+        }
+        }, [hasLoaded]
+    )
+
     const handleHostedCheckoutResultCheck = async (response: Response) => {
         if (response.ok) {
             const data = await response.json()
@@ -304,6 +312,19 @@ const ShoppingBasket = () => {
         navigate('/directPayment')
     }
 
+    const navigateToBulkPaymentPage = async () => {
+        const orderAmount = shoppingBasket.basketLines
+            .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+            
+        if (orderAmount === 0) {
+            toast.error("Can't checkout an empty order!")
+            return
+        }
+
+        dispatch(setPaymentState({ orderAmount: orderAmount, currency: 'EUR' }))
+        navigate('/bulkPayment')
+    }
+
     const clearShoppingBasket = async () => {
         await fetch(`https://localhost:7000/api/ShoppingBasket`, {
             method: 'DELETE',
@@ -353,6 +374,7 @@ const ShoppingBasket = () => {
             <div className='float-end'>
                 <Button className="btn btn-dark" text="Checkout by HCP" onClick={navigateToHostedCheckoutPage} />
                 <Button className="btn btn-dark" text="Checkout by S-S" onClick={navigateToDirectPaymentForm} />
+                <Button className="btn btn-dark" text="Add to Bulk file" onClick={navigateToBulkPaymentPage} />
                 <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
             </div>
         </div>
