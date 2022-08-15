@@ -2,6 +2,7 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { selectProductsState, selectSessionState } from '../../store'
+import { flushPaymentState } from '../../store/paymentSlice'
 import { setProducts } from '../../store/productsSlice'
 import { flushSessionData } from '../../store/sessionSlice'
 import { IUserSessionData, RootState } from '../../store/types'
@@ -15,6 +16,7 @@ const Header = () => {
 
     const logout = async () => {
         dispatch(flushSessionData())
+        dispatch(flushPaymentState())
         dispatch(setProducts(products.filter((product) => product.availableQuantity !== 0)))
         navigate("/")
     }
