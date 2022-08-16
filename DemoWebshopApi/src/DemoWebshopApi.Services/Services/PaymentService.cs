@@ -3,6 +3,7 @@ using DemoWebshopApi.Services.Interfaces;
 using OnlinePayments.Sdk;
 using OnlinePayments.Sdk.Domain;
 using System.Text;
+using System.Xml.Linq;
 
 namespace DemoWebshopApi.Services.Services
 {
@@ -198,29 +199,28 @@ namespace DemoWebshopApi.Services.Services
                     .CapturePayment(paymentId, request);
         }
 
-        public void AddBatchPayment(CardPaymentInput input, string merchantId, string userId, string ohlPassword)
+        public void AddBatchPayment(CardPaymentInput input, string merchantId, string userId, string ohlPassword, string apiUser)
         {
-            var fileName = $"paymentsBatch_{userId}.txt";
-            var filePath = $"files\\{fileName}";
-            Directory.CreateDirectory("files");
+            var directoryName = "files";
+            var fileName = $"paymentsBatch_{userId}_{DateTime.UtcNow:yyyyMMdd_HHmm}.txt";
+            var filePath = $"{directoryName}\\{fileName}";
+            Directory.CreateDirectory(directoryName);
 
             var fileExists = File.Exists(filePath);
             using (var fs = File.Open(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read))
             {
                 using (var sr = new StreamReader(fs, Encoding.UTF8))
                 {
+                    // TODO: OrderId must received as input
                     var paymentLine = $"{(long)(input.PaymentData.OrderAmount * 100)};{input.PaymentData.Currency};Visa;{input.CardData.CardNumber};{input.CardData.ExpiryDate};{Guid.NewGuid()};;{input.CardData.CardholderName};;SAL;;;;;;;;;;;;;;;;;{input.CardData.CardCVV};";
                     var sb = new StringBuilder();
                     if (!fileExists)
                     {
-                        // TODO: API User
-                        sb.AppendLine($"OHL;{merchantId};{ohlPassword};;API User;");
-                        sb.AppendLine($"OHF;{fileName.Replace(".txt", "")};ATR;SAL;1;");
-                        // TODO: OrderId must supplied as order ID here
+                        sb.AppendLine($"OHL;{merchantId};{ohlPassword};;{apiUser};");
+                        sb.AppendLine($"OHF;{fileName.Replace(".txt", $"")};ATR;SAL;1;");
                     }
                     else
                     {
-                        //TODO fix number after ATR;SAL;
                         var contentLines = sr.ReadToEnd().ToString().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
                         var ohfLine = contentLines[1];
                         var nb_payments = ohfLine.Substring(ohfLine.LastIndexOf(';', ohfLine.Length - 2) + 1);
@@ -237,6 +237,48 @@ namespace DemoWebshopApi.Services.Services
                     fs.Write(content, 0, content.Length);
                 }
             }
+        }
+
+        public async Task<IDictionary<string, List<string>>> ProcessBatchPayments(string batchEndpoint)
+        {
+            var processedFiles = new Dictionary<string, List<string>>();
+            processedFiles.Add("successful", new List<string>());
+            processedFiles.Add("failed", new List<string>());
+
+            var directoryName = "files";
+            var archiveDirectoryName = "archive";
+            Directory.CreateDirectory(directoryName);
+            Directory.CreateDirectory(archiveDirectoryName);
+            var files = Directory.GetFiles(directoryName);
+            foreach (var filePath in files)
+            {
+                var fileContent = File.ReadAllText(filePath);
+                var dict = new SortedDictionary<string, string>();
+                dict.Add("FILE", fileContent);
+                dict.Add("REPLY_TYPE", "XML");
+                dict.Add("MODE", "SYNC");
+                dict.Add("PROCESS_MODE", "CHECKANDPROCESS");
+                var request = new HttpRequestMessage(HttpMethod.Post, batchEndpoint)
+                {
+                    Content = new FormUrlEncodedContent(dict)
+                };
+
+                var client = new HttpClient();
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    string xml = await response.Content.ReadAsStringAsync();
+                    var doc = XDocument.Parse(xml);
+                    File.Move(filePath, filePath.Replace(directoryName, archiveDirectoryName));
+                    processedFiles["successful"].Add(filePath.Replace($"{directoryName}\\", "").Replace(".txt", ""));
+                }
+                else
+                {
+                    processedFiles["failed"].Add(filePath.Replace($"{directoryName}\\", "").Replace(".txt", ""));
+                }
+            }
+
+            return processedFiles;
         }
     }
 }

@@ -139,9 +139,25 @@ namespace DemoWebshopApi.Controllers
         {
             try
             {
-                _paymentService.AddBatchPayment(input, _paymentProviderSettings.Value.MerchantId, UserId, _paymentProviderSettings.Value.ApiKey);
+                _paymentService.AddBatchPayment(input, _paymentProviderSettings.Value.MerchantId, UserId, _paymentProviderSettings.Value.MerchantPass, _paymentProviderSettings.Value.ApiUser);
 
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("ProcessBatch")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> ProcessBatchPayments()
+        {
+            try
+            {
+                var response = await _paymentService.ProcessBatchPayments(_paymentProviderSettings.Value.BatchEndpoint);
+
+                return Ok(response);
             }
             catch (Exception e)
             {
