@@ -14,5 +14,6 @@ namespace DemoWebshopApi.Services.Interfaces
         Task<CaptureResponse> CapturePayment(string paymentId, string merchantId);
         void AddBatchPayment(CardPaymentInput input, string merchantId, string userId, string ohlPassword, string apiUser);
         Task<IDictionary<string, List<string>>> ProcessBatchPayments(string batchEndpoint);
+        Task<bool> AddScheduledPayment(CardPaymentInput input, string scheduledPaymentEndpoint, string merchantId, string password, string apiUser, string shaKey, int paymentsCount = 3);
     }
 }

@@ -2,6 +2,7 @@
 using DemoWebshopApi.Services.Interfaces;
 using OnlinePayments.Sdk;
 using OnlinePayments.Sdk.Domain;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 
@@ -279,6 +280,82 @@ namespace DemoWebshopApi.Services.Services
             }
 
             return processedFiles;
+        }
+
+        public async Task<bool> AddScheduledPayment(CardPaymentInput input, string scheduledPaymentEndpoint, string merchantId, string password, string apiUser, string shaKey, int paymentsCount = 3)
+        {
+            var dict = new SortedDictionary<string, string>();
+            var monthlyPayment = (long)(input.PaymentData.OrderAmount / paymentsCount * 100);
+            var paymentAmount = (long)(input.PaymentData.OrderAmount * 100);
+            var paymentDate = DateTime.UtcNow;
+            dict.Add("PSPID", merchantId);
+            // TODO: Replace fake with real OrderId
+            dict.Add("ORDERID", Guid.NewGuid().ToString());
+            dict.Add("USERID", apiUser);
+            dict.Add("PSWD", password);
+            dict.Add("CARDNO", input.CardData.CardNumber);
+            dict.Add("ED", input.CardData.ExpiryDate);
+            dict.Add("CVC", input.CardData.CardCVV);
+            dict.Add("AMOUNT", paymentAmount.ToString());
+            for (int i = 0; i < paymentsCount; i++)
+            {
+                if (i != paymentsCount - 1)
+                {
+                    dict.Add($"AMOUNT{i + 1}", monthlyPayment.ToString());
+                }
+                else
+                {
+                    dict.Add($"AMOUNT{i + 1}", (monthlyPayment + (paymentAmount - (paymentsCount * monthlyPayment))).ToString());
+                }
+                dict.Add($"EXECUTIONDATE{i + 1}", paymentDate.AddMonths(i).ToString("dd/MM/yyyy"));
+            }
+            dict.Add("CURRENCY", input.PaymentData.Currency);
+            dict.Add("SHASIGN", CreateShaSign(dict, shaKey));
+            var request = new HttpRequestMessage(HttpMethod.Post, scheduledPaymentEndpoint)
+            {
+                Content = new FormUrlEncodedContent(dict)
+            };
+
+            var client = new HttpClient();
+            var response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                string xml = await response.Content.ReadAsStringAsync();
+                var doc = XDocument.Parse(xml);
+                if (doc.Root.Attribute("NCERROR")?.Value == "0" && doc.Root.Attribute("STATUS")?.Value == "56")
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static string CreateShaSign(SortedDictionary<string, string> requestFormParameters, string shaKey)
+        {
+            var sb = new StringBuilder();
+            foreach(var parameterPair in requestFormParameters)
+            {
+                sb.Append($"{parameterPair.Key}={parameterPair.Value}{shaKey}");
+            }
+
+            return Hash(sb.ToString());
+        }
+
+        static string Hash(string input)
+        {
+            using (var sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
         }
     }
 }

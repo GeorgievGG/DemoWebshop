@@ -164,5 +164,30 @@ namespace DemoWebshopApi.Controllers
                 return StatusCode(500);
             }
         }
+
+        [HttpPost("AddScheduledPayment")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> AddScheduledPayment(CardPaymentInput input)
+        {
+            try
+            {
+                var isSuccessful = await _paymentService.AddScheduledPayment(input, 
+                                       _paymentProviderSettings.Value.ScheduledPaymentEndpoint,
+                                       _paymentProviderSettings.Value.MerchantId, 
+                                       _paymentProviderSettings.Value.MerchantPass, 
+                                       _paymentProviderSettings.Value.ApiUser,
+                                       _paymentProviderSettings.Value.ShaKey);
+                if (!isSuccessful)
+                {
+                    return BadRequest();
+                }
+
+                return Ok(isSuccessful);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }
