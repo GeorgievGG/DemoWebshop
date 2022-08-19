@@ -42,6 +42,15 @@ namespace DemoWebshopApi.Controllers
             return _mapper.Map<ProductResponseDto>(product);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ProductResponseDto>> CreateProduct(ProductRequestDto product)
+        {
+            var newProduct = await _productService.CreateProduct(_mapper.Map<Product>(product));
+
+            return CreatedAtAction("GetProduct", new { id = newProduct.Id }, _mapper.Map<ProductResponseDto>(newProduct));
+        }
+
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateProduct(Guid id, ProductRequestDto product)
@@ -52,15 +61,6 @@ namespace DemoWebshopApi.Controllers
             await _productService.UpdateProduct(id, _mapper.Map<Product>(updatedProduct));
 
             return NoContent();
-        }
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<ProductResponseDto>> CreateProduct(ProductRequestDto product)
-        {
-            var newProduct = await _productService.CreateProduct(_mapper.Map<Product>(product));
-
-            return CreatedAtAction("GetProduct", new { id = newProduct.Id }, _mapper.Map<ProductResponseDto>(newProduct));
         }
 
         [HttpDelete("{id}")]

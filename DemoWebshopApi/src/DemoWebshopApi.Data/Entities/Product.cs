@@ -12,5 +12,7 @@
         public int AvailableQuantity { get; set; }
 
         public double Price { get; set; }
+
+        public bool IsSubscription { get; set; }
     }
 }

@@ -8,5 +8,7 @@
         public double Price { get; set; }
 
         public int AvailableQuantity { get; set; }
+
+        public bool IsSubscription { get; set; }
     }
 }

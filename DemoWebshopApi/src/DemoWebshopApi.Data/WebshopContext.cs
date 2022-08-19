@@ -41,6 +41,7 @@ namespace DemoWebshopApi.Data
             modelBuilder.Entity<Product>().Property(t => t.Model).HasMaxLength(120).IsRequired();
             modelBuilder.Entity<Product>().Property(t => t.AvailableQuantity).IsRequired();
             modelBuilder.Entity<Product>().Property(t => t.Price).IsRequired();
+            modelBuilder.Entity<Product>().Property(t => t.IsSubscription).IsRequired();
         }
 
         private static void SetupOrdersConfiguration(ModelBuilder modelBuilder)
