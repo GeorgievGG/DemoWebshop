@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { IPaymentState, PaymentSliceState } from "./types"
 
 const initialState: PaymentSliceState = {
-    payment: { hostedCheckoutId: '', directPaymentId: '', batchPaymentAdded: false, orderAmount: 0, currency: 'EUR' }
+    payment: { hostedCheckoutId: '', directPaymentId: '', batchPaymentAdded: false, scheduledPaymentAdded: false, orderAmount: 0, currency: 'EUR' }
 }
 
 export const paymentSlice = createSlice({
@@ -15,6 +15,9 @@ export const paymentSlice = createSlice({
         setBatchPaymentAddedState: (state, action: PayloadAction<boolean>) => {
             state.payment.batchPaymentAdded = action.payload
         },
+        setScheduledPaymentAddedState: (state, action: PayloadAction<boolean>) => {
+            state.payment.scheduledPaymentAdded = action.payload
+        },
         setPaymentState: (state, action: PayloadAction<IPaymentState>) => {
             state.payment = action.payload
         },
@@ -24,4 +27,4 @@ export const paymentSlice = createSlice({
     }
 })
 
-export const { setDirectPaymentId, setBatchPaymentAddedState, setPaymentState, flushPaymentState } = paymentSlice.actions
+export const { setDirectPaymentId, setBatchPaymentAddedState, setScheduledPaymentAddedState, setPaymentState, flushPaymentState } = paymentSlice.actions

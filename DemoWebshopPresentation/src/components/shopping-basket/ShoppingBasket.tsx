@@ -74,6 +74,14 @@ const ShoppingBasket = () => {
         }, [hasLoaded]
     )
 
+    useEffect(() => {
+        if (paymentState && paymentState.scheduledPaymentAdded && hasLoaded) {
+            createOrder()
+            dispatch(flushPaymentState())
+        }
+        }, [hasLoaded]
+    )
+
     const handleHostedCheckoutResultCheck = async (response: Response) => {
         if (response.ok) {
             const data = await response.json()
@@ -299,7 +307,7 @@ const ShoppingBasket = () => {
         }
     }
 
-    const navigateToDirectPaymentForm = async () => {
+    const navigateToPaymentForm = async (pageAddress: string) => {
         const orderAmount = shoppingBasket.basketLines
             .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
             
@@ -309,20 +317,7 @@ const ShoppingBasket = () => {
         }
 
         dispatch(setPaymentState({ orderAmount: orderAmount, currency: 'EUR' }))
-        navigate('/directPayment')
-    }
-
-    const navigateToBulkPaymentPage = async () => {
-        const orderAmount = shoppingBasket.basketLines
-            .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
-            
-        if (orderAmount === 0) {
-            toast.error("Can't checkout an empty order!")
-            return
-        }
-
-        dispatch(setPaymentState({ orderAmount: orderAmount, currency: 'EUR' }))
-        navigate('/bulkPayment')
+        navigate(pageAddress)
     }
 
     const clearShoppingBasket = async () => {
@@ -373,8 +368,9 @@ const ShoppingBasket = () => {
             </table>
             <div className='float-end'>
                 <Button className="btn btn-dark" text="Checkout by HCP" onClick={navigateToHostedCheckoutPage} />
-                <Button className="btn btn-dark" text="Checkout by S-S" onClick={navigateToDirectPaymentForm} />
-                <Button className="btn btn-dark" text="Add to Bulk file" onClick={navigateToBulkPaymentPage} />
+                <Button className="btn btn-dark" text="Checkout by S-S" onClick={() => navigateToPaymentForm('/directPayment')} />
+                <Button className="btn btn-dark" text="Add to Bulk file" onClick={() => navigateToPaymentForm('/bulkPayment')} />
+                <Button className="btn btn-dark" text="Pay in 3-month installments" onClick={() => navigateToPaymentForm('/scheduledPayment')} />
                 <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
             </div>
         </div>

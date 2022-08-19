@@ -20,6 +20,7 @@ export interface IPaymentState {
     hostedCheckoutId?: string
     directPaymentId?: string
     batchPaymentAdded?: boolean
+    scheduledPaymentAdded?: boolean
     orderAmount: number
     currency: string
 }
