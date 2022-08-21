@@ -12,8 +12,9 @@ namespace DemoWebshopApi.Services.Interfaces
         Task<GetHostedCheckoutResponse> GetHostedCheckoutPaymentResult(string hostedCheckoutId, string merchantId);
         Task<PaymentResponse> GetDirectPaymentResult(string paymentId, string merchantId);
         Task<CaptureResponse> CapturePayment(string paymentId, string merchantId);
-        void AddBatchPayment(CardPaymentInput input, string merchantId, string userId, string ohlPassword, string apiUser);
+        void AddBatchPayment(CardPaymentInput input, BasePaymentProviderConfig config);
+        void AddSubscription(CardPaymentInput input, BasePaymentProviderConfig config);
         Task<IDictionary<string, List<string>>> ProcessBatchPayments(string batchEndpoint);
-        Task<bool> AddScheduledPayment(CardPaymentInput input, string scheduledPaymentEndpoint, string merchantId, string password, string apiUser, string shaKey, int paymentsCount = 3);
+        Task<bool> AddScheduledPayment(CardPaymentInput input, ScheduledPaymentProviderConfig config, int paymentsCount = 3);
     }
 }

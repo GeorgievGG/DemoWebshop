@@ -200,10 +200,23 @@ namespace DemoWebshopApi.Services.Services
                     .CapturePayment(paymentId, request);
         }
 
-        public void AddBatchPayment(CardPaymentInput input, string merchantId, string userId, string ohlPassword, string apiUser)
+        public void AddBatchPayment(CardPaymentInput input, BasePaymentProviderConfig config)
+        {
+            var paymentLine = $"{(long)(input.PaymentData.OrderAmount * 100)};{input.PaymentData.Currency};Visa;{input.CardData.CardNumber};{input.CardData.ExpiryDate};{Guid.NewGuid()};;{input.CardData.CardholderName};;SAL;;;;;;;;;;;;;;;;;{input.CardData.CardCVV};";
+            AddBatchLine(config, paymentLine);
+        }
+
+        public void AddSubscription(CardPaymentInput input, BasePaymentProviderConfig config)
+        {
+            var subId = Guid.NewGuid();
+            var paymentLine = $"ADDSUBS;{input.CardData.CardholderName};{input.CardData.CardNumber};{input.CardData.ExpiryDate};VISA;{config.MerchantId};{subId};{input.PaymentData.OrderAmount};{input.PaymentData.Currency};m;1;1;1;{DateTime.UtcNow:dd-MM-yyyy};{DateTime.UtcNow.AddYears(1):dd-MM-yyyy};;;;example@email.com;;;";
+            AddBatchLine(config, paymentLine);
+        }
+
+        private void AddBatchLine(BasePaymentProviderConfig config, string lineText)
         {
             var directoryName = "files";
-            var fileName = $"paymentsBatch_{userId}_{DateTime.UtcNow:yyyyMMdd_HHmm}.txt";
+            var fileName = $"paymentsBatch_{config.UserId}_{DateTime.UtcNow:yyyyMMdd_HHmm}.txt";
             var filePath = $"{directoryName}\\{fileName}";
             Directory.CreateDirectory(directoryName);
 
@@ -213,11 +226,10 @@ namespace DemoWebshopApi.Services.Services
                 using (var sr = new StreamReader(fs, Encoding.UTF8))
                 {
                     // TODO: OrderId must received as input
-                    var paymentLine = $"{(long)(input.PaymentData.OrderAmount * 100)};{input.PaymentData.Currency};Visa;{input.CardData.CardNumber};{input.CardData.ExpiryDate};{Guid.NewGuid()};;{input.CardData.CardholderName};;SAL;;;;;;;;;;;;;;;;;{input.CardData.CardCVV};";
                     var sb = new StringBuilder();
                     if (!fileExists)
                     {
-                        sb.AppendLine($"OHL;{merchantId};{ohlPassword};;{apiUser};");
+                        sb.AppendLine($"OHL;{config.MerchantId};{config.MerchantPass};;{config.ApiUser};");
                         sb.AppendLine($"OHF;{fileName.Replace(".txt", $"")};ATR;SAL;1;");
                     }
                     else
@@ -230,7 +242,7 @@ namespace DemoWebshopApi.Services.Services
                         sb.Remove(sb.Length - 6, 6);
                     }
 
-                    sb.AppendLine(paymentLine);
+                    sb.AppendLine(lineText);
                     sb.AppendLine($"OTF;");
 
                     var content = new UTF8Encoding(true).GetBytes(sb.ToString());
@@ -282,17 +294,17 @@ namespace DemoWebshopApi.Services.Services
             return processedFiles;
         }
 
-        public async Task<bool> AddScheduledPayment(CardPaymentInput input, string scheduledPaymentEndpoint, string merchantId, string password, string apiUser, string shaKey, int paymentsCount = 3)
+        public async Task<bool> AddScheduledPayment(CardPaymentInput input, ScheduledPaymentProviderConfig config, int paymentsCount = 3)
         {
             var dict = new SortedDictionary<string, string>();
             var monthlyPayment = (long)(input.PaymentData.OrderAmount / paymentsCount * 100);
             var paymentAmount = (long)(input.PaymentData.OrderAmount * 100);
             var paymentDate = DateTime.UtcNow;
-            dict.Add("PSPID", merchantId);
+            dict.Add("PSPID", config.MerchantId);
             // TODO: Replace fake with real OrderId
             dict.Add("ORDERID", Guid.NewGuid().ToString());
-            dict.Add("USERID", apiUser);
-            dict.Add("PSWD", password);
+            dict.Add("USERID", config.ApiUser);
+            dict.Add("PSWD", config.MerchantPass);
             dict.Add("CARDNO", input.CardData.CardNumber);
             dict.Add("ED", input.CardData.ExpiryDate);
             dict.Add("CVC", input.CardData.CardCVV);
@@ -310,8 +322,8 @@ namespace DemoWebshopApi.Services.Services
                 dict.Add($"EXECUTIONDATE{i + 1}", paymentDate.AddMonths(i).ToString("dd/MM/yyyy"));
             }
             dict.Add("CURRENCY", input.PaymentData.Currency);
-            dict.Add("SHASIGN", CreateShaSign(dict, shaKey));
-            var request = new HttpRequestMessage(HttpMethod.Post, scheduledPaymentEndpoint)
+            dict.Add("SHASIGN", CreateShaSign(dict, config.ShaKey));
+            var request = new HttpRequestMessage(HttpMethod.Post, config.ScheduledPaymentEndpoint)
             {
                 Content = new FormUrlEncodedContent(dict)
             };

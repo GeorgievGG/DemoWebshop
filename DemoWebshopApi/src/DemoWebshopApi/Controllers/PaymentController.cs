@@ -1,4 +1,5 @@
-﻿using DemoWebshopApi.DTOs;
+﻿using AutoMapper;
+using DemoWebshopApi.DTOs;
 using DemoWebshopApi.DTOs.RequestModels;
 using DemoWebshopApi.Services.DTOs;
 using DemoWebshopApi.Services.Interfaces;
@@ -14,11 +15,13 @@ namespace DemoWebshopApi.Controllers
     {
         private readonly IOptions<OgoneSettings> _paymentProviderSettings;
         private readonly IPaymentService _paymentService;
+        private readonly IMapper _mapper;
 
-        public PaymentController(IOptions<OgoneSettings> paymentProviderSettings, IPaymentService paymentService)
+        public PaymentController(IOptions<OgoneSettings> paymentProviderSettings, IPaymentService paymentService, IMapper mapper)
         {
             _paymentProviderSettings = paymentProviderSettings;
             _paymentService = paymentService;
+            _mapper = mapper;
         }
 
         [HttpPost("GetHostedCheckoutPage")]
@@ -139,7 +142,10 @@ namespace DemoWebshopApi.Controllers
         {
             try
             {
-                _paymentService.AddBatchPayment(input, _paymentProviderSettings.Value.MerchantId, UserId, _paymentProviderSettings.Value.MerchantPass, _paymentProviderSettings.Value.ApiUser);
+                var config = _mapper.Map<BasePaymentProviderConfig>(_paymentProviderSettings);
+                config.UserId = UserId;
+
+                _paymentService.AddBatchPayment(input, config);
 
                 return Ok();
             }
@@ -171,18 +177,35 @@ namespace DemoWebshopApi.Controllers
         {
             try
             {
-                var isSuccessful = await _paymentService.AddScheduledPayment(input, 
-                                       _paymentProviderSettings.Value.ScheduledPaymentEndpoint,
-                                       _paymentProviderSettings.Value.MerchantId, 
-                                       _paymentProviderSettings.Value.MerchantPass, 
-                                       _paymentProviderSettings.Value.ApiUser,
-                                       _paymentProviderSettings.Value.ShaKey);
+                var config = _mapper.Map<ScheduledPaymentProviderConfig>(_paymentProviderSettings);
+                config.UserId = UserId;
+
+                var isSuccessful = await _paymentService.AddScheduledPayment(input, config);
                 if (!isSuccessful)
                 {
                     return BadRequest();
                 }
 
                 return Ok(isSuccessful);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("AddScheduled")]
+        [Authorize(Roles = "User")]
+        public async Task<ActionResult> AddSubscription(CardPaymentInput input)
+        {
+            try
+            {
+                var config = _mapper.Map<BasePaymentProviderConfig>(_paymentProviderSettings);
+                config.UserId = UserId;
+
+                _paymentService.AddSubscription(input, config);
+
+                return Ok();
             }
             catch (Exception e)
             {
