@@ -14,6 +14,7 @@ const UpdateProduct = () => {
     const [model, setModel] = useState('')
     const [availableQuantity, setAvailableQuantity] = useState(0)
     const [price, setPrice] = useState(0.00)
+    const [isSubscription, setIsSubscription] = useState(false)
 
     const location = useLocation()
     const dispatch = useDispatch()
@@ -27,6 +28,7 @@ const UpdateProduct = () => {
             setModel(state.product.model)
             setAvailableQuantity(state.product.availableQuantity)
             setPrice(state.product.price)
+            setIsSubscription(state.product.isSubscription)
         }, [state]
     )
 
@@ -84,7 +86,7 @@ const UpdateProduct = () => {
                 return
         }
 
-        update({ name, pictureUrl, model, availableQuantity, price })
+        update({ name, pictureUrl, model, availableQuantity, price, isSubscription })
     }
 
     return (
@@ -124,6 +126,15 @@ const UpdateProduct = () => {
                         step=".01"
                         value={price}
                         onChange={(e) => setPrice(e.target.valueAsNumber)} />
+                </div>
+                <div className="form-control border-0 checkboxContainer">
+                    <label>
+                        <input id='tokenizeCheckbox' 
+                            type='checkbox' 
+                            checked={isSubscription}
+                            onChange={(e) => setIsSubscription(e.currentTarget.checked)} />
+                            Is the product subscription-based?
+                    </label>
                 </div>
                 <input className="btn btn-dark" type='submit' value='Update' />
             </form>

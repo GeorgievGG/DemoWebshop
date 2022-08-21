@@ -3,6 +3,7 @@ type BasicProductInfo = {
     name: string
     availableQuantity: number
     price: number
+    isSubscription: boolean
 }
 
 type BasketProductInfo = BasicProductInfo & {

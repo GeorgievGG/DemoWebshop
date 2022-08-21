@@ -27,7 +27,13 @@ const Product = ({ product, userRole, onAddToCart, onDeleteClick }: Props) => {
         <img className='pic' src={product.pictureUrl} alt={`${product.name} (${product.model})`}/>
         <h1>{product.name}</h1>
         <p>{product.model}</p>
-        <p className="price">{product.price.toLocaleString('de-DE', { style: 'currency', currency: 'EUR'})}</p>
+        <p className="price">
+          {
+            !product.isSubscription ?
+              product.price.toLocaleString('de-DE', { style: 'currency', currency: 'EUR'}) :
+              product.price.toLocaleString('de-DE', { style: 'currency', currency: 'EUR'}) + '/Month'
+          }
+          </p>
         {
           userRole === "Admin" ?
           <>
@@ -41,7 +47,11 @@ const Product = ({ product, userRole, onAddToCart, onDeleteClick }: Props) => {
             </div>
           </> :
           <p className="p-button">
-            <Button className="btn btn-dark single-button" text={"Add to cart"} onClick={addToCart} />
+            {
+              !product.isSubscription ?
+                <Button className="btn btn-dark single-button" text={"Add to cart"} onClick={addToCart} /> :
+                <Button className="btn btn-dark single-button" text={"Subscribe (Batch)"} onClick={subscribe} />
+            }
           </p>
         }
       </div>
