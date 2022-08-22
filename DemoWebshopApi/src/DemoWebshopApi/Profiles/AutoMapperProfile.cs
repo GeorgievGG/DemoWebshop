@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using DemoWebshopApi.Data.Entities;
+using DemoWebshopApi.DTOs;
 using DemoWebshopApi.DTOs.RequestModels;
 using DemoWebshopApi.DTOs.ResponseModels;
+using DemoWebshopApi.Services.DTOs;
 
 namespace DemoWebshopApi.Profiles
 {
@@ -12,7 +14,8 @@ namespace DemoWebshopApi.Profiles
             SetupUserMaps();
             SetupProductMaps();
             SetupOrderMaps();
-            SetupSoppingBasketMaps();
+            SetupShoppingBasketMaps();
+            SetupPaymentProviderConfigurationMaps();
         }
 
         private void SetupUserMaps()
@@ -39,13 +42,19 @@ namespace DemoWebshopApi.Profiles
             CreateMap<OrderLine, OrderLineResponseDto>();
         }
 
-        private void SetupSoppingBasketMaps()
+        private void SetupShoppingBasketMaps()
         {
             CreateMap<ShoppingBasketLineRequestDto, ShoppingBasketLine>();
             CreateMap<ShoppingBasket, ShoppingBasketResponseDto>();
             CreateMap<ShoppingBasket, ShoppingBasketDetailedResponseDto>();
             CreateMap<ShoppingBasketLine, ShoppingBasketLineResponseDto>();
             CreateMap<ShoppingBasketLine, ShoppingBasketDetailedLineResponseDto>();
+        }
+
+        private void SetupPaymentProviderConfigurationMaps()
+        {
+            CreateMap<OgoneSettings, BasePaymentProviderConfig>();
+            CreateMap<OgoneSettings, ScheduledPaymentProviderConfig>();
         }
     }
 }

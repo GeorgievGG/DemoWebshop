@@ -209,7 +209,7 @@ namespace DemoWebshopApi.Services.Services
         public void AddSubscription(CardPaymentInput input, BasePaymentProviderConfig config)
         {
             var subId = Guid.NewGuid();
-            var paymentLine = $"ADDSUBS;{input.CardData.CardholderName};{input.CardData.CardNumber};{input.CardData.ExpiryDate};VISA;{config.MerchantId};{subId};{input.PaymentData.OrderAmount};{input.PaymentData.Currency};m;1;1;1;{DateTime.UtcNow:dd-MM-yyyy};{DateTime.UtcNow.AddYears(1):dd-MM-yyyy};;;;example@email.com;;;";
+            var paymentLine = $"ADDSUBS;{input.CardData.CardholderName};{input.CardData.CardNumber};{input.CardData.ExpiryDate};VISA;{config.MerchantId};{subId};{(long)(input.PaymentData.OrderAmount * 100)};{input.PaymentData.Currency};m;1;1;1;{DateTime.UtcNow:dd-MM-yyyy};{DateTime.UtcNow.AddYears(1):dd-MM-yyyy};;;;example@email.com;;;";
             AddBatchLine(config, paymentLine);
         }
 

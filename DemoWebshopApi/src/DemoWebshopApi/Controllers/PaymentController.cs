@@ -142,7 +142,7 @@ namespace DemoWebshopApi.Controllers
         {
             try
             {
-                var config = _mapper.Map<BasePaymentProviderConfig>(_paymentProviderSettings);
+                var config = _mapper.Map<BasePaymentProviderConfig>(_paymentProviderSettings.Value);
                 config.UserId = UserId;
 
                 _paymentService.AddBatchPayment(input, config);
@@ -177,7 +177,7 @@ namespace DemoWebshopApi.Controllers
         {
             try
             {
-                var config = _mapper.Map<ScheduledPaymentProviderConfig>(_paymentProviderSettings);
+                var config = _mapper.Map<ScheduledPaymentProviderConfig>(_paymentProviderSettings.Value);
                 config.UserId = UserId;
 
                 var isSuccessful = await _paymentService.AddScheduledPayment(input, config);
@@ -194,13 +194,13 @@ namespace DemoWebshopApi.Controllers
             }
         }
 
-        [HttpPost("AddScheduled")]
+        [HttpPost("AddSubscription")]
         [Authorize(Roles = "User")]
         public async Task<ActionResult> AddSubscription(CardPaymentInput input)
         {
             try
             {
-                var config = _mapper.Map<BasePaymentProviderConfig>(_paymentProviderSettings);
+                var config = _mapper.Map<BasePaymentProviderConfig>(_paymentProviderSettings.Value);
                 config.UserId = UserId;
 
                 _paymentService.AddSubscription(input, config);
