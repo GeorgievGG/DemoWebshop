@@ -6,10 +6,11 @@ type Props = {
   product: CatalogProductInfo
   userRole: string
   onAddToCart: (productId: string) => void
+  onSubscribe: (subscriptionFee: number, pageAddress: string) => void
   onDeleteClick: (productId: string) => void
 }
 
-const Product = ({ product, userRole, onAddToCart, onDeleteClick }: Props) => {
+const Product = ({ product, userRole, onAddToCart, onSubscribe, onDeleteClick }: Props) => {
   const navigate = useNavigate();
 
   const addToCart = async () => {
@@ -19,6 +20,15 @@ const Product = ({ product, userRole, onAddToCart, onDeleteClick }: Props) => {
     }
     
     onAddToCart(product.id)
+  }
+
+  const subscribe = async () => {
+    if (userRole !== "User") {
+      navigate("/login")
+      return
+    }
+    
+    onSubscribe(product.price, '/subscription')
   }
 
   return (

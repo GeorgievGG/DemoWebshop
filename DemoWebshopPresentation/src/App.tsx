@@ -20,6 +20,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import DirectPaymentPage from './pages/DirectPaymentPage';
 import InsertBulkPaymentPage from './pages/InsertBulkPaymentPage';
 import AddScheduledPaymentPage from './pages/AddScheduledPaymentPage';
+import AddSubscriptionToBatchPage from './pages/AddSubscriptionToBatchPage';
 
 function App() {
   useScript('https://unpkg.com/react/umd/react.production.min.js');
@@ -85,6 +86,10 @@ function App() {
             <Route path='/scheduledPayment' element=
               {
                 <AddScheduledPaymentPage />
+              } />
+            <Route path='/subscription' element=
+              {
+                <AddSubscriptionToBatchPage />
               } />
             <Route path='/about' element=
               {
