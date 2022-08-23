@@ -24,8 +24,6 @@ const DirectPaymentPage = () => {
         })
         .then(response => handleGetTokenResponse(response))
       }
-
-      setPageLoaded(true)
     }, []
   )
 
@@ -35,8 +33,10 @@ const DirectPaymentPage = () => {
           setTokenCardInfo(tokenJson?.card?.data?.cardWithoutCvv)
       }
       else {
-        toast.error("Couldn't retrieve products!")
+        toast.error("Couldn't retrieve token!")
       }
+
+      setPageLoaded(true)
   }
 
   const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)

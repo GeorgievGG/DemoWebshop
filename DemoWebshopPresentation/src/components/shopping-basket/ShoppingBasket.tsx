@@ -67,15 +67,13 @@ const ShoppingBasket = () => {
     )
 
     useEffect(() => {
-        if (paymentState && paymentState.batchPaymentAdded && hasLoaded) {
-            createOrder()
-            dispatch(flushPaymentState())
-        }
-        }, [hasLoaded]
-    )
-
-    useEffect(() => {
-        if (paymentState && paymentState.scheduledPaymentAdded && hasLoaded) {
+        if (paymentState && 
+            hasLoaded &&
+            (
+                paymentState.batchPaymentAdded || 
+                paymentState.scheduledPaymentAdded ||
+                paymentState.aliasPaymentAdded 
+            )) {
             createOrder()
             dispatch(flushPaymentState())
         }
