@@ -94,7 +94,7 @@ function Catalog() {
             deleteProduct(deletedProductId)
         }
         else {
-            handleNegativeResponse(response, `Couldn't delete product ${deletedProductId}!`, false)
+            handleNegativeResponse(response, `Couldn't delete product ${deletedProductId}`, true)
         }
 
         setOpen(false)

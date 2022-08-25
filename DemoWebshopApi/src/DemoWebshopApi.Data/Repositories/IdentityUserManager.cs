@@ -13,6 +13,14 @@ namespace DemoWebshopApi.Data.Repositories
         {
         }
 
+        public async Task<User> FindByIdAsync(Guid userId)
+        {
+            return await Users
+                .Include(x => x.Orders)
+                .Include(x => x.Basket)
+                .SingleAsync(x => x.Id == userId);
+        }
+
         public async Task<List<User>> GetAllAsync()
         {
             return await Users.ToListAsync();
@@ -52,7 +60,7 @@ namespace DemoWebshopApi.Data.Repositories
 
         public async Task<bool> IsUserInRole(Guid userId, string roleName)
         {
-            User user = await FindByIdAsync(userId.ToString());
+            User user = await FindByIdAsync(userId);
             return await IsInRoleAsync(user, roleName);
         }
 

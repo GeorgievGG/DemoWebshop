@@ -7,7 +7,7 @@ namespace DemoWebshopApi.Data.Interfaces
     public interface IIdentityUserManager
     {
         Task<List<User>> GetAllAsync();
-        Task<User> FindByIdAsync(string id);
+        Task<User> FindByIdAsync(Guid id);
         Task<User> FindByNameAsync(string userName);
         Task<User> GetUserAsync(ClaimsPrincipal principal);
         Task<IList<User>> GetUsersInRoleAsync(string roleName);

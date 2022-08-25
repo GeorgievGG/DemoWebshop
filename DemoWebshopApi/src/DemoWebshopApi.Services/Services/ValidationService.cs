@@ -80,7 +80,7 @@ namespace DemoWebshopApi.Services.Services
 
         public async Task EnsureUserExists(Guid userId)
         {
-            var existingUser = await _userManager.FindByIdAsync(userId.ToString());
+            var existingUser = await _userManager.FindByIdAsync(userId);
             if (existingUser == null)
             {
                 throw new UserNotExistException(Constants.ClientDoesNotExist);
