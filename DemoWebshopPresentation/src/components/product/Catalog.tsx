@@ -50,7 +50,7 @@ function Catalog() {
             setHasLoaded(true)
         }
         else {
-          toast.error("Couldn't retrieve products!")
+            handleNegativeResponse(response, "Couldn't retrieve products!", false)
         }
     }
     
@@ -94,7 +94,7 @@ function Catalog() {
             deleteProduct(deletedProductId)
         }
         else {
-          toast.error(`Couldn't delete product ${deletedProductId}!`)
+            handleNegativeResponse(response, `Couldn't delete product ${deletedProductId}!`, false)
         }
 
         setOpen(false)

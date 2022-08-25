@@ -33,7 +33,7 @@ export const OrderList = () => {
         setHasLoaded(true)
     }
     else {
-      toast.error(`Couldn't retrieve orders!`)
+      handleNegativeResponse(response, "Couldn't retrieve orders!", false)
     }
   }
 

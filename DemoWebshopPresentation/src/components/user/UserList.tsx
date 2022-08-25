@@ -33,7 +33,7 @@ export const UserList = () => {
         setUsers(data)
     }
     else {
-      toast.error(`Couldn't retrieve users!`)
+      handleNegativeResponse(response, "Couldn't retrieve users!", false)
     }
   }
 
@@ -75,9 +75,7 @@ export const UserList = () => {
       deleteUserById(deletedUserId)
     }
     else {
-      const body = await response.text()
-      const bodyJson = JSON.parse(body)
-      toast.error(`Couldn't delete user: ${bodyJson.message}!`)
+      handleNegativeResponse(response, "Couldn't delete user", true)
     }
 
     setOpen(false);

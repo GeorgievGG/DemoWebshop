@@ -38,7 +38,7 @@ const UpdatePersonData = ({ token }: Props) => {
             setLastName(data.lastName)
         }
         else {
-          toast.error(`Couldn't load your user data!`)
+            handleNegativeResponse(response, "Couldn't load your user data!", false)
         }
     }
     

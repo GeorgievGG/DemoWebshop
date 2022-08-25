@@ -37,7 +37,7 @@ const ShoppingBasket = () => {
             setHasLoaded(true)
         }
         else {
-          toast.error(`Couldn't retrieve products!`)
+            handleNegativeResponse(response, "Couldn't retrieve shopping basket data!", false)
         }
     }
 
@@ -96,7 +96,7 @@ const ShoppingBasket = () => {
             dispatch(flushPaymentState())
         }
         else {
-            handleUnsuccessfulPayment()
+            handleUnsuccessfulPayment(response)
         }
     }
 
@@ -123,19 +123,20 @@ const ShoppingBasket = () => {
                 createOrder()
             }
             else {
-                handleUnsuccessfulPayment()
+                handleUnsuccessfulPayment(response)
             }
             // INFO: I know that Captured status might be delayed. 
             // For the sake of simplicity, I won't implement more detailed logic for that case
             dispatch(flushPaymentState())
         }
         else {
-            handleUnsuccessfulPayment()
+            handleUnsuccessfulPayment(response)
         }
     }
 
-    const handleUnsuccessfulPayment = async (paymentStatus?: string) => {
-        toast.error(`Payment unsuccessful${paymentStatus ? `, status: ${paymentStatus}` : ''}!`)
+    const handleUnsuccessfulPayment = async (response: Response, paymentStatus?: string) => {
+        const message = `Payment unsuccessful${paymentStatus ? `, status: ${paymentStatus}` : ''}!`
+        handleNegativeResponse(response, message, false)
     }
 
     const increaseShoppingQuantity = async (productId: string) => {

@@ -34,7 +34,7 @@ const DirectPaymentPage = () => {
           setTokenCardInfo(tokenJson?.card?.data?.cardWithoutCvv)
       }
       else {
-        toast.error("Couldn't retrieve token!")
+        handleNegativeResponse(response, "Couldn't retrieve token!", false)
       }
 
       setPageLoaded(true)
@@ -106,7 +106,7 @@ const DirectPaymentPage = () => {
         dispatch(setPaymentCardToken(data.token))
       }
       else {
-        toast.error(`Couldn't tokenize card details!`)
+        handleNegativeResponse(tokenResponse, "Couldn't tokenize card details!", false)
       }
     }
 

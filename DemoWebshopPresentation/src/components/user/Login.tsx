@@ -7,6 +7,7 @@ import { setSessionData } from '../../store/sessionSlice'
 import Button from '../common/Button'
 import { Buffer } from 'buffer'
 import { toast } from 'react-toastify'
+import { handleNegativeResponse } from '../../utility'
 
 const Login = () => {
   const navigate = useNavigate()
@@ -46,7 +47,7 @@ const Login = () => {
       navigate(-1)
     }
     else {
-      toast.error(`Login for user ${userCredentials.username} failed.`)
+      handleNegativeResponse(response, `Login for user ${userCredentials.username} failed.`, false)
     }
   }
 

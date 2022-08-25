@@ -3,11 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { selectProductsState, selectSessionState } from '../../store'
-import { flushPaymentState } from '../../store/paymentSlice'
 import { setProducts } from '../../store/productsSlice'
-import { flushSessionData } from '../../store/sessionSlice'
 import { IUserSessionData, RootState } from '../../store/types'
-import { handleNegativeResponse } from '../../utility'
+import { handleNegativeResponse, logout } from '../../utility'
 import Button from './Button'
 
 const Header = () => {
@@ -36,9 +34,8 @@ const Header = () => {
         }
     }
 
-    const logout = async () => {
-        dispatch(flushSessionData())
-        dispatch(flushPaymentState())
+    const onLogoutClicked = async () => {
+        logout()
         dispatch(setProducts(products.filter((product) => product.availableQuantity !== 0)))
         navigate("/")
     }
@@ -74,7 +71,7 @@ const Header = () => {
                     { sessionState.UserLogged && sessionState.LoggedUserRole === "User" && <Button className="btn btn-dark" text={"Basket"} onClick={() => navigate("/shoppingBasket")} /> }
                 </li>
                 <li>
-                    { sessionState.UserLogged && <Button className="btn btn-dark" text={"Logout"} onClick={logout} /> }
+                    { sessionState.UserLogged && <Button className="btn btn-dark" text={"Logout"} onClick={onLogoutClicked} /> }
                 </li>
             </ul>
         </header>
