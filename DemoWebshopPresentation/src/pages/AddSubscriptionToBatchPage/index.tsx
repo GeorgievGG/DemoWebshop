@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import CardDetailsForm from '../../components/shopping-basket/CardDetailsForm'
 import { selectPaymentState, selectSessionState } from '../../store'
 import { setSubscriptionAddedState } from '../../store/paymentSlice'
 import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
+import { handleNegativeResponse } from '../../utility'
 import { IPaymentCardData } from '../ShoppingBasketPage/types'
 
 const AddSubscriptionToBatchPage = () => {
@@ -25,18 +25,12 @@ const AddSubscriptionToBatchPage = () => {
             body: JSON.stringify({ cardData: userInput, paymentData: paymentState })
         })
         
-        const body = await response.text()
         if (response.ok) {
             dispatch(setSubscriptionAddedState(true))
             navigate(-1)
         }
         else {
-            let errorMessage = 'Unknown error'
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Couldn't add subscription!`)
+            handleNegativeResponse(response, "Couldn't add subscription!", false)
         }
     }
 

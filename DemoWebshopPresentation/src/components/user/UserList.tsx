@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { selectSessionState } from '../../store'
 import { IUserSessionData, RootState } from '../../store/types'
+import { handleNegativeResponse } from '../../utility'
 import Button from '../common/Button'
 import UserRow from './UserRow'
 
@@ -52,13 +53,7 @@ export const UserList = () => {
             ))
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Updating user failed: ${errorMessage}`)
+          handleNegativeResponse(response, "Updating user failed", true)
         }
   }
 

@@ -7,6 +7,7 @@ import { selectPaymentState, selectProductsState, selectSessionState } from '../
 import { flushPaymentState, setPaymentState } from '../../store/paymentSlice'
 import { deleteProduct, setProducts } from '../../store/productsSlice'
 import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
+import { handleNegativeResponse } from '../../utility'
 import CatalogLine from './CatalogLine'
 
 function Catalog() {
@@ -71,13 +72,7 @@ function Catalog() {
             toast.success('Added to basket!')
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Adding to basket failed: ${errorMessage}`)
+            handleNegativeResponse(response, "Adding to basket failed", true)
         }
     }
 

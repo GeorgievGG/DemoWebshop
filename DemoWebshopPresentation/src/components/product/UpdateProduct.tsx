@@ -6,6 +6,7 @@ import { toast } from 'react-toastify'
 import { selectSessionState } from '../../store'
 import { updateProduct } from '../../store/productsSlice'
 import { IUserSessionData, RootState } from '../../store/types'
+import { handleNegativeResponse } from '../../utility'
 import Button from '../common/Button'
 
 const UpdateProduct = () => {
@@ -43,19 +44,13 @@ const UpdateProduct = () => {
         body: JSON.stringify(userInput)
         })
         
-        const body = await response.text()
         if (response.ok) {
             const updatedProduct = { ...userInput, id: state.product.id } as CatalogProductInfo
             dispatch(updateProduct(updatedProduct))
             toast.success(`Product ${updatedProduct.name} updated!`)
         }
         else {
-            let errorMessage = 'Unknown error'
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Update failed for product ${userInput.name}: ${errorMessage}`)
+            handleNegativeResponse(response, `Update failed for product ${userInput.name}`, true)
         }
     }
 

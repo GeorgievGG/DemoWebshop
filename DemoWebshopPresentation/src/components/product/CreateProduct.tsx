@@ -7,6 +7,7 @@ import { IUserSessionData, RootState } from '../../store/types'
 import { addProduct } from '../../store/productsSlice'
 import Button from '../common/Button'
 import { toast } from 'react-toastify'
+import { handleNegativeResponse } from '../../utility'
 
 const CreateProduct = () => {
   const [name, setName] = useState('')
@@ -37,12 +38,7 @@ const CreateProduct = () => {
       toast.success(`Product ${data.name} created!`)
     }
     else {
-      let errorMessage = 'Unknown error'
-      if (body && body !== '') {
-        const data = JSON.parse(body)
-        errorMessage = data.message
-      }
-      toast.error(`Creation failed for product ${userInput.name}: ${errorMessage}`)
+      handleNegativeResponse(response, `Creation failed for product ${userInput.name}`, true)
     }
   }
 

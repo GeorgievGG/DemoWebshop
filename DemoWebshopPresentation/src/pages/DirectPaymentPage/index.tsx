@@ -7,6 +7,7 @@ import { selectPaymentState, selectSessionState } from '../../store'
 import { setDirectPaymentId } from '../../store/paymentSlice'
 import { setPaymentCardToken } from '../../store/sessionSlice'
 import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
+import { handleNegativeResponse } from '../../utility'
 import { IDirectPaymentData, IPaymentCardData, ITokenCardData } from '../ShoppingBasketPage/types'
 
 
@@ -125,12 +126,7 @@ const DirectPaymentPage = () => {
       navigate(-1)
     }
     else {
-      let errorMessage = 'Unknown error'
-      if (body && body !== '') {
-        const data = JSON.parse(body)
-        errorMessage = data.message
-      }
-      toast.error(`Couldn't send payment: ${errorMessage}!`)
+      handleNegativeResponse(response, "Couldn't send payment", true)
     }
   }
 

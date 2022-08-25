@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { IRegistrationInput } from '../../pages/RegisterPage/types'
+import { handleNegativeResponse } from '../../utility'
 import Button from '../common/Button'
 
 const Register = () => {
@@ -56,12 +57,7 @@ const Register = () => {
       navigate(-1)
     }
     else {
-      let errorMessage = 'Unknown error'
-      if (body && body !== '') {
-        const data = JSON.parse(body)
-        errorMessage = data.message
-      }
-      toast.error(`Registration failed for user ${userInput.username}: ${errorMessage}`)
+      handleNegativeResponse(response, `Registration failed for user ${userInput.username}`, true)
     }
 }
 

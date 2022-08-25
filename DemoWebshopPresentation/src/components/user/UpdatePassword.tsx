@@ -1,6 +1,7 @@
 import React, { FormEventHandler } from 'react'
 import { useState } from "react"
 import { toast } from 'react-toastify'
+import { handleNegativeResponse } from '../../utility'
 
 type Props = {
     token: string
@@ -46,13 +47,7 @@ const Profile = ({ token }: Props) => {
             toast.success(`Password updated!`)
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Updating password failed: ${errorMessage}`)
+            handleNegativeResponse(response, "Updating password failed", true)
         }
     }
 

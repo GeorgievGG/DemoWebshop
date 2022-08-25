@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Buffer } from 'buffer';
 import ClaimTypes from '../../enums/ClaimTypes';
 import { toast } from 'react-toastify';
+import { handleNegativeResponse } from '../../utility';
 
 type Props = {
     token: string
@@ -71,13 +72,7 @@ const UpdatePersonData = ({ token }: Props) => {
             toast.success(`User updated!`)
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Updating profile failed for user ${userInput.username}: ${errorMessage}`)
+            handleNegativeResponse(response, `Updating profile failed for user ${userInput.username}`, true)
         }
     }
 

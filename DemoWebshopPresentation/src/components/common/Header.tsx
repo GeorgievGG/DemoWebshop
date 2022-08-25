@@ -7,6 +7,7 @@ import { flushPaymentState } from '../../store/paymentSlice'
 import { setProducts } from '../../store/productsSlice'
 import { flushSessionData } from '../../store/sessionSlice'
 import { IUserSessionData, RootState } from '../../store/types'
+import { handleNegativeResponse } from '../../utility'
 import Button from './Button'
 
 const Header = () => {
@@ -31,12 +32,7 @@ const Header = () => {
             data?.failed?.length !== 0 && toast.warning(`Couldn't process payment batches: ${data.failed.join('\n')}`)
         }
         else {
-            let errorMessage = 'Unknown error'
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Couldn't process payment batches: ${errorMessage}!`)
+            handleNegativeResponse(response, "Couldn't process payment batches", true)
         }
     }
 

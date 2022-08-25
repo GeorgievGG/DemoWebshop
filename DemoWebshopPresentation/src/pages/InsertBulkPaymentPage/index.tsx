@@ -1,11 +1,11 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import CardDetailsForm from '../../components/shopping-basket/CardDetailsForm'
 import { selectPaymentState, selectSessionState } from '../../store'
 import { setBatchPaymentAddedState } from '../../store/paymentSlice'
 import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
+import { handleNegativeResponse } from '../../utility'
 import { IPaymentCardData } from '../ShoppingBasketPage/types'
 
 const InsertBulkPaymentPage = () => {
@@ -25,18 +25,12 @@ const InsertBulkPaymentPage = () => {
             body: JSON.stringify({ cardData: userInput, paymentData: paymentState })
         })
         
-        const body = await response.text()
         if (response.ok) {
             dispatch(setBatchPaymentAddedState(true))
             navigate(-1)
         }
         else {
-            let errorMessage = 'Unknown error'
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Couldn't send payment: ${errorMessage}!`)
+            handleNegativeResponse(response, "Couldn't send payment", true)
         }
     }
 

@@ -6,6 +6,7 @@ import { IBasket } from '../../pages/ShoppingBasketPage/types'
 import { selectPaymentState, selectSessionState } from '../../store'
 import { flushPaymentState, setPaymentState } from '../../store/paymentSlice'
 import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
+import { handleNegativeResponse } from '../../utility'
 import Button from '../common/Button'
 import ShoppingBasketRow from './ShoppingBasketRow'
 
@@ -71,8 +72,7 @@ const ShoppingBasket = () => {
             hasLoaded &&
             (
                 paymentState.batchPaymentAdded || 
-                paymentState.scheduledPaymentAdded ||
-                paymentState.aliasPaymentAdded 
+                paymentState.scheduledPaymentAdded
             )) {
             createOrder()
             dispatch(flushPaymentState())
@@ -158,13 +158,7 @@ const ShoppingBasket = () => {
             })
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Adding to cart failed: ${errorMessage}`)
+            handleNegativeResponse(response, "Changing cart data failed", true)
         }
     }
     
@@ -188,13 +182,7 @@ const ShoppingBasket = () => {
             })
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Adding to cart failed: ${errorMessage}`)
+            handleNegativeResponse(response, "Changing cart data failed", true)
         }
     }
     
@@ -231,13 +219,7 @@ const ShoppingBasket = () => {
             })
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Adding to cart failed: ${errorMessage}`)
+            handleNegativeResponse(response, "Changing cart data failed", true)
         }
     }
 
@@ -265,13 +247,7 @@ const ShoppingBasket = () => {
             window.location.href = data.redirectUrl
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Retrieving hosted checkout page failed: ${errorMessage}`)
+            handleNegativeResponse(response, "Retrieving hosted checkout page failed", true)
         }
     }
 
@@ -295,13 +271,7 @@ const ShoppingBasket = () => {
             navigate('/')
         }
         else {
-            let errorMessage = 'Unknown error'
-            const body = await response.text()
-            if (body && body !== '') {
-                const data = JSON.parse(body)
-                errorMessage = data.message
-            }
-            toast.error(`Adding to cart failed: ${errorMessage}`)
+            handleNegativeResponse(response, "Creating order failed", true)
         }
     }
 
