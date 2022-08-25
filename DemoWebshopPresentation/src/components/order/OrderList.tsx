@@ -7,6 +7,7 @@ import { IUserSessionData, RootState } from '../../store/types'
 import { handleNegativeResponse } from '../../utility'
 import Button from '../common/Button'
 import OrderRow from './OrderRow'
+import RiseLoader from "react-spinners/RiseLoader";
 
 export const OrderList = () => {
   const [orders, setOrders] = useState<OrderInfo[]>([])
@@ -100,8 +101,8 @@ export const OrderList = () => {
                   <OrderRow key={order.id} order={order} onConfirmOrder={confirmOrder} onSetDeliveryDate={setOrderDeliveryDate} />
               )) :
               <tr>
-                  <td colSpan={4} className="text-center">
-                      Loading....
+                  <td colSpan={6} className="text-center">
+                    <RiseLoader className='loader' color={'black'} size={15} />
                   </td>
               </tr>
             }

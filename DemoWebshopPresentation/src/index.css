@@ -196,3 +196,14 @@ footer {
   height: inherit !important;
   width: inherit !important;
 }
+
+.loader {
+  margin: auto;
+  width: 95px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+tr .loader {
+  display: inline-block !important;
+}

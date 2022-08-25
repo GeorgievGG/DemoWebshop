@@ -9,6 +9,7 @@ import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
 import { handleNegativeResponse } from '../../utility'
 import Button from '../common/Button'
 import ShoppingBasketRow from './ShoppingBasketRow'
+import RiseLoader from "react-spinners/RiseLoader";
 
 const ShoppingBasket = () => {
     const [shoppingBasket, setShoppingBasket] = useState<IBasket>({id: '', basketLines: []})
@@ -313,26 +314,31 @@ const ShoppingBasket = () => {
                 <tbody>
                     {
                         hasLoaded ?
-                        shoppingBasket.basketLines.map((basketLine) => (
-                            <ShoppingBasketRow key={basketLine.product.id} basketLine={basketLine} onMinusClicked={decreaseShoppingQuantity} onQuantityChanged={setShoppingQuantity} onPlusClicked={increaseShoppingQuantity}   />
-                        )) :
+                        <>
+                            {
+                                shoppingBasket.basketLines.map((basketLine) => (
+                                    <ShoppingBasketRow key={basketLine.product.id} basketLine={basketLine} onMinusClicked={decreaseShoppingQuantity} onQuantityChanged={setShoppingQuantity} onPlusClicked={increaseShoppingQuantity}   />
+                                ))
+                            }
+                            <tr>
+                                <td colSpan={2} />
+                                <td className='fw-bold'>TOTAL:</td>
+                                <td className='fw-bold'>
+                                    {
+                                        shoppingBasket.basketLines
+                                            .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
+                                            .toLocaleString('de-DE', { style: 'currency', currency: 'EUR'})
+                                    }
+                                </td>
+                            </tr>
+                        </> :
                         <tr>
                             <td colSpan={4} className="text-center">
-                                Loading....
+                                <RiseLoader className='loader' color={'black'} size={15} />
                             </td>
                         </tr>
                     }
-                    <tr>
-                        <td colSpan={2} />
-                        <td className='fw-bold'>TOTAL:</td>
-                        <td className='fw-bold'>
-                            {
-                                shoppingBasket.basketLines
-                                    .reduce((partialSum, x) => partialSum + (x.quantity * x.product.price), 0)
-                                    .toLocaleString('de-DE', { style: 'currency', currency: 'EUR'})
-                            }
-                        </td>
-                    </tr>
+                   
                 </tbody>
             </table>
             <div className='float-end'>

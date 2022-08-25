@@ -8,9 +8,11 @@ import { IUserSessionData, RootState } from '../../store/types'
 import { handleNegativeResponse } from '../../utility'
 import Button from '../common/Button'
 import UserRow from './UserRow'
+import RiseLoader from "react-spinners/RiseLoader";
 
 export const UserList = () => {
   const [users, setUsers] = useState<UserInfo[]>([])
+  const [hasLoaded, setHasLoaded] = useState(false)
   const [open, setOpen] = useState(false);
   const [deletedUserId, setDeletedUserId] = useState('');
   const navigate = useNavigate()
@@ -31,6 +33,7 @@ export const UserList = () => {
     if (response.ok) {
         const data = await response.json()
         setUsers(data)
+        setHasLoaded(true)
     }
     else {
       handleNegativeResponse(response, "Couldn't retrieve users!", false)
@@ -102,30 +105,34 @@ export const UserList = () => {
           confirm="Yes"
           cancel="No"
       />
-      <div>
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">Username</th>
-              <th scope="col">Email</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">IsAdmin</th>
-              <th scope="col"></th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              users.map((user) => (
-                  <UserRow key={user.id} loggedUserId={sessionState.LoggedUserId} user={user} onSetAdmin={onSetAdmin} onDeleteUser={openConfirmDialog} />
-              ))
-            }
-          </tbody>
-        </table>
+      { 
+        hasLoaded ?
+        <div>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Username</th>
+                <th scope="col">Email</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">IsAdmin</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                users.map((user) => (
+                    <UserRow key={user.id} loggedUserId={sessionState.LoggedUserId} user={user} onSetAdmin={onSetAdmin} onDeleteUser={openConfirmDialog} />
+                ))
+              }
+            </tbody>
+          </table>
 
-        <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
-      </div>
+          <Button className="btn btn-dark" text="Go Back" onClick={() => navigate(-1)} />
+        </div> :
+        <RiseLoader className='loader' color={'black'} size={15} /> 
+      }
     </>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, CSSProperties } from 'react'
 import { Confirm } from 'react-admin'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +9,7 @@ import { deleteProduct, setProducts } from '../../store/productsSlice'
 import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
 import { handleNegativeResponse } from '../../utility'
 import CatalogLine from './CatalogLine'
+import RiseLoader from "react-spinners/RiseLoader";
 
 function Catalog() {
     const dispatch = useDispatch()
@@ -122,17 +123,18 @@ function Catalog() {
                 confirm="Yes"
                 cancel="No"
             />
-            
             {
-                products.length > 0 ?
-                chunk(products, 4).map((productsChunk, index) => {
-                    return (
-                        <CatalogLine key={index} products={productsChunk} userRole={sessionState.LoggedUserRole} onAddToCart={addToCart} onSubscribe={navigateToSubscriptionPage} onDeleteClick={openConfirmDialog} />
-                    )
-                }) :
-                (
-                  'No products to Show'
-                )
+                hasLoaded ?
+                    products.length > 0 ?
+                    chunk(products, 4).map((productsChunk, index) => {
+                        return (
+                            <CatalogLine key={index} products={productsChunk} userRole={sessionState.LoggedUserRole} onAddToCart={addToCart} onSubscribe={navigateToSubscriptionPage} onDeleteClick={openConfirmDialog} />
+                        )
+                    }) :
+                    (
+                      'No products to Show'
+                    ) :
+                <RiseLoader className='loader' color={'black'} size={15} />
             }
         </>
     )
