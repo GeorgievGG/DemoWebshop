@@ -11,10 +11,12 @@ namespace DemoWebshopApi.Services.Services
     public class PaymentService : IPaymentService
     {
         private readonly IClient _paymentPlatformClient;
+        private readonly IValidationService _validationService;
 
-        public PaymentService(IClient paymentPlatformClient)
+        public PaymentService(IClient paymentPlatformClient, IValidationService validationService)
         {
             _paymentPlatformClient = paymentPlatformClient;
+            _validationService = validationService;
         }
 
         public async Task<CreateHostedCheckoutResponse> RequestHostedCheckoutPage(decimal paymentAmount, string currency, string redirectUrl, string merchantId)
@@ -263,6 +265,7 @@ namespace DemoWebshopApi.Services.Services
             Directory.CreateDirectory(directoryName);
             Directory.CreateDirectory(archiveDirectoryName);
             var files = Directory.GetFiles(directoryName);
+            _validationService.EnsureArrayNotEmpty(files, "Batch files");
             foreach (var filePath in files)
             {
                 var fileContent = File.ReadAllText(filePath);

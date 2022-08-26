@@ -21,5 +21,6 @@
         public const string UserNotAuthenticated = "User is not authenticated!";
         public const string UserNotAuthorized = "User is not authorized to execute this action!";
         public const string OrderShouldNotBeEmpty = "Order should have at least one line to be created!";
+        public const string ArrayShouldNotBeEmpty = "Can't process empty list of {0}!";
     }
 }

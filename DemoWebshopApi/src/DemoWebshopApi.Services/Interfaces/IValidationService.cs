@@ -26,5 +26,6 @@ namespace DemoWebshopApi.Services.Interfaces
         void EnsureQuantityIsSufficient(ICollection<OrderLine> orderLines);
         void EnsureOrderHasLines(Order order);
         void EnsureOrderDatePrecedesDelivery(Order order, DateTime deliceryDate);
+        void EnsureArrayNotEmpty<T>(T[] files, string listName);
     }
 }

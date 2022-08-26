@@ -165,6 +165,10 @@ namespace DemoWebshopApi.Controllers
 
                 return Ok(response);
             }
+            catch (ArgumentException e)
+            {
+                throw e;
+            }
             catch (Exception e)
             {
                 return StatusCode(500);

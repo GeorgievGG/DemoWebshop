@@ -211,5 +211,13 @@ namespace DemoWebshopApi.Services.Services
                 throw new DeliveryDatePrecedesOrderException(Constants.OrderShouldNotBeEmpty);
             }
         }
+
+        public void EnsureArrayNotEmpty<T>(T[] files, string listName)
+        {
+            if (files.Length <= 0)
+            {
+                throw new ArgumentException(string.Format(Constants.ArrayShouldNotBeEmpty, listName));
+            }
+        }
     }
 }
