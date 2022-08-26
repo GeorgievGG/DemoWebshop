@@ -51,7 +51,7 @@ function Catalog() {
             setHasLoaded(true)
         }
         else {
-            handleNegativeResponse(response, "Couldn't retrieve products!", false)
+            handleNegativeResponse(response, "Couldn't retrieve products!", null, false)
         }
     }
     
@@ -73,7 +73,7 @@ function Catalog() {
             toast.success('Added to basket!')
         }
         else {
-            handleNegativeResponse(response, "Adding to basket failed", true)
+            handleNegativeResponse(response, "Adding to basket failed", null, true)
         }
     }
 
@@ -95,7 +95,7 @@ function Catalog() {
             deleteProduct(deletedProductId)
         }
         else {
-            handleNegativeResponse(response, `Couldn't delete product ${deletedProductId}`, true)
+            handleNegativeResponse(response, `Couldn't delete product ${deletedProductId}`, null, true)
         }
 
         setOpen(false)

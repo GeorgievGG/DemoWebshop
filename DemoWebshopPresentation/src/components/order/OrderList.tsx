@@ -34,7 +34,7 @@ export const OrderList = () => {
         setHasLoaded(true)
     }
     else {
-      handleNegativeResponse(response, "Couldn't retrieve orders!", false)
+      handleNegativeResponse(response, "Couldn't retrieve orders!", null, false)
     }
   }
 
@@ -54,7 +54,7 @@ export const OrderList = () => {
             ))
         }
         else {
-            handleNegativeResponse(response, 'Updating order failed', true)
+            handleNegativeResponse(response, 'Updating order failed', null, true)
         }
   }
 
@@ -75,7 +75,7 @@ export const OrderList = () => {
             ))
         }
         else {
-          handleNegativeResponse(response, 'Updating order failed', true)
+          handleNegativeResponse(response, 'Updating order failed', null, true)
         }
   }
 

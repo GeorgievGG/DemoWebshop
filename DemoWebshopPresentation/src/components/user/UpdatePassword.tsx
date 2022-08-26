@@ -47,7 +47,7 @@ const Profile = ({ token }: Props) => {
             toast.success(`Password updated!`)
         }
         else {
-            handleNegativeResponse(response, "Updating password failed", true)
+            handleNegativeResponse(response, "Updating password failed", null, true)
         }
     }
 

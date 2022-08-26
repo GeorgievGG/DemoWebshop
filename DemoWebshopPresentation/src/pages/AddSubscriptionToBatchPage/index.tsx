@@ -30,7 +30,7 @@ const AddSubscriptionToBatchPage = () => {
             navigate(-1)
         }
         else {
-            handleNegativeResponse(response, "Couldn't add subscription!", false)
+            handleNegativeResponse(response, "Couldn't add subscription!", null, false)
         }
     }
 

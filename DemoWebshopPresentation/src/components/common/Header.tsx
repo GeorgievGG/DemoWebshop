@@ -30,7 +30,7 @@ const Header = () => {
             data?.failed?.length !== 0 && toast.warning(`Couldn't process payment batches: ${data.failed.join('\n')}`)
         }
         else {
-            handleNegativeResponse(response, "Couldn't process payment batches", true)
+            handleNegativeResponse(response, "Couldn't process payment batches", body, true)
         }
     }
 

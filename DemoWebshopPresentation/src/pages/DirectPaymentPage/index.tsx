@@ -34,7 +34,7 @@ const DirectPaymentPage = () => {
           setTokenCardInfo(tokenJson?.card?.data?.cardWithoutCvv)
       }
       else {
-        handleNegativeResponse(response, "Couldn't retrieve token!", false)
+        handleNegativeResponse(response, "Couldn't retrieve token!", null, false)
       }
 
       setPageLoaded(true)
@@ -106,7 +106,7 @@ const DirectPaymentPage = () => {
         dispatch(setPaymentCardToken(data.token))
       }
       else {
-        handleNegativeResponse(tokenResponse, "Couldn't tokenize card details!", false)
+        handleNegativeResponse(tokenResponse, "Couldn't tokenize card details!", null, false)
       }
     }
 
@@ -126,7 +126,7 @@ const DirectPaymentPage = () => {
       navigate(-1)
     }
     else {
-      handleNegativeResponse(response, "Couldn't send payment", true)
+      handleNegativeResponse(response, "Couldn't send payment", body, true)
     }
   }
 

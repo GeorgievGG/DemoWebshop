@@ -30,7 +30,7 @@ const AddScheduledPaymentPage = () => {
             navigate(-1)
         }
         else {
-            handleNegativeResponse(response, "Couldn't send payment!", false)
+            handleNegativeResponse(response, "Couldn't send payment!", null, false)
         }
     }
 

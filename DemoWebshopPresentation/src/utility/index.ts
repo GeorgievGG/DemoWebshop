@@ -3,8 +3,11 @@ import store from "../store"
 import { flushPaymentState } from "../store/paymentSlice"
 import { flushSessionData } from "../store/sessionSlice"
 
-export const handleNegativeResponse = async (response: Response, errorMessage: string, useBackEndError: boolean = false) => {
-    const body = await response.text()
+export const handleNegativeResponse = async (response: Response, errorMessage: string, body: string | null, useBackEndError: boolean = false) => {
+    if (!body) {
+        body = await response?.text()
+    }
+
     let backEndError = 'Unknown error'
     if (body && body !== '') {
         const data = JSON.parse(body)

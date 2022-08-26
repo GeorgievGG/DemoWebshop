@@ -57,7 +57,7 @@ const Register = () => {
       navigate(-1)
     }
     else {
-      handleNegativeResponse(response, `Registration failed for user ${userInput.username}`, true)
+      handleNegativeResponse(response, `Registration failed for user ${userInput.username}`, body, true)
     }
 }
 

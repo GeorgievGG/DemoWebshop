@@ -38,7 +38,7 @@ const ShoppingBasket = () => {
             setHasLoaded(true)
         }
         else {
-            handleNegativeResponse(response, "Couldn't retrieve shopping basket data!", false)
+            handleNegativeResponse(response, "Couldn't retrieve shopping basket data!", null, false)
         }
     }
 
@@ -137,7 +137,7 @@ const ShoppingBasket = () => {
 
     const handleUnsuccessfulPayment = async (response: Response, paymentStatus?: string) => {
         const message = `Payment unsuccessful${paymentStatus ? `, status: ${paymentStatus}` : ''}!`
-        handleNegativeResponse(response, message, false)
+        handleNegativeResponse(response, message, null, false)
     }
 
     const increaseShoppingQuantity = async (productId: string) => {
@@ -160,7 +160,7 @@ const ShoppingBasket = () => {
             })
         }
         else {
-            handleNegativeResponse(response, "Changing cart data failed", true)
+            handleNegativeResponse(response, "Changing cart data failed", null, true)
         }
     }
     
@@ -184,7 +184,7 @@ const ShoppingBasket = () => {
             })
         }
         else {
-            handleNegativeResponse(response, "Changing cart data failed", true)
+            handleNegativeResponse(response, "Changing cart data failed", null, true)
         }
     }
     
@@ -221,7 +221,7 @@ const ShoppingBasket = () => {
             })
         }
         else {
-            handleNegativeResponse(response, "Changing cart data failed", true)
+            handleNegativeResponse(response, "Changing cart data failed", null, true)
         }
     }
 
@@ -249,7 +249,7 @@ const ShoppingBasket = () => {
             window.location.href = data.redirectUrl
         }
         else {
-            handleNegativeResponse(response, "Retrieving hosted checkout page failed", true)
+            handleNegativeResponse(response, "Retrieving hosted checkout page failed", null, true)
         }
     }
 
@@ -273,7 +273,7 @@ const ShoppingBasket = () => {
             navigate('/')
         }
         else {
-            handleNegativeResponse(response, "Creating order failed", true)
+            handleNegativeResponse(response, "Creating order failed", null, true)
         }
     }
 

@@ -38,7 +38,7 @@ const CreateProduct = () => {
       toast.success(`Product ${data.name} created!`)
     }
     else {
-      handleNegativeResponse(response, `Creation failed for product ${userInput.name}`, true)
+      handleNegativeResponse(response, `Creation failed for product ${userInput.name}`, body, true)
     }
   }
 

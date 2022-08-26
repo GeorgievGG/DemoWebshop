@@ -38,7 +38,7 @@ const UpdatePersonData = ({ token }: Props) => {
             setLastName(data.lastName)
         }
         else {
-            handleNegativeResponse(response, "Couldn't load your user data!", false)
+            handleNegativeResponse(response, "Couldn't load your user data!", null, false)
         }
     }
     
@@ -72,7 +72,7 @@ const UpdatePersonData = ({ token }: Props) => {
             toast.success(`User updated!`)
         }
         else {
-            handleNegativeResponse(response, `Updating profile failed for user ${userInput.username}`, true)
+            handleNegativeResponse(response, `Updating profile failed for user ${userInput.username}`, null, true)
         }
     }
 

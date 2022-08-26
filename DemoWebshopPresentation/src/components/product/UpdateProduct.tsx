@@ -50,7 +50,7 @@ const UpdateProduct = () => {
             toast.success(`Product ${updatedProduct.name} updated!`)
         }
         else {
-            handleNegativeResponse(response, `Update failed for product ${userInput.name}`, true)
+            handleNegativeResponse(response, `Update failed for product ${userInput.name}`, null, true)
         }
     }
 

@@ -36,7 +36,7 @@ export const UserList = () => {
         setHasLoaded(true)
     }
     else {
-      handleNegativeResponse(response, "Couldn't retrieve users!", false)
+      handleNegativeResponse(response, "Couldn't retrieve users!", null, false)
     }
   }
 
@@ -56,7 +56,7 @@ export const UserList = () => {
             ))
         }
         else {
-          handleNegativeResponse(response, "Updating user failed", true)
+          handleNegativeResponse(response, "Updating user failed", null, true)
         }
   }
 
@@ -78,7 +78,7 @@ export const UserList = () => {
       deleteUserById(deletedUserId)
     }
     else {
-      handleNegativeResponse(response, "Couldn't delete user", true)
+      handleNegativeResponse(response, "Couldn't delete user", null, true)
     }
 
     setOpen(false);

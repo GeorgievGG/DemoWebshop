@@ -47,7 +47,7 @@ const Login = () => {
       navigate(-1)
     }
     else {
-      handleNegativeResponse(response, `Login for user ${userCredentials.username} failed.`, false)
+      handleNegativeResponse(response, `Login for user ${userCredentials.username} failed.`, null, false)
     }
   }
 

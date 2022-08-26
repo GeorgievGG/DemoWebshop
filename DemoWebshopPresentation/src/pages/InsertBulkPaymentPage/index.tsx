@@ -30,7 +30,7 @@ const InsertBulkPaymentPage = () => {
             navigate(-1)
         }
         else {
-            handleNegativeResponse(response, "Couldn't send payment", true)
+            handleNegativeResponse(response, "Couldn't send payment", null, true)
         }
     }
 
