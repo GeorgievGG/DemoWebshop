@@ -326,7 +326,7 @@ namespace DemoWebshopApi.Services.Services
             }
             dict.Add("CURRENCY", input.PaymentData.Currency);
             dict.Add("SHASIGN", CreateShaSign(dict, config.ShaKey));
-            var request = new HttpRequestMessage(HttpMethod.Post, config.ScheduledPaymentEndpoint)
+            var request = new HttpRequestMessage(HttpMethod.Post, config.OldschoolDirectPaymentEndpoint)
             {
                 Content = new FormUrlEncodedContent(dict)
             };

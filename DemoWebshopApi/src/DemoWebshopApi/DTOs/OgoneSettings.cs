@@ -7,7 +7,7 @@
         public string BaseUrl { get; set; }
         public string ApiEndpoint { get; set; }
         public string BatchEndpoint { get; set; }
-        public string ScheduledPaymentEndpoint { get; set; }
+        public string OldschoolDirectPaymentEndpoint { get; set; }
         public string Integrator { get; set; }
         public string MerchantId { get; set; }
         public string ApiUser { get; set; }
