@@ -5,7 +5,7 @@ type Props = {
   products: CatalogProductInfo[]
   userRole: string
   onAddToCart: (productId: string) => void
-  onSubscribe: (subscriptionFee: number, pageAddress: string) => void
+  onSubscribe: (subsctiptionId: string, subscriptionFee: number, pageAddress: string) => void
   onDeleteClick: (productId: string) => void
 }
 

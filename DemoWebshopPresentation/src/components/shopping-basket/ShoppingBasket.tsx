@@ -6,7 +6,7 @@ import { IBasket } from '../../pages/ShoppingBasketPage/types'
 import { selectPaymentState, selectSessionState } from '../../store'
 import { flushPaymentState, setPaymentState } from '../../store/paymentSlice'
 import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
-import { handleNegativeResponse } from '../../utility'
+import { createOrderCall, handleNegativeResponse } from '../../utility'
 import Button from '../common/Button'
 import ShoppingBasketRow from './ShoppingBasketRow'
 import RiseLoader from "react-spinners/RiseLoader";
@@ -255,17 +255,10 @@ const ShoppingBasket = () => {
 
     const createOrder = async () => {
         const orderLines = shoppingBasket.basketLines.map(function (basketLine) {
-            return { quantity: basketLine.quantity, price: basketLine.product.price, productId: basketLine.product.id }
+            return { quantity: basketLine.quantity, price: basketLine.product.price, productId: basketLine.product.id } as OrderLine
         })
-        const response = await fetch(`https://localhost:7000/api/Order`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-                'Authorization': `Bearer ${sessionState.Token}`
-            },
-            body: JSON.stringify({ orderLines: orderLines })
-        })
-        
+
+        const response = await createOrderCall(orderLines, sessionState.Token)
         if (response.ok) {
             toast.success(`Order created successfully!`)
             await clearShoppingBasket()

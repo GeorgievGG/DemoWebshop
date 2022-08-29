@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 import CardDetailsForm from '../../components/shopping-basket/CardDetailsForm'
 import { selectPaymentState, selectSessionState } from '../../store'
 import { setDirectPaymentId } from '../../store/paymentSlice'
@@ -24,6 +23,9 @@ const DirectPaymentPage = () => {
           }
         })
         .then(response => handleGetTokenResponse(response))
+      }
+      else {
+        setPageLoaded(true)
       }
     }, []
   )
@@ -133,7 +135,8 @@ const DirectPaymentPage = () => {
   return (
     <>
     {
-      pageLoaded && <CardDetailsForm tokenizable={true} onCheckout={sendPayment} shouldTokenizeCardData={shouldTokenizeCardData} onTokenizationChecked={() => setShouldTokenizeCardData(!shouldTokenizeCardData)} tokenCardData={tokenCardInfo} />
+      pageLoaded && 
+      <CardDetailsForm tokenizable={true} onCheckout={sendPayment} shouldTokenizeCardData={shouldTokenizeCardData} onTokenizationChecked={() => setShouldTokenizeCardData(!shouldTokenizeCardData)} tokenCardData={tokenCardInfo} />
     }
     </>
   )

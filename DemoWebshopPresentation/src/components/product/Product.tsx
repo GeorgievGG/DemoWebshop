@@ -6,7 +6,7 @@ type Props = {
   product: CatalogProductInfo
   userRole: string
   onAddToCart: (productId: string) => void
-  onSubscribe: (subscriptionFee: number, pageAddress: string) => void
+  onSubscribe: (subscriptionId: string, subscriptionFee: number, pageAddress: string) => void
   onDeleteClick: (productId: string) => void
 }
 
@@ -28,7 +28,7 @@ const Product = ({ product, userRole, onAddToCart, onSubscribe, onDeleteClick }:
       return
     }
     
-    onSubscribe(product.price, '/subscription')
+    onSubscribe(product.id, product.price, '/subscription')
   }
 
   return (

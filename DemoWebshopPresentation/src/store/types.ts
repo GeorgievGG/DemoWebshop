@@ -22,6 +22,7 @@ export interface IPaymentState {
     batchPaymentAdded?: boolean
     scheduledPaymentAdded?: boolean
     subscriptionAdded?: boolean
+    subscriptionId?: string
     orderAmount: number
     currency: string
 }

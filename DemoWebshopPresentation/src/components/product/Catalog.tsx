@@ -1,4 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Confirm } from 'react-admin'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -7,7 +7,7 @@ import { selectPaymentState, selectProductsState, selectSessionState } from '../
 import { flushPaymentState, setPaymentState } from '../../store/paymentSlice'
 import { deleteProduct, setProducts } from '../../store/productsSlice'
 import { IPaymentState, IUserSessionData, RootState } from '../../store/types'
-import { handleNegativeResponse } from '../../utility'
+import { createOrderCall, handleNegativeResponse } from '../../utility'
 import CatalogLine from './CatalogLine'
 import RiseLoader from "react-spinners/RiseLoader";
 
@@ -31,9 +31,12 @@ function Catalog() {
     )
 
     useEffect(() => {
-        if (hasLoaded && paymentState && paymentState.subscriptionAdded) {
+        if (hasLoaded && paymentState && paymentState.subscriptionAdded && paymentState.subscriptionId) {
             toast.success('Subscription added')
-            dispatch(flushPaymentState())
+            var subscription = [{quantity: 1, price: paymentState.orderAmount, productId: paymentState.subscriptionId}] as OrderLine[]
+            createOrderCall(subscription, sessionState.Token)
+            .then(response => handleCreateOrderResponse(response))
+
         }
         }, [hasLoaded]
     )
@@ -52,6 +55,16 @@ function Catalog() {
         }
         else {
             handleNegativeResponse(response, "Couldn't retrieve products!", null, false)
+        }
+    }
+    
+    const handleCreateOrderResponse = async (response: Response) => {
+        if (response.ok) {
+            toast.success(`Order created successfully!`)
+            dispatch(flushPaymentState())
+        }
+        else {
+            handleNegativeResponse(response, "Creating order failed", null, true)
         }
     }
     
@@ -77,8 +90,8 @@ function Catalog() {
         }
     }
 
-    const navigateToSubscriptionPage = async (subscriptionFee: number, pageAddress: string) => {
-        dispatch(setPaymentState({ orderAmount: subscriptionFee, currency: 'EUR' }))
+    const navigateToSubscriptionPage = (subscriptionId: string, subscriptionFee: number, pageAddress: string) => {
+        dispatch(setPaymentState({ orderAmount: subscriptionFee, currency: 'EUR', subscriptionId: subscriptionId }))
         navigate(pageAddress)
     }
     

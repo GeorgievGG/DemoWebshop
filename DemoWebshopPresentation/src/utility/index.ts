@@ -4,7 +4,7 @@ import { flushPaymentState } from "../store/paymentSlice"
 import { flushSessionData } from "../store/sessionSlice"
 
 export const handleNegativeResponse = async (response: Response, errorMessage: string, body: string | null, useBackEndError: boolean = false) => {
-    if (!body) {
+    if (!body && response) {
         body = await response?.text()
     }
 
@@ -24,4 +24,15 @@ export const handleNegativeResponse = async (response: Response, errorMessage: s
 export const logout = () => {
     store.dispatch(flushSessionData())
     store.dispatch(flushPaymentState())
+}
+
+export const createOrderCall = async (orderLines: OrderLine[], token: string) => {
+    return await fetch(`https://localhost:7000/api/Order`, {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ orderLines: orderLines })
+    })
 }
