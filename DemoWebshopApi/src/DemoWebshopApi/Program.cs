@@ -136,7 +136,7 @@ builder.Services
 
 var app = builder.Build();
 
-DatabaseSeeder.Seed(app.Services);
+await DatabaseSeeder.Seed(app.Services);
 app.UseCors(builder.Configuration.GetSection("CorsSettings")["PolicyName"]);
 app.UseIdentityServer();
 

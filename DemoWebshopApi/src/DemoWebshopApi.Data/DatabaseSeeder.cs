@@ -1,19 +1,20 @@
 ﻿using DemoWebshopApi.Data.Entities;
-using Microsoft.AspNetCore.Identity;
+using DemoWebshopApi.Data.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DemoWebshopApi.Data
 {
     public class DatabaseSeeder
     {
-        public static void Seed(IServiceProvider applicationServices)
+        public static async Task Seed(IServiceProvider applicationServices)
         {
             using (IServiceScope serviceScope = applicationServices.CreateScope())
             {
                 WebshopContext context = serviceScope.ServiceProvider.GetRequiredService<WebshopContext>();
+
                 if (context.Database.EnsureCreated())
                 {
-                    PasswordHasher<User> hasher = new PasswordHasher<User>();
+                    var userManager = serviceScope.ServiceProvider.GetRequiredService<IIdentityUserManager>();
 
                     User admin = new User()
                     {
@@ -26,10 +27,7 @@ namespace DemoWebshopApi.Data
                         EmailConfirmed = true,
                         NormalizedUserName = "admin@identity.com".ToUpper(),
                         SecurityStamp = Guid.NewGuid().ToString("D"),
-
                     };
-
-                    admin.PasswordHash = hasher.HashPassword(admin, "adminpass");
 
                     var adminRole = new ApplicationRole()
                     {
@@ -47,19 +45,12 @@ namespace DemoWebshopApi.Data
                         ConcurrencyStamp = Guid.NewGuid().ToString("D")
                     };
 
-
-                    var initialAdminRole = new IdentityUserRole<Guid>()
-                    {
-                        RoleId = adminRole.Id,
-                        UserId = admin.Id
-                    };
-
-                    context.Users.Add(admin);
                     context.Roles.Add(adminRole);
                     context.Roles.Add(userRole);
-                    context.UserRoles.Add(initialAdminRole);
                     context.SaveChanges();
 
+                    await userManager.CreateUserAsync(admin, "adminpass");
+                    await userManager.AddUserToRoleAsync(admin, "Admin");
                 }
             }
         }
