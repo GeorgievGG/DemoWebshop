@@ -130,8 +130,8 @@ builder.Services
 
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://localhost:7000";
-        options.Audience = "https://localhost:7000/resources";
+        options.Authority = "https://demo-webshop-webapp.azurewebsites.net";
+        options.Audience = "https://demo-webshop-webapp.azurewebsites.net/resources";
     });
 
 var app = builder.Build();

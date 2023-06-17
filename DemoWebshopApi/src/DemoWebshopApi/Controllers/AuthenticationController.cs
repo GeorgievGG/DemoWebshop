@@ -24,7 +24,7 @@ namespace DemoWebshopApi.Controllers
         {
             var client = new HttpClient();
 
-            var url = "https://localhost:7000/connect/token";
+            var url = "https://demo-webshop-webapp.azurewebsites.net/connect/token";
 
             var identityServerParameters = new List<KeyValuePair<string, string>>
             {
@@ -51,7 +51,7 @@ namespace DemoWebshopApi.Controllers
         {
             var client = new HttpClient();
 
-            var url = "https://localhost:7000/connect/token";
+            var url = "https://demo-webshop-webapp.azurewebsites.net/connect/token";
 
             var identityServerParameters = new List<KeyValuePair<string, string>>
             {
