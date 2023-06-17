@@ -34,7 +34,7 @@ namespace DemoWebshopApi.Data
 
             modelBuilder.HasServiceTier("GeneralPurpose");
 
-            modelBuilder.HasPerformanceLevel("GP_Gen5_1");
+            modelBuilder.HasPerformanceLevel("GP_Gen5_2");
         }
 
         private static void SetupUserConfiguration(ModelBuilder modelBuilder)

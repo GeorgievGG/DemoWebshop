@@ -1,5 +1,6 @@
 ﻿using DemoWebshopApi.Data.Entities;
 using DemoWebshopApi.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DemoWebshopApi.Data
@@ -12,6 +13,7 @@ namespace DemoWebshopApi.Data
             {
                 WebshopContext context = serviceScope.ServiceProvider.GetRequiredService<WebshopContext>();
 
+                context.Database.SetCommandTimeout(600);
                 if (context.Database.EnsureCreated())
                 {
                     var userManager = serviceScope.ServiceProvider.GetRequiredService<IIdentityUserManager>();
