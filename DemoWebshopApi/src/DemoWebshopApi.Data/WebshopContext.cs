@@ -16,6 +16,8 @@ namespace DemoWebshopApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            ConfigureAzureDb(modelBuilder);
+
             SetupUserConfiguration(modelBuilder);
             SetupProductsConfiguration(modelBuilder);
             SetupOrdersConfiguration(modelBuilder);
@@ -24,6 +26,15 @@ namespace DemoWebshopApi.Data
             SetupShoppingBasketLinesConfiguration(modelBuilder);
 
             base.OnModelCreating(modelBuilder);
+        }
+
+        private static void ConfigureAzureDb(ModelBuilder modelBuilder)
+        {
+            modelBuilder.HasDatabaseMaxSize("2 GB");
+
+            modelBuilder.HasServiceTier("GeneralPurpose");
+
+            modelBuilder.HasPerformanceLevel("GP_Gen5_1");
         }
 
         private static void SetupUserConfiguration(ModelBuilder modelBuilder)
