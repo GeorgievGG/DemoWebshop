@@ -16,7 +16,7 @@ const AddScheduledPaymentPage = () => {
     const paymentState = useSelector<RootState, IPaymentState>(selectPaymentState)
 
     const addScheduledPayment = async (userInput: IPaymentCardData) => {
-        const response = await fetch('https://localhost:7000/api/Payment/AddScheduledPayment', {
+        const response = await fetch(`${process.env.API_URL}/api/Payment/AddScheduledPayment`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',

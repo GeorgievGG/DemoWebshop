@@ -15,7 +15,7 @@ const DirectPaymentPage = () => {
   const navigate = useNavigate()
   useEffect(() => {
       if (sessionState.PaymentCardToken) {
-        fetch(`https://localhost:7000/api/Payment/Token/${sessionState.PaymentCardToken}`, {
+        fetch(`${process.env.API_URL}/api/Payment/Token/${sessionState.PaymentCardToken}`, {
           method: 'GET',
           headers: {
             'Content-type': 'application/json',
@@ -92,7 +92,7 @@ const DirectPaymentPage = () => {
   
   const sendPayment = async (userInput: IPaymentCardData) => {
     if (shouldTokenizeCardData) {
-      const tokenResponse = await fetch('https://localhost:7000/api/Payment/Token', {
+      const tokenResponse = await fetch(`${process.env.API_URL}/api/Payment/Token`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
@@ -112,7 +112,7 @@ const DirectPaymentPage = () => {
       }
     }
 
-    const response = await fetch('https://localhost:7000/api/Payment/ServerToServerPayment', {
+    const response = await fetch(`${process.env.API_URL}/api/Payment/ServerToServerPayment`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',

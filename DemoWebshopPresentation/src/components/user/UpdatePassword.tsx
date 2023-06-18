@@ -34,7 +34,7 @@ const Profile = ({ token }: Props) => {
     }
 
     const updatePasswords = async (userInput: UpdatePasswordInput) => {
-        const response = await fetch('https://localhost:7000/api/User/UpdatePassword', {
+        const response = await fetch(`${process.env.API_URL}/api/User/UpdatePassword`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',

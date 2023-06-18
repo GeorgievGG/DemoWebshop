@@ -42,7 +42,7 @@ const Register = () => {
   }
 
   const register = async (userInput: IRegistrationInput) => {
-    const response = await fetch('https://localhost:7000/api/User', {
+    const response = await fetch(`${process.env.API_URL}/api/User`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'

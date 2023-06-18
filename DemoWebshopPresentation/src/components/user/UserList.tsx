@@ -19,7 +19,7 @@ export const UserList = () => {
   const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
 
   useEffect(() => {
-    fetch('https://localhost:7000/api/User', {
+    fetch(`${process.env.API_URL}/api/User`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${sessionState.Token}`
@@ -41,7 +41,7 @@ export const UserList = () => {
   }
 
   const onSetAdmin = async (userId: string) => {
-    const response = await fetch(`https://localhost:7000/api/User/${userId}/SetUserAdmin`, {
+    const response = await fetch(`${process.env.API_URL}/api/User/${userId}/SetUserAdmin`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -66,7 +66,7 @@ export const UserList = () => {
   }
 
   const handleConfirm = async () => {
-    const response = await fetch(`https://localhost:7000/api/User/${deletedUserId}`, {
+    const response = await fetch(`${process.env.API_URL}/api/User/${deletedUserId}`, {
         method: 'DELETE',
         headers: {
             'Content-type': 'application/json',

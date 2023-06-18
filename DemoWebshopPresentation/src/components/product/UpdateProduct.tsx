@@ -35,7 +35,7 @@ const UpdateProduct = () => {
 
 
     const update = async (userInput: FormProductInfo) => {
-        const response = await fetch(`https://localhost:7000/api/Product/${state.product.id}`, {
+        const response = await fetch(`${process.env.API_URL}/api/Product/${state.product.id}`, {
         method: 'PUT',
         headers: {
             'Content-type': 'application/json',

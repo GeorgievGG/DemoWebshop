@@ -15,7 +15,7 @@ const Header = () => {
     const products = useSelector<RootState, CatalogProductInfo[]>(selectProductsState)
 
     const processPaymentBatches = async () => {
-        const response = await fetch('https://localhost:7000/api/Payment/ProcessBatch', {
+        const response = await fetch(`${process.env.API_URL}/api/Payment/ProcessBatch`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',

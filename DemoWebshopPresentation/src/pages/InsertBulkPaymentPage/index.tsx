@@ -16,7 +16,7 @@ const InsertBulkPaymentPage = () => {
     const paymentState = useSelector<RootState, IPaymentState>(selectPaymentState)
 
     const addBulkPaymentRecord = async (userInput: IPaymentCardData) => {
-        const response = await fetch('https://localhost:7000/api/Payment/AddBatchPayment', {
+        const response = await fetch(`${process.env.API_URL}/api/Payment/AddBatchPayment`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',

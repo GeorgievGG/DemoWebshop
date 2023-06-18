@@ -27,7 +27,7 @@ export const logout = () => {
 }
 
 export const createOrderCall = async (orderLines: OrderLine[], token: string) => {
-    return await fetch(`https://localhost:7000/api/Order`, {
+    return await fetch(`${process.env.API_URL}/api/Order`, {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',

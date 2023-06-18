@@ -17,7 +17,7 @@ export const OrderList = () => {
   const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
 
   useEffect(() => {
-    fetch('https://localhost:7000/api/Order', {
+    fetch(`${process.env.API_URL}/api/Order`, {
             method: 'GET',
             headers: {
               'Authorization': `Bearer ${sessionState.Token}`
@@ -39,7 +39,7 @@ export const OrderList = () => {
   }
 
   const confirmOrder = async (orderId: string) => {
-    const response = await fetch(`https://localhost:7000/api/Order/${orderId}/ConfirmOrder`, {
+    const response = await fetch(`${process.env.API_URL}/api/Order/${orderId}/ConfirmOrder`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
@@ -59,7 +59,7 @@ export const OrderList = () => {
   }
 
   const setOrderDeliveryDate = async (orderId: string, deliveryDate: Date) => {
-    const response = await fetch(`https://localhost:7000/api/Order/${orderId}/SetDeliveryDate`, {
+    const response = await fetch(`${process.env.API_URL}/api/Order/${orderId}/SetDeliveryDate`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',
