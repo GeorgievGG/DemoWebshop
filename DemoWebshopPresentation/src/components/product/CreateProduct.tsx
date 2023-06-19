@@ -22,7 +22,7 @@ const CreateProduct = () => {
   const sessionState = useSelector<RootState, IUserSessionData>(selectSessionState)
 
   const createProduct = async (userInput: FormProductInfo) => {
-    const response = await fetch(`${process.env.API_URL}/api/Product`, {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/Product`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',

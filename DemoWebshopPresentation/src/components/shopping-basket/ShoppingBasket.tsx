@@ -21,7 +21,7 @@ const ShoppingBasket = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        fetch(`${process.env.API_URL}/api/ShoppingBasket`, {
+        fetch(`${process.env.REACT_APP_SERVER_URL}/api/ShoppingBasket`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${sessionState.Token}`
@@ -44,7 +44,7 @@ const ShoppingBasket = () => {
 
     useEffect(() => {
         if (paymentState && paymentState.hostedCheckoutId && hasLoaded) {
-            fetch(`${process.env.API_URL}/api/Payment/${paymentState.hostedCheckoutId}/CheckHostedCheckoutPagePaymentResult`, {
+            fetch(`${process.env.REACT_APP_SERVER_URL}/api/Payment/${paymentState.hostedCheckoutId}/CheckHostedCheckoutPagePaymentResult`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${sessionState.Token}`
@@ -57,7 +57,7 @@ const ShoppingBasket = () => {
 
     useEffect(() => {
         if (paymentState && paymentState.directPaymentId && hasLoaded) {
-            fetch(`${process.env.API_URL}/api/Payment/${paymentState.directPaymentId}/CheckDirectPaymentResult`, {
+            fetch(`${process.env.REACT_APP_SERVER_URL}/api/Payment/${paymentState.directPaymentId}/CheckDirectPaymentResult`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${sessionState.Token}`
@@ -107,7 +107,7 @@ const ShoppingBasket = () => {
             const paymentStatus = data?.status ?? ''
             let isPaymentSuccessful = false
             if (paymentStatus === 'PENDING_CAPTURE') {
-                const captureResponse = await fetch(`${process.env.API_URL}/api/Payment/${paymentState.directPaymentId}/CapturePayment`, {
+                const captureResponse = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/Payment/${paymentState.directPaymentId}/CapturePayment`, {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/json',
@@ -141,7 +141,7 @@ const ShoppingBasket = () => {
     }
 
     const increaseShoppingQuantity = async (productId: string) => {
-        const response = await fetch(`${process.env.API_URL}/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -165,7 +165,7 @@ const ShoppingBasket = () => {
     }
     
     const decreaseShoppingQuantity = async (productId: string) => {
-        const response = await fetch(`${process.env.API_URL}/api/ShoppingBasket/DecreaseShoppingQuantity/${productId}`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/ShoppingBasket/DecreaseShoppingQuantity/${productId}`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -201,7 +201,7 @@ const ShoppingBasket = () => {
             return
         }
 
-        const response = await fetch(`${process.env.API_URL}/api/ShoppingBasket/SetShoppingQuantity`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/ShoppingBasket/SetShoppingQuantity`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -234,7 +234,7 @@ const ShoppingBasket = () => {
             return
         }
 
-        const response = await fetch(`${process.env.API_URL}/api/Payment/GetHostedCheckoutPage`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/Payment/GetHostedCheckoutPage`, {
             method: 'POST',           
             headers: {
                 'Content-type': 'application/json',
@@ -284,7 +284,7 @@ const ShoppingBasket = () => {
     }
 
     const clearShoppingBasket = async () => {
-        await fetch(`${process.env.API_URL}/api/ShoppingBasket`, {
+        await fetch(`${process.env.REACT_APP_SERVER_URL}/api/ShoppingBasket`, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',

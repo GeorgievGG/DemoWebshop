@@ -19,7 +19,7 @@ const UpdatePersonData = ({ token }: Props) => {
         const tokenData = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
         const userId = tokenData[ClaimTypes.UserId]
         fetch(
-            `${process.env.API_URL}/api/User/${userId}`, {
+            `${process.env.REACT_APP_SERVER_URL}/api/User/${userId}`, {
                 method: 'GET',
                 headers: {
                   'Authorization': `Bearer ${token}`
@@ -59,7 +59,7 @@ const UpdatePersonData = ({ token }: Props) => {
     }
 
     const updateProfile = async (userInput: UpdateProfileInput) => {
-        const response = await fetch(`${process.env.API_URL}/api/User`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/User`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json',

@@ -23,7 +23,7 @@ function Catalog() {
     const paymentState = useSelector<RootState, IPaymentState>(selectPaymentState)
 
     useEffect(() => {
-        fetch(`${process.env.API_URL}/api/Product`, {
+        fetch(`${process.env.REACT_APP_SERVER_URL}/api/Product`, {
                 method: 'GET'
             })
             .then(response => handleGetProductsResponse(response))
@@ -74,7 +74,7 @@ function Catalog() {
     )
 
     const addToCart = async (productId: string) => {
-        const response = await fetch(`${process.env.API_URL}/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/ShoppingBasket/IncreaseShoppingQuantity/${productId}`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -96,7 +96,7 @@ function Catalog() {
     }
     
     const handleConfirm = async () => {
-        const response = await fetch(`${process.env.API_URL}/api/Product/${deletedProductId}`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/Product/${deletedProductId}`, {
             method: 'DELETE',
             headers: {
                 'Content-type': 'application/json',

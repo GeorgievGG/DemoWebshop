@@ -16,7 +16,7 @@ const AddSubscriptionToBatchPage = () => {
     const paymentState = useSelector<RootState, IPaymentState>(selectPaymentState)
 
     const addSubcriptionToBatch = async (userInput: IPaymentCardData) => {
-        const response = await fetch(`${process.env.API_URL}/api/Payment/AddSubscription`, {
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/Payment/AddSubscription`, {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',

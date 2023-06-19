@@ -32,7 +32,7 @@ const Login = () => {
   }
 
   const login = async (userCredentials: IUserLoginInput) => {
-    const response = await fetch(`${process.env.API_URL}/api/Authentication/Login`, {
+    const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/Authentication/Login`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -53,7 +53,7 @@ const Login = () => {
 
   // TODO: use refresh token
   // const refreshToken = async (refreshToken: string) => {
-  //   const response = await fetch(`${process.env.API_URL}/api/Authentication/RefreshToken`, {
+  //   const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/Authentication/RefreshToken`, {
   //     method: 'POST',
   //     headers: {
   //       'Content-type': 'application/json'
